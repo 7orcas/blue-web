@@ -1,0 +1,1 @@
+cp deployments/blue-web.war /opt/wildfly/standalone/deployments/
