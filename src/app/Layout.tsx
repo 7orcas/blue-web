@@ -15,7 +15,9 @@ const Layout = () => {
         <button type="submit" onClick={() => lang()}>Lang</button>
       </form>
       <div>
-        <a href='http://localhost:3000/'>Login</a>
+        <h1>
+          <a href='http://localhost:3000/'>Login</a>
+        </h1>
       </div>
     </>
   )
