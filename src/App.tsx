@@ -5,7 +5,6 @@ import {
   useLocation
 } from "react-router-dom";
 import './App.css';
-import api from './sys/api';
 import Layout from './app/Layout'
 import { AppContextProvider } from './sys/AppContext'
 import UrlSearchParams from './sys/util/urlSearchParams'

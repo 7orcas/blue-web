@@ -1,7 +1,7 @@
 import { FC, createContext, useState, useEffect } from 'react'
 import { LangI } from './Interfaces'
-import axios from 'axios';
-import api from './api';
+import axiosFactory from './axiosFactory'
+import api from './api'
 import UrlSearchParams from './util/urlSearchParams'
 import loadLang from './util/loadLang'
 
@@ -22,21 +22,21 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const [lang, setLang] = useState <LangI[]>([])
   const [load, setLoad] = useState <boolean>(false)
   const [baseUrl, setBaseUrl] = useState ('')
+  // const [api, setApi] = useState <any>(null)
 
   // Load language and orgs data, setup parameters at page load
   useEffect(() => {
     if (load === true) return
     setLoad(true)
-
-    const params = new UrlSearchParams()
     
+    const params = new UrlSearchParams()
+    const axiosInit = axiosFactory(params.baseUrl)
     const initialise = async () => {
       try {
-        console.log(1)
-        const response = await api.get(params.init + '?SessionID=' + params.sid, {withCredentials: true})
-        console.log(2)
+        const response = await axiosInit.get(params.init + '?SessionID=' + params.sid, {withCredentials: true})
+console.log('Got usnr:' + params.baseUrl + response.data.b)
         setBaseUrl(response.data.b)
-        console.log(3)
+        // setApi(axiosFactory(params.baseUrl + response.data.b))
 
       } catch (err : any) {
         console.log(err.message)
@@ -49,12 +49,12 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
 console.log ('base=' + params.baseUrl)
 
-    //Load langauge package
-    const load1 = async () => {
-      let labels = await loadLang() || []
-      setLang (labels)
-    }
-    load1()
+    // //Load langauge package
+    // const load1 = async () => {
+    //   let labels = await loadLang() || []
+    //   setLang (labels)
+    // }
+    // load1()
 
   })
 
@@ -65,7 +65,7 @@ console.log ('base=' + params.baseUrl)
         // var params = new URLSearchParams()
         // params.append('pack', 'login')
         
-        
+console.log('lang/pack')
         const response = await api.get(`${baseUrl}lang/pack`, {withCredentials: true})
         console.log('/lang/pack:' + response.data)
 
