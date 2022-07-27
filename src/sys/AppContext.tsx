@@ -1,9 +1,8 @@
 import { FC, createContext, useState, useEffect } from 'react'
-import { LangI } from './Interfaces'
+import { LabelI } from './Interfaces'
 import axiosFactory from './axiosFactory'
 import api from './api'
 import UrlSearchParams from './util/urlSearchParams'
-import loadLang from './util/loadLang'
 
 interface Props {
   children: any
@@ -11,7 +10,8 @@ interface Props {
 
 export interface AppContextI {
     org: number
-    lang : any
+    loadLang: any
+    labels: LabelI[]
   }
  
 
@@ -19,7 +19,7 @@ const AppContext = createContext<AppContextI | null>(null)
 
 export const AppContextProvider: FC<Props> = ({ children }) => {
 
-  const [lang, setLang] = useState <LangI[]>([])
+  const [labels, setLabels] = useState <LabelI[]>([])
   const [load, setLoad] = useState <boolean>(false)
   const [baseUrl, setBaseUrl] = useState ('')
   // const [api, setApi] = useState <any>(null)
@@ -68,6 +68,11 @@ console.log ('base=' + params.baseUrl)
 console.log('lang/pack')
         const response = await api.get(`${baseUrl}lang/pack`, {withCredentials: true})
         console.log('/lang/pack:' + response.data)
+        let labels : Array<LabelI> = []
+        for (const l of response.data) {
+            labels.push ({key : l._c, label : l.l})
+        }
+        setLabels(labels)
 
       } catch (err : any) {
           console.log(`Error: ${err.message}`);
@@ -76,7 +81,8 @@ console.log('lang/pack')
 
     const appValue: AppContextI = {
       org: 1,
-      lang: getLangPack
+      loadLang: getLangPack,
+      labels: labels
     }
 
   return (

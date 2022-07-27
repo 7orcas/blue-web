@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
 import AppContext, { AppContextI } from '../sys/AppContext'
+import useLabel from '../sys/util/useLabel'
+
 
 const Layout = () => {
 
-  const { lang } = useContext(AppContext) as AppContextI
+  const { loadLang, labels } = useContext(AppContext) as AppContextI
   
   return (
     <>
@@ -12,13 +14,14 @@ const Layout = () => {
       </header>
       <form onSubmit={(e) => e.preventDefault()}>
         LANG PACK
-        <button type="submit" onClick={() => lang()}>Lang</button>
+        <button type="submit" onClick={() => loadLang()}>Lang</button>
       </form>
       <div>
         <h1>
-          <a href='http://localhost:3000/'>Login</a>
+          <a href='http://localhost:3000/'>{useLabel('login')}</a>
         </h1>
       </div>
+      userid={useLabel('userid')}
     </>
   )
 }

@@ -1,4 +1,4 @@
-export interface LangI {
+export interface LabelI {
   key: string;
   label: string;
 }
