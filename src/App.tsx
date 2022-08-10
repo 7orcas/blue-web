@@ -7,17 +7,11 @@ import {
 import './App.css';
 import Layout from './app/Layout'
 import { AppContextProvider } from './sys/AppContext'
-import UrlSearchParams from './sys/util/urlSearchParams'
 
 function App() {
   
-  const params = new UrlSearchParams()
-
   return (
     <div className="App">
-      <p>Base Url: {params.baseUrl}</p>
-      <p>Initialise Url: {params.init}</p>
-      <p>Session ID: {params.sid}</p>
       <Router>
         <AppContextProvider>
           <Layout />

@@ -1,26 +1,21 @@
 import { LabelI } from '../Interfaces'
-import api from '../api'
+import axios from '../apiAxios'
 
-const loadLang = async () => {
+const loadLabels = async (baseUrl : string, setLabels : any) => {
 
     try {
-        var params = new URLSearchParams()
-        params.append('lang', 'en')
-
-        const response = await api.get(`/lang/login-pack?${params}`, {withCredentials: true})
-        
+        const response = await axios.get(`${baseUrl}/lang/pack`, {withCredentials: true})
         let labels : Array<LabelI> = []
-        for (const l of response.data) {
-            labels.push ({key : l._c, label : l.l})
+        for (const l of response.data.data) {
+            labels.push ({key : l.c, label : l.l})
         }
+        setLabels(labels)
         return labels
-
     } catch (err : any) {
-        console.log(err.message)
-
+        console.log('loadLabels' + err.message)
     } finally {
 
     }
 }
 
-export default loadLang
+export default loadLabels
