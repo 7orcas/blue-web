@@ -1,19 +1,16 @@
 import React, { useContext } from 'react'
-import AppContext, { AppContextI } from '../sys/AppContext'
-import useLabel from '../sys/util/useLabel'
-import loadLabels from '../sys/util/loadLabels'
-import UrlSearchParams from '../sys/util/urlSearchParams'
+import AppContext, { AppContextI } from '../../sys/AppContext'
+import loadLabels from '../../sys/lang/loadLabels'
+import useLabel from '../../sys/lang/useLabel'
+import UrlSearchParams from '../../sys/api/urlSearchParams'
 
-const Layout = () => {
+const Body = () => {
 
   const { baseUrl, setLabels } = useContext(AppContext) as AppContextI
   const params = new UrlSearchParams()
 
   return (
-    <>
-      <header>
-        <h1>Blue</h1>
-      </header>
+    <div className='main-body'>
       <form onSubmit={(e) => e.preventDefault()}>
         LANG PACK
         <button type="submit" onClick={() => loadLabels(baseUrl, setLabels)}>Lang</button>
@@ -28,8 +25,8 @@ const Layout = () => {
       <p>Session ID: {params.sid}</p>
 
       userid={useLabel('userid')}
-    </>
+    </div>
   )
 }
 
-export default Layout
+export default Body

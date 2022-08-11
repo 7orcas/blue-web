@@ -1,8 +1,8 @@
 import { FC, createContext, useState, useEffect } from 'react'
 import { LabelI } from './Interfaces'
-import axios from './apiAxios'
-import UrlSearchParams from './util/urlSearchParams'
-import loadLabels from './util/loadLabels'
+import axios from './api/apiAxios'
+import UrlSearchParams from './api/urlSearchParams'
+import loadLabels from './lang/loadLabels'
 
 interface Props {
   children: any

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import UrlSearchParams from './util/urlSearchParams'
+import UrlSearchParams from './urlSearchParams'
 
 const params = new UrlSearchParams()
 axios.defaults.baseURL = params.baseUrl

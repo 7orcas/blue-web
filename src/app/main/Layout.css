@@ -1,0 +1,32 @@
+
+.main-layout {
+  border: 1px solid orange;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: minmax(35px, 4%) minmax(28px, 3%) 89% minmax(35px, 4%);
+  justify-content: start;
+}
+
+.main-header {
+  border: 1px solid blue;
+  text-align: center;
+  font-size: 1.5em;
+  font-family: "Sarabun", sans-serif;
+}
+
+.main-menu {
+  border: 1px solid green;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.main-body {
+  border: 1px solid black;
+}
+
+.main-footer {
+  border: 1px solid red;
+}
