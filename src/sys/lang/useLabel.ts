@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import AppContext, { AppContextI } from '../AppContext'
+import AppContext, { AppContextI } from '../context/AppContext'
 
 const useLabel = (key : string) => {
 

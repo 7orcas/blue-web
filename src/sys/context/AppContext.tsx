@@ -1,8 +1,8 @@
 import { FC, createContext, useState, useEffect } from 'react'
-import { LabelI } from './Interfaces'
-import axios from './api/apiAxios'
-import UrlSearchParams from './api/urlSearchParams'
-import loadLabels from './lang/loadLabels'
+import axios from '../api/apiAxios'
+import UrlSearchParams from '../api/urlSearchParams'
+import loadLabels, { LabelI } from '../lang/loadLabels'
+import Session from './Session'
 
 interface Props {
   children: any
@@ -13,6 +13,9 @@ export interface AppContextI {
     org: number
     labels: LabelI[]
     setLabels: any
+    debugMessage: string
+    setDebugMessage: any
+    session: {}
   }
  
 
@@ -22,6 +25,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [labels, setLabels] = useState <LabelI[]>([])
   const [baseUrl, setBaseUrl] = useState ('')
+  const [debugMessage, setDebugMessage] = useState ('')
+  const [session, setSession] = useState ({})
 
   // Load language and orgs data, setup parameters at page load
   useEffect(() => {
@@ -43,7 +48,10 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
       baseUrl: baseUrl,
       org: 1,
       labels: labels,
-      setLabels: setLabels
+      setLabels: setLabels,
+      debugMessage: debugMessage,
+      setDebugMessage : setDebugMessage,
+      session : session
     }
 
   return (

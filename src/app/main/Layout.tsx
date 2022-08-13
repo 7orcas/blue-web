@@ -1,7 +1,7 @@
 import './Layout.css';
 import Header from './Header'
 import MainMenu from './MainMenu';
-import Body from './Body'
+import Body from '../body/Body'
 import Footer from './Footer'
 
 

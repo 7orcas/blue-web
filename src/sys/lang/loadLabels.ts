@@ -1,5 +1,9 @@
-import { LabelI } from '../Interfaces'
 import axios from '../api/apiAxios'
+
+export interface LabelI {
+  key: string;
+  label: string;
+}
 
 const loadLabels = async (baseUrl : string, setLabels : any) => {
 

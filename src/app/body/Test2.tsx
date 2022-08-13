@@ -1,15 +1,15 @@
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/context/AppContext'
 
-const Footer = () => {
+const Test2 = () => {
 
   const { debugMessage } = useContext(AppContext) as AppContextI
 
   return (
-    <section className='main-footer'>
+    <section >
       {debugMessage}
     </section>
   )
 }
 
-export default Footer
+export default Test2

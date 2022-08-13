@@ -21,6 +21,10 @@
   border: 1px solid green;
   text-align: center;
   font-size: 1.2em;
+  display: flex;
+}
+.menu-item {
+  margin-right: 20px;
 }
 
 .main-body {
