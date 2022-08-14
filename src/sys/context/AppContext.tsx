@@ -15,7 +15,8 @@ export interface AppContextI {
     setLabels: any
     debugMessage: string
     setDebugMessage: any
-    session: {}
+    session: Session
+    setSession: any
   }
  
 
@@ -26,16 +27,25 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const [labels, setLabels] = useState <LabelI[]>([])
   const [baseUrl, setBaseUrl] = useState ('')
   const [debugMessage, setDebugMessage] = useState ('')
-  const [session, setSession] = useState ({})
+  const [session, setSession] = useState <Session>(new Session ())
+
+  var sessionX = new Session ()
 
   // Load language and orgs data, setup parameters at page load
   useEffect(() => {
     const params = new UrlSearchParams()
+    sessionX.params = params
+
     const initialise = async () => {
       try {
         const response = await axios.get(params.init + '?SessionID=' + params.sid, {withCredentials: true})
         setBaseUrl(response.data.data.b)
-        loadLabels(response.data.data.b, setLabels)
+        sessionX.baseUrl = response.data.data.b
+        
+        const l = await loadLabels(response.data.data.b)
+        sessionX.labels = l!
+
+        setSession(sessionX)
       } catch (err : any) {
         console.log(err.message)
       } finally {
@@ -51,7 +61,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
       setLabels: setLabels,
       debugMessage: debugMessage,
       setDebugMessage : setDebugMessage,
-      session : session
+      session : session,
+      setSession : setSession
     }
 
   return (

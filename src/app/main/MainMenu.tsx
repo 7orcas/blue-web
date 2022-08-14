@@ -5,10 +5,12 @@ import MenuItem from "../../sys/menu/MenuItem"
 
 const MainMenu = () => {
 
-  const { setDebugMessage } = useContext(AppContext) as AppContextI
+  const { session, setSession } = useContext(AppContext) as AppContextI
 
   const setSelection = (item : string) => {
-    setDebugMessage(item)
+    var s = session.copy()
+    s.debugMessage = item
+    setSession(s)
   }
 
   return (
