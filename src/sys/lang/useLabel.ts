@@ -3,11 +3,11 @@ import AppContext, { AppContextI } from '../context/AppContext'
 
 const useLabel = (key : string) => {
 
-  const { labels } = useContext(AppContext) as AppContextI
+  const { session } = useContext(AppContext) as AppContextI
 
-  for (var i=0; i<labels.length; i++) {
-    if (labels[i].key === key)
-      return labels[i].label
+  for (var i=0; i<session.labels.length; i++) {
+    if (session.labels[i].key === key)
+      return session.labels[i].label
       
     }
   return key + '?'
