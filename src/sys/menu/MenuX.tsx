@@ -24,13 +24,33 @@ export class Item {
   menu : any [] = []
   selected : boolean = false
 
-  constructor (key : string, type : string, link : string, label : string) {
+  main = (key : string, type : string, link : string, label : string) => {
     this.key = key
     this.type = type
     this.link = link
     this.label = label
+    this.type = 'main'
   }
 
+  item = (key : string, type : string, link : string, label : string) => {
+    this.key = key
+    this.type = type
+    this.link = link
+    this.label = label
+    this.type = 'item'
+  }
+
+  sub = (label : string) => {
+    this.label = label
+    this.type = 'sub'
+  }
+
+  subx = (label : string) => {
+    this.label = label
+    this.type = 'subx'
+  }
+
+  head = (label : string) => this.type = 'head'
   div = () => this.type = 'div'
 }
 
