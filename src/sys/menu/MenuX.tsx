@@ -10,127 +10,80 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import MenuItemX, { MenuItemType } from "./MenuItemX"
+
+/*
+  Process menu items to display on page
+
+  [Licence]
+  @author John Stewart
+ */
+
 
 interface Props {
-  item: Item 
+  item: MenuItemX 
   setSelection: any
 }
 
-export class Item {
-  key : string = ''
-  type : string = ''
-  link : string = ''
-  label : string = ''
-  menu : any [] = []
-  selected : boolean = false
-
-  main = (key : string, type : string, link : string, label : string) => {
-    this.key = key
-    this.type = type
-    this.link = link
-    this.label = label
-    this.type = 'main'
-  }
-
-  item = (key : string, type : string, link : string, label : string) => {
-    this.key = key
-    this.type = type
-    this.link = link
-    this.label = label
-    this.type = 'item'
-  }
-
-  sub = (label : string) => {
-    this.label = label
-    this.type = 'sub'
-  }
-
-  subx = (label : string) => {
-    this.label = label
-    this.type = 'subx'
-  }
-
-  head = (label : string) => this.type = 'head'
-  div = () => this.type = 'div'
-}
-
-export class ItemX {
-  key : string = ''
-  type : string = ''
-  link : string = ''
-  label : string = ''
-  menu : any [] = []
-  selected : boolean = false
-
-  div = () => this.type = 'div'
-}
 
 const MenuX : FC<Props> = ({ item, setSelection }) => {
 
   return (
     <>
-      {item.type === 'main'?
+      {item.type === MenuItemType.main &&
         <div className='menu-item'>
-          <Link key={item.key} to={item.link}>
+          <Link to={item.link}>
             <button onClick={() => setSelection(item)}>{item.label}</button>
           </Link>
         </div>
-      :''}
-      {item.type === 'item'?
+      }
+
+      {item.type === MenuItemType.main_right &&
+        <div className='menu-item menu-item-right'>
+          <Link to={item.link}>
+            <button onClick={() => setSelection(item)}>{item.label}</button>
+          </Link>
+        </div>
+      }
+
+      {item.type === MenuItemType.item &&
         <div className='menu-item'>
-          <Link key={item.key} to={item.link}>
+          <Link to={item.link}>
             <MenuItem onClick={() => setSelection(item)}>{item.label}</MenuItem>
           </Link>
         </div>
-      :''}
-      {item.type === 'sub'?
-        <Menu key={item.key} menuButton={<MenuButton>{item.label}</MenuButton>} transition>
+      }
+
+      {item.type === MenuItemType.sub &&
+        <div className='menu-item'>
+          <Menu 
+            menuButton={<MenuButton>{item.label}</MenuButton>} transition
+            theming='dark' /* not working */
+            >
+            {item.menu.map(i => (
+              <MenuX key={i.key} item={i} setSelection={setSelection}/>
+            ))}
+          </Menu>
+        </div>
+      }
+
+      {item.type === MenuItemType.subx &&
+        <SubMenu label= {item.label}>
           {item.menu.map(i => (
-            <MenuX item={i} setSelection={setSelection}/>
-          ))}
-        </Menu>
-      :''}
-      {item.type === 'subx'?
-        <SubMenu key={item.key} label= {item.label}>
-          {item.menu.map(i => (
-            <MenuX item={i} setSelection={setSelection}/>
+            <MenuX key={i.key} item={i} setSelection={setSelection}/>
           ))}
         </SubMenu>
-      :''}
-      {item.type === 'head'?
-        <MenuHeader key={item.key}>HEAD</MenuHeader>
-      :''}
-      {item.type === 'div'?
-        <MenuDivider key={item.key}/>
-      :''}
+      }
+
+      {item.type === MenuItemType.head && 
+        <MenuHeader>{item.label}</MenuHeader>
+      }
+
+      {item.type === MenuItemType.div &&
+        <MenuDivider/>
+      }
     </>
   )
-
-  // return (
-  //   <>
-  //     {
-  //       (item instanceof Item)? (
-  //         <div className='menu-item'>
-  //           <Link key={item.key} to={item.link}>
-  //             <button onClick={() => setSelection(item)}>{item.label}</button>
-  //           </Link>
-  //         </div>
-  //       ) : ((item instanceof SubMenu)? (
-  //         <Menu key={item.key} menuButton={<MenuButton>{item.label}</MenuButton>} transition>
-  //           {item.menu.map(i => (
-  //             <Link key={i.key} to={i.link}>
-  //               <MenuItem><button onClick={() => setSelection(i)}>{i.label}</button></MenuItem>
-  //             </Link>
-  //           ))}
-  //         </Menu>
-  //       ) : ((item instanceof Header) ? (
-  //         <MenuHeader key={item.key}>item.label</MenuHeader>
-  //       ) : (
-  //         <MenuDivider key={item.key}/>
-  //       )))
-  //     }
-  //   </>
-  // )
 }
 
 export default MenuX
