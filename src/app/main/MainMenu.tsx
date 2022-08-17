@@ -3,18 +3,15 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/context/AppContext'
+import { SessionType } from '../../sys/context/Session'
 import useLabel from '../../sys/lang/useLabel'
 import MenuItemFactory from '../../sys/menu/MenuItemFactory'
-import MenuItemX from '../../sys/menu/MenuItemX'
+import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
 import MenuX from "../../sys/menu/MenuX"
 import {
   Menu,
-  MenuItem,
-  MenuButton,
-  MenuHeader,
-  MenuDivider,
-  SubMenu
-} from '@szhsin/react-menu';
+  MenuButton  
+  } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
@@ -26,7 +23,7 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
  */
 const MainMenu = () => {
 
-  const { session, setSession } = useContext(AppContext) as AppContextI
+  const { dispatch } = useContext(AppContext) as AppContextI
 
   const f = new MenuItemFactory (useLabel)
   
@@ -54,16 +51,21 @@ const MainMenu = () => {
   admin.link = '/Test3'
   admin.menu.push(f.item('logout', '/Test3'))
   admin.menu.push(f.item('chgpw', '/Test3'))
+  
+  var themeX = f.action('theme', () => {
+    dispatch ({type: SessionType.tgTheme})
+  })
   // admin.menu.push(f.div())
 
   const setSelection = (item : MenuItemX) => {
-    var s = session.copy()
-    s.debugMessage = item.label
-    setSession(s)
+    if (item.type === MenuItemType.action) {
+      item.action()
+    }
+    dispatch ({type: SessionType.debugMessage, payload: item.label})
   }
 
   return (
-    <div className='main-menu'>
+    <nav className='main-menu'>
       {f.items.map(i => (
         <MenuX key={i.key} item={i} setSelection={setSelection}/>
       ))}
@@ -78,7 +80,11 @@ const MainMenu = () => {
           ))}
         </Menu>
       </div>
-    </div>
+
+      <div className='menu-item'>
+        <button onClick={(e) => setSelection(themeX)}>{themeX.label}</button>
+      </div>
+    </nav>
   )
 
 }

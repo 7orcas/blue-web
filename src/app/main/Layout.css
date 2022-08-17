@@ -1,4 +1,14 @@
 
+#light {
+  background-color: white;
+  color: rgb(29, 28, 28);
+}
+
+#dark {
+  background-color: #1e1e1e;
+  color: #cccccc;
+}
+
 .main-layout {
   border: 1px solid orange;
   height: 100vh;

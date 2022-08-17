@@ -54,6 +54,12 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
         </div>
       }
 
+      {item.type === MenuItemType.action &&
+        <div className='menu-item'>
+          <MenuItem onClick={() => setSelection(item)}>{item.label}</MenuItem>
+        </div>
+      }
+
       {item.type === MenuItemType.sub &&
         <div className='menu-item'>
           <Menu 

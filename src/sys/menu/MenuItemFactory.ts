@@ -50,6 +50,14 @@ export default class MenuItemFactory {
     return i
   }
 
+  action = (label : string, action : any) => {
+    var i = new MenuItemX(this.key++)
+    i.type = MenuItemType.action
+    i.label = this.useLabel(label)
+    i.action = action
+    return i
+  }
+
   subx = (label : string) => {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.subx

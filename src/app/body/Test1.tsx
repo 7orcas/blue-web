@@ -1,17 +1,18 @@
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/context/AppContext'
+import { SessionType } from '../../sys/context/Session'
 import loadLabels from '../../sys/lang/loadLabels'
 import useLabel from '../../sys/lang/useLabel'
 
 const Test1 = () => {
 
-  const { session, setSession } = useContext(AppContext) as AppContextI
+  const { session, dispatch } = useContext(AppContext) as AppContextI
   
   const loadLabelsX = async() => {
     var l = await loadLabels(session.baseUrl)
-    var s = session.copy()
-    s.labels = l!
-    setSession(s)
+    if (l !== null) {
+      dispatch ({type: SessionType.loadLabels, payload: l})
+    }
   }
 
   return (

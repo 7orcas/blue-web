@@ -9,6 +9,7 @@ export enum MenuItemType {
   main,
   main_right,
   item,
+  action,
   sub,
   subx,
   head,
@@ -21,6 +22,7 @@ export default class MenuItemX {
   link : string = ''
   label : string = ''
   menu : any [] = []
+  action : any
 
   constructor (key : number) {
     this.key = key
