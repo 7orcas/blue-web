@@ -1,3 +1,4 @@
+import './Navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
@@ -21,9 +22,9 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
   [Licence]
   @author John Stewart
  */
-const MainMenu = () => {
+const Navbar = () => {
 
-  const { dispatch } = useContext(AppContext) as AppContextI
+  const { session, dispatch } = useContext(AppContext) as AppContextI
 
   const f = new MenuItemFactory (useLabel)
   
@@ -32,7 +33,7 @@ const MainMenu = () => {
   f.main('startmo', '/Test2')
   f.main('simus', '/Test2')
   var sub1 = f.sub('mastdat')
-  f.main('rpts', '/Test3')
+  f.main('fixes', '/Test3')
   
   //Sub menus
   sub1.menu.push(f.item('styles', '/Test3'))
@@ -52,10 +53,10 @@ const MainMenu = () => {
   admin.menu.push(f.item('logout', '/Test3'))
   admin.menu.push(f.item('chgpw', '/Test3'))
   
-  var themeX = f.action('theme', () => {
+  var themeX = f.action(session.theme === 'dark'? 'cThemeL' : 'cThemeD', () => {
     dispatch ({type: SessionType.tgTheme})
   })
-  // admin.menu.push(f.div())
+  admin.menu.push(themeX)
 
   const setSelection = (item : MenuItemX) => {
     if (item.type === MenuItemType.action) {
@@ -80,13 +81,9 @@ const MainMenu = () => {
           ))}
         </Menu>
       </div>
-
-      <div className='menu-item'>
-        <button onClick={(e) => setSelection(themeX)}>{themeX.label}</button>
-      </div>
     </nav>
   )
 
 }
 
-export default MainMenu
+export default Navbar
