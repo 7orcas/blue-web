@@ -13,16 +13,12 @@ export default class MenuItemFactory {
   items : Array<MenuItemX> = []
   key : number = 0
 
-  constructor (useLabel : any) {
-    this.useLabel = useLabel
-  }
-
   //Top level item
   main = (label : string, link : string) : MenuItemX => {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.main
     i.link = link
-    i.label = this.useLabel(label)
+    i.label = label
     this.items.push(i)
     return i
   }
@@ -37,7 +33,7 @@ export default class MenuItemFactory {
   sub = (label : string) => {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.sub
-    i.label = this.useLabel(label)
+    i.label = label
     this.items.push(i)
     return i
   }
@@ -46,14 +42,23 @@ export default class MenuItemFactory {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.item
     i.link = link
-    i.label = this.useLabel(label)
+    i.label = label
+    return i
+  }
+
+  checkbox = (label : string, action : any, checked : boolean) => {
+    var i = new MenuItemX(this.key++)
+    i.type = MenuItemType.checkbox
+    i.label = label
+    i.action = action
+    i.checked = checked
     return i
   }
 
   action = (label : string, action : any) => {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.action
-    i.label = this.useLabel(label)
+    i.label = label
     i.action = action
     return i
   }
@@ -61,14 +66,14 @@ export default class MenuItemFactory {
   subx = (label : string) => {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.subx
-    i.label = this.useLabel(label)
+    i.label = label
     return i
   }
 
   head = (label : string) => {
     var i = new MenuItemX(this.key++)
     i.type = MenuItemType.head
-    i.label = this.useLabel(label)
+    i.label = label
     return i
   }
 

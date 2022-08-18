@@ -26,11 +26,12 @@ const Test1 = () => {
           <a href='http://localhost:8080/blue-web-login/?u=js@7orcas.com&p=123&org=t'>{useLabel('login')}</a>
         </h1>
       </div>
+      <p>Userid: {session.userid}</p>
       <p>Base Url: {session.params.baseUrl + session.baseUrl}</p>
       <p>Initialise Url: {session.params.init}</p>
       <p>Session ID: {session.params.sid}</p>
-
-      userid={useLabel('userid')}
+      <p>Lang: {session.lang}</p>
+      <p>Roles: {session.roles.map(r => r + ' ')}</p>
     </div>
   )
 }

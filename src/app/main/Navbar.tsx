@@ -1,23 +1,20 @@
 import './Navbar.css';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/context/AppContext'
 import { SessionType } from '../../sys/context/Session'
-import useLabel from '../../sys/lang/useLabel'
 import MenuItemFactory from '../../sys/menu/MenuItemFactory'
 import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
 import MenuX from "../../sys/menu/MenuX"
-import {
-  Menu,
-  MenuButton  
-  } from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
+import { Menu, MenuButton } from '@szhsin/react-menu';
 
 /*
   Application main menu
+  Creates the menu dynamically
+  User roles are checked to determine if a menu item is displayed
 
   [Licence]
   @author John Stewart
@@ -26,14 +23,21 @@ const Navbar = () => {
 
   const { session, dispatch } = useContext(AppContext) as AppContextI
 
-  const f = new MenuItemFactory (useLabel)
+  const f = new MenuItemFactory ()
   
+  const containsRole = (role : string) : boolean => {
+    return session.roles.includes(role)
+  }
+
   //Top Level
   f.main('planmat', '/')
   f.main('startmo', '/Test2')
   f.main('simus', '/Test2')
   var sub1 = f.sub('mastdat')
-  f.main('fixes', '/Test3')
+
+  if (containsRole('Fix')) {
+    f.main('fixes', '/Test3')
+  }
   
   //Sub menus
   sub1.menu.push(f.item('styles', '/Test3'))
@@ -53,13 +57,21 @@ const Navbar = () => {
   admin.menu.push(f.item('logout', '/Test3'))
   admin.menu.push(f.item('chgpw', '/Test3'))
   
-  var themeX = f.action(session.theme === 'dark'? 'cThemeL' : 'cThemeD', () => {
+  var themeX = f.action(session.theme === 'dark'? 'themeL' : 'themeD', () => {
     dispatch ({type: SessionType.tgTheme})
   })
   admin.menu.push(themeX)
 
+  if (containsRole('LangEdit')) {
+    var editLabel = f.checkbox('editLabels', 
+      () => {dispatch ({type: SessionType.editLabels})},
+      session.editLabels
+    )
+    admin.menu.push(editLabel)
+  }
+
   const setSelection = (item : MenuItemX) => {
-    if (item.type === MenuItemType.action) {
+    if (item.type === MenuItemType.action || item.type === MenuItemType.checkbox) {
       item.action()
     }
     dispatch ({type: SessionType.debugMessage, payload: item.label})

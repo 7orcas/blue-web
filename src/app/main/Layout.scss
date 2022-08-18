@@ -1,0 +1,54 @@
+$navbar-bg: #3d3f4d;
+$navbar-item-bg:rgb(0,94,184);
+$navbar-item-bg-hover:rgb(0,94,184);
+$navbar-item-color:#f1f1f1;
+
+$light-bg:white;
+$light-color:rgb(29, 28, 28);
+$light-navbar-item-color:rgb(29, 28, 28);
+
+$dark-bg:#1e1e1e;
+$dark-color:#cccccc;
+$dark-navbar-bg:#4b4a4a;
+$dark-navbar-item-color:#cccccc;
+$dark-navbar-item-color-hover:rgb(29, 28, 28);
+
+
+// see mixin for functions
+
+#light {
+  background-color: $light-bg;
+  color: $light-color;
+}
+
+#dark {
+  background-color: $dark-bg;
+  color: $dark-color;
+}
+
+.main-layout {
+  border: 1px solid orange;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: minmax(35px, 4%) minmax(28px, 3%) 89% minmax(35px, 4%);
+  justify-content: start;
+}
+
+.main-header {
+  border: 1px solid blue;
+  text-align: center;
+  font-size: 1.5em;
+  font-family: "Sarabun", sans-serif;
+}
+
+
+.main-body {
+  border: 1px solid black;
+}
+
+.main-footer {
+  border: 1px solid red;
+}

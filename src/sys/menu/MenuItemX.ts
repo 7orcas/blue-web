@@ -9,6 +9,7 @@ export enum MenuItemType {
   main,
   main_right,
   item,
+  checkbox,
   action,
   sub,
   subx,
@@ -23,6 +24,7 @@ export default class MenuItemX {
   label : string = ''
   menu : any [] = []
   action : any
+  checked : boolean = false
 
   constructor (key : number) {
     this.key = key

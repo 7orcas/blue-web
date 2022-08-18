@@ -1,4 +1,3 @@
-
 #light {
   background-color: white;
   color: rgb(29, 28, 28);
@@ -27,11 +26,10 @@
   font-family: "Sarabun", sans-serif;
 }
 
-
 .main-body {
   border: 1px solid black;
 }
 
 .main-footer {
   border: 1px solid red;
-}
+}/*# sourceMappingURL=Layout.css.map */

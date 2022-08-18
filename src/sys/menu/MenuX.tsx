@@ -11,6 +11,7 @@ import {
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import MenuItemX, { MenuItemType } from "./MenuItemX"
+import LangLabel from '../lang/LangLabel'
 
 /*
   Process menu items to display on page
@@ -33,7 +34,9 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
       {item.type === MenuItemType.main &&
         <div className='menu-item'>
           <Link to={item.link}>
-            <button onClick={() => setSelection(item)}>{item.label}</button>
+            <button onClick={() => setSelection(item)}>
+              <LangLabel langkey={item.label}/>
+            </button>
           </Link>
         </div>
       }
@@ -41,7 +44,9 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
       {item.type === MenuItemType.main_right &&
         <div className='menu-item menu-item-right'>
           <Link to={item.link}>
-            <button onClick={() => setSelection(item)}>{item.label}</button>
+            <button onClick={() => setSelection(item)}>
+              <LangLabel langkey={item.label}/>
+            </button>
           </Link>
         </div>
       }
@@ -49,21 +54,37 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
       {item.type === MenuItemType.item &&
         <div className='menu-item'>
           <Link to={item.link}>
-            <MenuItem onClick={() => setSelection(item)}>{item.label}</MenuItem>
+            <MenuItem onClick={() => setSelection(item)}>
+              <LangLabel langkey={item.label}/>
+            </MenuItem>
           </Link>
         </div>
       }
 
       {item.type === MenuItemType.action &&
         <div className='menu-item'>
-          <MenuItem onClick={() => setSelection(item)}>{item.label}</MenuItem>
+          <MenuItem onClick={() => setSelection(item)}>
+            <LangLabel langkey={item.label}/>
+          </MenuItem>
+        </div>
+      }
+
+      {item.type === MenuItemType.checkbox &&
+        <div className={'menu-item ' + (!item.checked?'menu-item-unchecked':'')}>
+          <MenuItem 
+            type='checkbox' 
+            onClick={() => setSelection(item)}
+            checked={item.checked}
+            >
+            <LangLabel langkey={item.label}/>
+          </MenuItem>
         </div>
       }
 
       {item.type === MenuItemType.sub &&
         <div className='menu-item'>
           <Menu 
-            menuButton={<MenuButton>{item.label}</MenuButton>} transition
+            menuButton={<MenuButton><LangLabel langkey={item.label}/></MenuButton>} transition
             theming='dark' /* not working */
             >
             {item.menu.map(i => (
@@ -82,7 +103,9 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
       }
 
       {item.type === MenuItemType.head && 
-        <MenuHeader>{item.label}</MenuHeader>
+        <MenuHeader>
+          <LangLabel langkey={item.label}/>
+        </MenuHeader>
       }
 
       {item.type === MenuItemType.div &&

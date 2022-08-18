@@ -1,10 +1,10 @@
-import useLabel from '../../sys/lang/useLabel'
+import LangLabel from '../../sys/lang/LangLabel'
 
 const Header = () => {
 
   return (
     <div className='main-header'>
-      {useLabel('appname')}
+      <LangLabel langkey='appname' />
     </div>
   )
 }
