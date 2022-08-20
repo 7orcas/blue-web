@@ -15,7 +15,7 @@ export enum SessionType {
   baseUrl,
   org,
   lang,
-  loadLabels,
+  labels,
   editLabels,
   roles,
   debugMessage,
@@ -30,7 +30,7 @@ class Session {
   org : number = 0
   lang : string = ''
   labels : LabelI[] = []
-  editLabels : boolean = true
+  editLabels : boolean = false
   roles : string[] = []
   debugMessage: string = ''
   theme : string = 'dark'

@@ -1,7 +1,9 @@
-@import './Layout.scss';
+@import './variables.scss';
 
 .main-menu {
-  border: 1px solid green;
+  @if $debug-borders {
+    border: $debug-borders-width solid green;
+  }
   background-color: $navbar-bg;
   text-align: center;
   font-size: 1.2em;

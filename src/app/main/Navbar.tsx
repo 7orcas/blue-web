@@ -30,6 +30,7 @@ const Navbar = () => {
   }
 
   //Top Level
+  f.main('labeladmin', '/Labels')
   f.main('planmat', '/')
   f.main('startmo', '/Test2')
   f.main('simus', '/Test2')

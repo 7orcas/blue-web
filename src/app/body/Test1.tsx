@@ -11,7 +11,7 @@ const Test1 = () => {
   const loadLabelsX = async() => {
     var l = await loadLabels(session.baseUrl)
     if (l !== null) {
-      dispatch ({type: SessionType.loadLabels, payload: l})
+      dispatch ({type: SessionType.labels, payload: l})
     }
   }
 

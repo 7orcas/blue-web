@@ -35,7 +35,7 @@ const reducer = (session : Session, action : any) => {
     case SessionType.debugMessage:
       return {...session, debugMessage: action.payload};
     
-    case SessionType.loadLabels:
+    case SessionType.labels:
       return {...session, labels: action.payload};
 
     case SessionType.editLabels:

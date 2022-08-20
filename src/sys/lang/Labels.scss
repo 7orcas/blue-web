@@ -1,0 +1,31 @@
+@import '../../app/main/Layout.scss';
+
+.md-table {
+  border-collapse:collapse;
+}
+
+#dark .md-table {
+  border: 1px solid $dark-color;
+}
+
+#dark .md-table td {
+  border: solid 1px $dark-color;
+}
+
+#light .md-table {
+  border: 1px solid $light-color;
+}
+
+#light .md-table td {
+  border: solid 1px $light-color;
+}
+
+#dark .md-table {
+  background-color: $dark-navbar-bg;
+}
+#dark .md-table {
+  color: $dark-navbar-item-color;
+}
+#light .md-table {
+  color: $light-navbar-item-color;
+}

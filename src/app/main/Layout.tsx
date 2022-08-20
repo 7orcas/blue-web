@@ -4,7 +4,6 @@ import AppContext,
   { AppContextI 
   } from '../../sys/context/AppContext'
 import Header from './Header'
-import Navbar from './Navbar'
 import Body from '../body/Body'
 import Footer from './Footer'
 
@@ -22,10 +21,8 @@ const Layout = () => {
   return (
     <div className='main-layout' id={session.theme}>
       <Header />
-      <Navbar />
       <Body />
       <Footer />
-      
     </div>
   )
 }

@@ -1,41 +1,5 @@
-#light {
-  background-color: white;
-  color: rgb(29, 28, 28);
-}
-
-#dark {
-  background-color: #1e1e1e;
-  color: #cccccc;
-}
-
-.main-layout {
-  border: 1px solid orange;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: minmax(35px, 4%) minmax(28px, 3%) 89% minmax(35px, 4%);
-  justify-content: start;
-}
-
-.main-header {
-  border: 1px solid blue;
-  text-align: center;
-  font-size: 1.5em;
-  font-family: "Sarabun", sans-serif;
-}
-
-.main-body {
-  border: 1px solid black;
-}
-
-.main-footer {
-  border: 1px solid red;
-}
-
 .main-menu {
-  border: 1px solid green;
+  border: 5px solid green;
   background-color: #3d3f4d;
   text-align: center;
   font-size: 1.2em;

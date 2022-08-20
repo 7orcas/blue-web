@@ -1,20 +1,4 @@
-$navbar-bg: #3d3f4d;
-$navbar-item-bg:rgb(0,94,184);
-$navbar-item-bg-hover:rgb(0,94,184);
-$navbar-item-color:#f1f1f1;
-
-$light-bg:white;
-$light-color:rgb(29, 28, 28);
-$light-navbar-item-color:rgb(29, 28, 28);
-
-$dark-bg:#1e1e1e;
-$dark-color:#cccccc;
-$dark-navbar-bg:#4b4a4a;
-$dark-navbar-item-color:#cccccc;
-$dark-navbar-item-color-hover:rgb(29, 28, 28);
-
-
-// see mixin for functions
+@import './variables.scss';
 
 #light {
   background-color: $light-bg;
@@ -26,29 +10,65 @@ $dark-navbar-item-color-hover:rgb(29, 28, 28);
   color: $dark-color;
 }
 
+.fixed-header, .fixed-footer{
+  // width: 100%;
+  // position: fixed;        
+}
+.fixed-header{
+  // top: 0;
+}
+.fixed-footer{
+  // bottom: 0;
+}
+
 .main-layout {
-  border: 1px solid orange;
+  @if $debug-borders {
+    border: $debug-borders-width solid orange;
+  }
   height: 100vh;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: minmax(35px, 4%) minmax(28px, 3%) 89% minmax(35px, 4%);
+  display: flex;
+  flex-flow: column nowrap;
   justify-content: start;
+  align-items: stretch;
+  // grid-template-columns: 100%;
+  // grid-template-rows: minmax(35px, 4%) minmax(28px, 3%) 89% minmax(35px, 4%);
+  // grid-template-rows: minmax(50px, 10%) 50% minmax(35px, 4%) minmax(50px, 10%);
 }
 
 .main-header {
-  border: 1px solid blue;
+  @if $debug-borders {
+    border: $debug-borders-width solid rgb(255, 0, 255);
+  }
+  flex-basis: 20%;
+  max-height: 60px;
+}
+
+.main-title {
+  @if $debug-borders {
+    border: $debug-borders-width solid blue;
+  }
   text-align: center;
   font-size: 1.5em;
   font-family: "Sarabun", sans-serif;
 }
 
-
 .main-body {
-  border: 1px solid black;
+  @if $debug-borders {
+    border: $debug-borders-width solid red;
+  }
+  min-height: 0;
+  flex-basis: 60%;
+  flex-grow: 10;
+  overflow: auto;
 }
 
 .main-footer {
-  border: 1px solid red;
+  @if $debug-borders {
+    border: $debug-borders-width solid rgb(5, 248, 106);
+  }
+  flex-basis: 20%;
+  scroll-behavior: auto;
+  max-height: 17px;
 }

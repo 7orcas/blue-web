@@ -56,7 +56,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         dispatch ({type: SessionType.roles, payload: roles})
 
         const l = await loadLabels(response.data.data.b)
-        dispatch ({type: SessionType.loadLabels, payload: l})
+        dispatch ({type: SessionType.labels, payload: l})
         
       } catch (err : any) {
         console.log(err.message)
