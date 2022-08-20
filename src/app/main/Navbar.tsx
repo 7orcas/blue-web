@@ -1,4 +1,4 @@
-import './Navbar.css';
+import '../../css/Navbar.css';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

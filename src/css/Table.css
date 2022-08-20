@@ -1,0 +1,38 @@
+.md-table {
+  border-collapse: collapse;
+}
+.md-table th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0; /* required for the stickiness */
+}
+
+.table-header {
+  font-weight: bold;
+}
+
+#light .md-table {
+  border: 1px solid rgb(29, 28, 28);
+}
+#light .md-table th {
+  background-color: #759ac7;
+  color: white;
+  border: solid 1px rgb(29, 28, 28);
+}
+#light .md-table td {
+  border: solid 1px rgb(29, 28, 28);
+  color: rgb(29, 28, 28);
+}
+
+#dark .md-table {
+  border: 1px solid #cfcbcb;
+}
+#dark .md-table th {
+  background-color: #303442;
+  color: #cfcbcb;
+  border: solid 1px #cfcbcb;
+}
+#dark .md-table td {
+  border: solid 1px #cfcbcb;
+  color: #cfcbcb;
+}/*# sourceMappingURL=Table.css.map */

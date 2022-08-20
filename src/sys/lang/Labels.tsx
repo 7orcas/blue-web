@@ -1,4 +1,4 @@
-import './Labels.css';
+import '../../css/Table.css';
 import React from 'react'
 import { useTable } from 'react-table'
 import { useContext } from 'react'
@@ -45,16 +45,11 @@ const Labels = () => {
     <table {...getTableProps()} className='md-table'>
        <thead>
          {headerGroups.map(headerGroup => (
-           <tr {...headerGroup.getHeaderGroupProps()}>
+           <tr {...headerGroup.getHeaderGroupProps()} className='table-header'>
              {headerGroup.headers.map(column => (
                <th
                  {...column.getHeaderProps()}
-                 style={{
-                   borderBottom: 'solid 3px red',
-                   background: 'aliceblue',
-                   color: 'black',
-                   fontWeight: 'bold',
-                 }}
+                 className='table-header'
                >
                  {column.render('Header')}
                </th>

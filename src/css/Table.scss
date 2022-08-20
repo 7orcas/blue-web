@@ -1,0 +1,43 @@
+@import './variables.scss';
+
+.md-table {
+  border-collapse:collapse;
+  
+  th {
+    position: sticky;
+    top: 0; /* required for the stickiness */
+  }
+}
+
+.table-header {
+  font-weight: bold;
+  // border-bottom: 3px solid red;
+}
+
+#light .md-table {
+  border: 1px solid $light-color;
+  
+  th {
+    background-color: $light-table-header-bg;
+    color: $light-table-header-color;
+    border: solid 1px $light-color;
+  }
+  td {
+    border: solid 1px $light-color;
+    color: $light-color;
+  }
+}
+
+#dark .md-table {
+  border: 1px solid $dark-color;
+  
+  th {
+    background-color: $dark-table-header-bg;
+    color: $dark-table-header-color;
+    border: solid 1px $dark-color;
+  }
+  td {
+    border: solid 1px $dark-color;
+    color: $dark-color;
+  }
+}

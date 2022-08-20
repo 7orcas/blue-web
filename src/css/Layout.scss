@@ -32,6 +32,7 @@
   flex-flow: column nowrap;
   justify-content: start;
   align-items: stretch;
+  overflow: hidden;
   // grid-template-columns: 100%;
   // grid-template-rows: minmax(35px, 4%) minmax(28px, 3%) 89% minmax(35px, 4%);
   // grid-template-rows: minmax(50px, 10%) 50% minmax(35px, 4%) minmax(50px, 10%);

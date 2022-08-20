@@ -1,0 +1,75 @@
+@import './variables.scss';
+
+.main-menu {
+  @if $debug-borders {
+    border: $debug-borders-width solid green;
+  }
+  text-align: center;
+  font-size: 1.2em;
+  display: flex;
+}
+
+.menu-item {
+  button {
+    margin-right: 20px;
+    border: 0; 
+  }
+  .szh-menu__item {
+    text-decoration: none;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+.menu-item-right {
+  margin-left: auto;
+}
+
+.menu-item-unchecked li {
+  padding-left: 1.3em;
+}
+
+#light {
+  .main-menu {
+    background-color: $light-navbar-bg;
+  }
+  .menu-item button {
+    background-color: $light-navbar-bg;
+    color: $light-navbar-item-color;
+  }
+  .menu-item button:hover{
+    background-color: $light-navbar-item-bg-hover;
+  }
+  .szh-menu {
+    background-color: $light-navbar-bg;
+  }
+  .szh-menu__item {
+    color: $light-navbar-item-color;
+  }
+  .szh-menu__item:hover {
+    color: $light-navbar-bg;
+  }
+}
+
+#dark {
+  .main-menu {
+    background-color: $dark-navbar-bg;
+  }
+  .menu-item button {
+    background-color: $dark-navbar-bg;
+    color: $dark-navbar-item-color;
+  }
+  .menu-item button:hover{
+    background-color:$dark-navbar-item-bg-hover;
+  }
+  .szh-menu {
+    background-color: $dark-navbar-bg;
+  }
+  .szh-menu__item {
+    color: $dark-navbar-item-color;
+  }
+  .szh-menu__item:hover {
+    color: $dark-navbar-bg;
+  }
+}
