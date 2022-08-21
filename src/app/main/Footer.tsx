@@ -6,7 +6,7 @@ const Footer = () => {
   const { session } = useContext(AppContext) as AppContextI
 
   return (
-    <section className='main-footer fixed-footer'>
+    <section className='main-footer'>
       {session.debugMessage}
     </section>
   )

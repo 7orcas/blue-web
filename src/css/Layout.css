@@ -41,4 +41,16 @@
   flex-basis: 20%;
   scroll-behavior: auto;
   max-height: 17px;
+  background-color: white;
+  color: #3d3f4d;
+}
+
+#light .main-footer {
+  background-color: rgb(29, 28, 28);
+  color: white;
+}
+
+#dark .main-footer {
+  background-color: #c1bebe;
+  color: #4b4a4a;
 }/*# sourceMappingURL=Layout.css.map */

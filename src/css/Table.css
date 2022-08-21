@@ -19,6 +19,12 @@
   color: white;
   border: solid 1px rgb(29, 28, 28);
 }
+#light .md-table .table-row-0 {
+  background-color: white;
+}
+#light .md-table .table-row-1 {
+  background-color: #e1e1e1;
+}
 #light .md-table td {
   border: solid 1px rgb(29, 28, 28);
   color: rgb(29, 28, 28);
@@ -31,6 +37,12 @@
   background-color: #303442;
   color: #cfcbcb;
   border: solid 1px #cfcbcb;
+}
+#dark .md-table .table-row-0 {
+  background-color: #1e1e1e;
+}
+#dark .md-table .table-row-1 {
+  background-color: #343333;
 }
 #dark .md-table td {
   border: solid 1px #cfcbcb;

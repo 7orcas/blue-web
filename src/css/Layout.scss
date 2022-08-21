@@ -10,17 +10,6 @@
   color: $dark-color;
 }
 
-.fixed-header, .fixed-footer{
-  // width: 100%;
-  // position: fixed;        
-}
-.fixed-header{
-  // top: 0;
-}
-.fixed-footer{
-  // bottom: 0;
-}
-
 .main-layout {
   @if $debug-borders {
     border: $debug-borders-width solid orange;
@@ -72,4 +61,16 @@
   flex-basis: 20%;
   scroll-behavior: auto;
   max-height: 17px;
+  background-color: white;
+  color: #3d3f4d;  
+}
+
+#light .main-footer {
+  background-color: $light-footer-bg;
+  color: $light-footer-color;  
+}
+
+#dark .main-footer {
+  background-color: $dark-footer-bg;
+  color: $dark-footer-color;  
 }

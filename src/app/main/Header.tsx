@@ -4,7 +4,7 @@ import Navbar from './Navbar'
 const Header = () => {
 
   return (
-    <div className='main-header fixed-header'>
+    <div className='main-header'>
       <div className='main-title'>
         <LangLabel langkey='appname' />
       </div>

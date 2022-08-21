@@ -18,29 +18,17 @@ interface Props {
 }
 
 export interface AppContextI {
-    sessionOrg: Session
-    setSessionOrg: any
-    session: Session
-    dispatch: any
-    updateSession: any
-    theme : string
-    setTheme : any
-  }
+  session: Session
+  dispatch: any
+}
  
 const AppContext = createContext<AppContextI | null>(null)
 
 export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, dispatch] = useReducer(reducer, new Session ());
-  const [sessionOrg, setSessionOrg] = useState <Session>(new Session ())
-  const [theme, setTheme] = useState ('dark')
-
-  const updateSession = (s : Session) => {
-    setSessionOrg (s)
-  }
-
-  
-  // Load language and orgs data, setup parameters at page load
+    
+  // Load app defaults
   useEffect(() => {
     const params = new UrlSearchParams()
     dispatch ({ type: SessionType.params, payload: params })
@@ -66,15 +54,10 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
     initialise()
   },[])
 
-    const appValue: AppContextI = {
-      sessionOrg : sessionOrg,
-      setSessionOrg : setSessionOrg,
-      session: session,
-      dispatch: dispatch,
-      updateSession : updateSession,
-      theme : theme,
-      setTheme : setTheme
-    }
+  const appValue: AppContextI = {
+    session: session,
+    dispatch: dispatch,
+  }
 
   return (
     <AppContext.Provider value={appValue}>

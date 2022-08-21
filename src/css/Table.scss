@@ -22,6 +22,12 @@
     color: $light-table-header-color;
     border: solid 1px $light-color;
   }
+  .table-row-0 {
+    background-color: $light-table-row-0;
+  }
+  .table-row-1 {
+    background-color: $light-table-row-1;
+  }
   td {
     border: solid 1px $light-color;
     color: $light-color;
@@ -35,6 +41,12 @@
     background-color: $dark-table-header-bg;
     color: $dark-table-header-color;
     border: solid 1px $dark-color;
+  }
+  .table-row-0 {
+    background-color: $dark-table-row-0;
+  }
+  .table-row-1 {
+    background-color: $dark-table-row-1;
   }
   td {
     border: solid 1px $dark-color;
