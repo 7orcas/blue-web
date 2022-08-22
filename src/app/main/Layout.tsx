@@ -1,8 +1,7 @@
 import '../../css/Layout.css'
 import { useContext } from 'react'
-import AppContext, 
-  { AppContextI 
-  } from '../../sys/context/AppContext'
+import AppContext, { AppContextI } from '../../sys/context/AppContext'
+import { ThemeType } from '../../sys/context/Session'
 import Header from './Header'
 import Body from '../body/Body'
 import Footer from './Footer'
@@ -19,7 +18,7 @@ const Layout = () => {
   const { session } = useContext(AppContext) as AppContextI
 
   return (
-    <div className='main-layout' id={session.theme}>
+    <div className='main-layout' id={session.theme === ThemeType.light ? 'light' : 'dark'}>
       <Header />
       <Body />
       <Footer />

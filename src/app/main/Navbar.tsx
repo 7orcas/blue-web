@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/context/AppContext'
-import { SessionType } from '../../sys/context/Session'
+import { SessionType, ThemeType } from '../../sys/context/Session'
 import MenuItemFactory from '../../sys/menu/MenuItemFactory'
 import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
 import MenuX from "../../sys/menu/MenuX"
@@ -58,7 +58,7 @@ const Navbar = () => {
   admin.menu.push(f.item('logout', '/Test3'))
   admin.menu.push(f.item('chgpw', '/Test3'))
   
-  var themeX = f.action(session.theme === 'dark'? 'themeL' : 'themeD', () => {
+  var themeX = f.action(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
     dispatch ({type: SessionType.tgTheme})
   })
   admin.menu.push(themeX)

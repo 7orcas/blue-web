@@ -22,6 +22,11 @@ export enum SessionType {
   tgTheme,
 }
 
+export enum ThemeType {
+  light,
+  dark,
+}
+
 
 class Session {
   userid : string = ''
@@ -33,7 +38,7 @@ class Session {
   editLabels : boolean = false
   roles : string[] = []
   debugMessage: string = ''
-  theme : string = 'dark'
+  theme : ThemeType = ThemeType.dark
 }
 
 export default Session

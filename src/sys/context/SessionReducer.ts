@@ -1,4 +1,4 @@
-import Session, { SessionType } from './Session'
+import Session, { SessionType, ThemeType } from './Session'
 
 /*
   Session state object reducer
@@ -27,7 +27,7 @@ const reducer = (session : Session, action : any) => {
       return {...session, org: action.payload};
 
     case SessionType.tgTheme:
-      return {...session, theme: session.theme === 'light' ? 'dark' : 'light'};
+      return {...session, theme: session.theme === ThemeType.light ? ThemeType.dark : ThemeType.light};
     
     case SessionType.roles:
       return {...session, roles: action.payload};
