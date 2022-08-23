@@ -28,6 +28,8 @@
   text-align: center;
   font-size: 1.5em;
   font-family: "Sarabun", sans-serif;
+  display: flex;
+  justify-content: center;
 }
 
 .main-body {

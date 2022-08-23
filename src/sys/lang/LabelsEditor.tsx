@@ -1,16 +1,16 @@
 import React, { useState, useContext, useCallback } from 'react'
-import AppContext, { AppContextI } from '../../sys/context/AppContext'
-import { SessionType } from '../../sys/context/Session';
+import AppContext, { AppContextI } from '../context/AppContext'
+import { SessionType } from '../context/Session';
 import { LabelI } from './loadLabels'
 import ReactDataGrid from '@inovua/reactdatagrid-community';
-import { ThemeType } from '../../sys/context/Session'
+import { ThemeType } from '../context/Session'
 import useLabel from './useLabel'
 import '@inovua/reactdatagrid-community/index.css';
 import '@inovua/reactdatagrid-community/theme/default-dark.css'
 import { TypeEditInfo } from '@inovua/reactdatagrid-community/types';
-import Button from '@mui/material/Button';
+import ButtonX from '../utils/ButtonX';
 
-const LabelEditor = () => {
+const LabelsEditor = () => {
   
   const { session, dispatch } = useContext(AppContext) as AppContextI
   const [dataSource, setDataSource] = useState<LabelI[]>(session.labels.map(l => Object.assign({}, l)))
@@ -19,10 +19,11 @@ const LabelEditor = () => {
   
   const columns = [
     { name: 'id', header : 'ID', type: 'number', defaultWidth: 60, editable: false },
+    { name: 'org', header : 'Org', type: 'number', defaultWidth: 60, editable: false },
     { name: 'key', header : useLabel('key'), defaultFlex: 0, xdefaultLocked: 'start', editable: false },
     { name: 'label', header : useLabel('label'), defaultFlex: 1, xdefaultLocked: 'end' },
   ];
-  const columnOrder = ['id', 'key', 'label']
+  const columnOrder = ['id', 'org', 'key', 'label']
   
   const defaultFilterValue = [
     { name: 'key', type: 'string', operator: 'contains', value: '' },
@@ -47,7 +48,9 @@ const LabelEditor = () => {
 
   return (
     <>
-      <Button variant="outlined" onClick={update} style={{marginLeft:'20px'}}>commit</Button>
+      <div style={{marginLeft:'20px'}}>
+      <ButtonX onClick={update} langkey='commit'/>
+      </div>
       <ReactDataGrid
         idProperty='id'
         style={gridStyle}
@@ -66,4 +69,4 @@ const LabelEditor = () => {
   
 }
 
-export default LabelEditor
+export default LabelsEditor
