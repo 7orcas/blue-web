@@ -36,6 +36,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
     const initialise = async () => {
       try {
         const response = await axios.get(params.init + '?SessionID=' + params.sid, {withCredentials: true})
+  
         dispatch ({type: SessionType.userid, payload: response.data.data.u})
         dispatch ({ type: SessionType.baseUrl, payload: response.data.data.b })
         dispatch ({type: SessionType.lang, payload: response.data.data.l})

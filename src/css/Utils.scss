@@ -1,0 +1,10 @@
+@import './variables.scss';
+
+.lang-dialog-title {
+  background-color: $dialog-title-bg;
+  color: $dialog-title-color;
+}
+
+.lang-dialog-content {
+  margin-bottom: 20px;
+}
