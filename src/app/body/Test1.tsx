@@ -27,6 +27,7 @@ const Test1 = () => {
         </h1>
       </div>
       <p>Userid: {session.userid}</p>
+      <p>Org: {session.org}</p>
       <p>Base Url: {session.params.baseUrl + session.baseUrl}</p>
       <p>Initialise Url: {session.params.init}</p>
       <p>Session ID: {session.params.sid}</p>
