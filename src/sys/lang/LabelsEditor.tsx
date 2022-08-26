@@ -1,13 +1,15 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../context/AppContext'
-import { SessionType } from '../context/Session';
+import { SessionType } from '../context/Session'
 import loadLabels, { LabelI } from './loadLabels'
-import ReactDataGrid from '@inovua/reactdatagrid-community';
+import ReactDataGrid from '@inovua/reactdatagrid-community'
 import { ThemeType } from '../context/Session'
-import '@inovua/reactdatagrid-community/index.css';
+import '@inovua/reactdatagrid-community/index.css'
 import '@inovua/reactdatagrid-community/theme/default-dark.css'
-import { TypeEditInfo } from '@inovua/reactdatagrid-community/types';
-import ButtonX from '../utils/ButtonX';
+import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
+import ButtonX from '../utils/ButtonX'
+import downloadExcel from '../utils/downloadExcel'
+import { saveAs } from 'file-saver'
 
 const LabelsEditor = () => {
   
@@ -55,10 +57,15 @@ const LabelsEditor = () => {
     dispatch ({type: SessionType.labels, payload: dataSource})
   }
 
+  const excel = () => {
+    downloadExcel(session.baseUrl, 'lang/pack/excel')
+  }
+
   return (
     <>
       <div style={{marginLeft:'20px'}}>
-      <ButtonX onClick={update} langkey='commit'/>
+        <ButtonX onClick={excel} langkey='expExcel'/>
+        <ButtonX onClick={update} langkey='commit'/>
       </div>
       <ReactDataGrid
         idProperty='id'
