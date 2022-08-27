@@ -8,8 +8,8 @@ import '@inovua/reactdatagrid-community/index.css'
 import '@inovua/reactdatagrid-community/theme/default-dark.css'
 import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
 import ButtonX from '../utils/ButtonX'
-import downloadExcel from '../utils/downloadExcel'
-import { saveAs } from 'file-saver'
+import download from '../utils/download'
+import Upload from '../utils/Upload'
 
 const LabelsEditor = () => {
   
@@ -57,14 +57,18 @@ const LabelsEditor = () => {
     dispatch ({type: SessionType.labels, payload: dataSource})
   }
 
-  const excel = () => {
-    downloadExcel(session.baseUrl, 'lang/pack/excel')
+  const downloadExcel = () => {
+    download(session.baseUrl, 'lang/pack/excel')
   }
 
   return (
     <>
       <div style={{marginLeft:'20px'}}>
-        <ButtonX onClick={excel} langkey='expExcel'/>
+        <ButtonX onClick={downloadExcel} langkey='expExcel'/>
+        <Upload 
+          baseUrl={session.baseUrl} 
+          rest={'labels'}
+        />
         <ButtonX onClick={update} langkey='commit'/>
       </div>
       <ReactDataGrid

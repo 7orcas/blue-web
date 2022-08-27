@@ -1,7 +1,7 @@
-import axios from '../api/apiAxiosExcel'
+import axios from '../api/apiAxiosDownload'
 import { saveAs } from 'file-saver'
 
-const downloadExcel = async (baseUrl : string, rest : string, filename? : string) => {
+const download = async (baseUrl : string, rest : string, filename? : string) => {
 
   try {
     const response = await axios.get(`${baseUrl}${rest}`, {withCredentials: true})
@@ -30,4 +30,4 @@ const downloadExcel = async (baseUrl : string, rest : string, filename? : string
   }
 }
 
-export default downloadExcel
+export default download
