@@ -67,7 +67,7 @@ const LabelsEditor = () => {
         <ButtonX onClick={downloadExcel} langkey='expExcel'/>
         <Upload 
           baseUrl={session.baseUrl} 
-          rest={'labels'}
+          rest={'lang/upload'}
         />
         <ButtonX onClick={update} langkey='commit'/>
       </div>

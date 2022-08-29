@@ -16,7 +16,7 @@ const Upload : FC<Props> = ({ baseUrl, rest }) => {
     try {
       const formData = new FormData();
       formData.append("selectedFile", selectedFile);
-
+console.log(`${baseUrl}${rest}`)
       const response = await axios.post(`${baseUrl}${rest}`, formData, {withCredentials: true})
 
       if (response.status === 200) {
