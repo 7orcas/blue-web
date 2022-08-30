@@ -1,4 +1,4 @@
-import { FC, createContext, useEffect, useState, useReducer } from 'react'
+import { FC, createContext, useEffect, useReducer } from 'react'
 import axios from '../api/apiAxios'
 import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
@@ -27,25 +27,28 @@ const AppContext = createContext<AppContextI | null>(null)
 export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, dispatch] = useReducer(reducer, new Session ());
-    
+
   // Load app defaults
   useEffect(() => {
+
     const params = new UrlSearchParams()
     dispatch ({ type: SessionType.params, payload: params })
-    
+
     const initialise = async () => {
       try {
-        const response = await axios.get(params.init + '?SessionID=' + params.sid, {withCredentials: true})
-  
-        dispatch ({type: SessionType.userid, payload: response.data.data.u})
-        dispatch ({ type: SessionType.baseUrl, payload: response.data.data.b })
-        dispatch ({type: SessionType.lang, payload: response.data.data.l})
 
-        var roles = response.data.data.r.split(',')
-        dispatch ({type: SessionType.roles, payload: roles})
+        const response = await axios.get(params.init + '?SessionID=' + params.sid)
 
-        const l = await loadLabels(response.data.data.b)
-        dispatch ({type: SessionType.labels, payload: l})
+        dispatch ({ type: SessionType.userid, payload: response.data.data.userid })
+        dispatch ({ type: SessionType.clientUrl, payload: response.data.data.clientUrl })
+        dispatch ({ type: SessionType.lang, payload: response.data.data.lang })
+        dispatch ({ type: SessionType.orgNr, payload: response.data.data.orgNr })
+
+        var roles = response.data.data.roles.split(',')
+        dispatch ({ type: SessionType.roles, payload: roles })
+
+        const l = await loadLabels(response.data.data.clientUrl)
+        dispatch ({ type: SessionType.labels, payload: l })
         
       } catch (err : any) {
         console.log(err.message)

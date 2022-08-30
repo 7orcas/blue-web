@@ -27,7 +27,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
   const handleClickOpen = () => {
     const load = async () => {
       try {
-        const response = await axios.get(`${session.baseUrl}lang/label?label=${langkey}`, {withCredentials: true})
+        const response = await axios.get(`lang/label?label=${langkey}`)
         let labels : Array<LangLabelI> = []
         for (const l of response.data.data) {
             labels.push ({id : l.id, idLangKey : l.idLangKey, code : l.code, org : l.org, active : l.active})
@@ -44,17 +44,11 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
   };
 
   const handleCommit = () => {
-    const headers = {
-      'Sec-Fetch-Site': 'cross-site',
-      'withCredentials': true
-   };
     const put = async () => {
-      const response = await axios.post(`${session.baseUrl}lang/label`, labels, {withCredentials: true})
-      // const response = await axios.post(`${session.baseUrl}lang/label`, { labels }, headers)
-      // const response = await axios.post(`${session.baseUrl}lang/label`, {withCredentials: true})
+      await axios.post('lang/label', labels)
+      setOpen(false);
     }
     put()
-    setOpen(false);
   };
 
   const handleClose = () => {

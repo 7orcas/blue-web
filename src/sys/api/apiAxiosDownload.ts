@@ -6,5 +6,6 @@ axios.defaults.baseURL = params.baseUrl
 
 export default axios.create({
   baseURL: params.baseUrl,
-  responseType: 'blob'
+  responseType: 'blob',
+  withCredentials: true
 });

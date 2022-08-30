@@ -17,14 +17,14 @@ const reducer = (session : Session, action : any) => {
     case SessionType.params:
       return {...session, params: action.payload};
   
-    case SessionType.baseUrl:
-      return {...session, baseUrl: action.payload};
+    case SessionType.clientUrl:
+      return {...session, clientUrl: action.payload};
 
     case SessionType.lang:
       return {...session, lang: action.payload};
 
-    case SessionType.org:
-      return {...session, org: action.payload};
+    case SessionType.orgNr:
+      return {...session, orgNr: action.payload};
 
     case SessionType.tgTheme:
       return {...session, theme: session.theme === ThemeType.light ? ThemeType.dark : ThemeType.light};

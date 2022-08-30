@@ -5,5 +5,6 @@ const params = new UrlSearchParams()
 axios.defaults.baseURL = params.baseUrl
 
 export default axios.create({
-  baseURL: params.baseUrl
+  baseURL: params.baseUrl,
+  withCredentials: true
 });

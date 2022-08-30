@@ -7,10 +7,10 @@ export interface LabelI {
   label: string
 }
 
-const loadLabels = async (baseUrl : string, loadFlag? : string) => {
+const loadLabels = async (loadFlag? : string) => {
 
     try {
-        const response = await axios.get(`${baseUrl}/lang/pack?load=${loadFlag}`, {withCredentials: true})
+        const response = await axios.get(`lang/pack?load=${loadFlag}`)
         let labels : Array<LabelI> = []
         if (response.status === 200){
           for (const l of response.data.data) {

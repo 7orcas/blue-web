@@ -9,7 +9,7 @@ const Test1 = () => {
   const { session, dispatch } = useContext(AppContext) as AppContextI
   
   const loadLabelsX = async() => {
-    var l = await loadLabels(session.baseUrl)
+    var l = await loadLabels()
     if (l !== null) {
       dispatch ({type: SessionType.labels, payload: l})
     }
@@ -27,8 +27,9 @@ const Test1 = () => {
         </h1>
       </div>
       <p>Userid: {session.userid}</p>
-      <p>Org: {session.org}</p>
-      <p>Base Url: {session.params.baseUrl + session.baseUrl}</p>
+      <p>Org: {session.orgNr}</p>
+      <p>Base Url: {session.params.baseUrl}</p>
+      <p>Client Url: {session.clientUrl}</p>
       <p>Initialise Url: {session.params.init}</p>
       <p>Session ID: {session.params.sid}</p>
       <p>Lang: {session.lang}</p>

@@ -18,7 +18,7 @@ const LabelsEditor = () => {
   
   useEffect(() => {
     const loadLabelsX = async() => {
-      var l : LabelI[] | undefined = await loadLabels(session.baseUrl, 'All')
+      var l : LabelI[] | undefined = await loadLabels('All')
       if (typeof l !== 'undefined') {
         setDataSource(l)
       }
@@ -58,7 +58,7 @@ const LabelsEditor = () => {
   }
 
   const downloadExcel = () => {
-    download(session.baseUrl, 'lang/pack/excel')
+    download(session.clientUrl, 'lang/pack/excel')
   }
 
   return (
@@ -66,7 +66,7 @@ const LabelsEditor = () => {
       <div style={{marginLeft:'20px'}}>
         <ButtonX onClick={downloadExcel} langkey='expExcel'/>
         <Upload 
-          baseUrl={session.baseUrl} 
+          clientUrl={session.clientUrl} 
           rest={'lang/upload'}
         />
         <ButtonX onClick={update} langkey='commit'/>
