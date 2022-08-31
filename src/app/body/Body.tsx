@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Routes, Route } from 'react-router-dom';
-import AppContext, { AppContextI } from '../../sys/context/AppContext'
+import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import LabelsEditor from '../../sys/lang/LabelsEditor'
 import Test1 from './Test1'
 import Test2 from './Test2'

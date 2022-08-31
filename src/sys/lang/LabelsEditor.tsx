@@ -1,9 +1,9 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
-import AppContext, { AppContextI } from '../context/AppContext'
-import { SessionType } from '../context/Session'
+import AppContext, { AppContextI } from '../system/AppContext'
+import { SessionType } from '../system/Session'
 import loadLabels, { LabelI } from './loadLabels'
 import ReactDataGrid from '@inovua/reactdatagrid-community'
-import { ThemeType } from '../context/Session'
+import { ThemeType } from '../system/Session'
 import '@inovua/reactdatagrid-community/index.css'
 import '@inovua/reactdatagrid-community/theme/default-dark.css'
 import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
@@ -13,12 +13,12 @@ import Upload from '../utils/Upload'
 
 const LabelsEditor = () => {
   
-  const { session, dispatch } = useContext(AppContext) as AppContextI
+  const { session, dispatch, setError } = useContext(AppContext) as AppContextI
   const [dataSource, setDataSource] = useState<LabelI[]>([])
   
   useEffect(() => {
     const loadLabelsX = async() => {
-      var l : LabelI[] | undefined = await loadLabels('All')
+      var l : LabelI[] | undefined = await loadLabels('All', setError)
       if (typeof l !== 'undefined') {
         setDataSource(l)
       }
@@ -58,7 +58,7 @@ const LabelsEditor = () => {
   }
 
   const downloadExcel = () => {
-    download(session.clientUrl, 'lang/pack/excel')
+    download('lang/pack/excel')
   }
 
   return (
@@ -66,7 +66,6 @@ const LabelsEditor = () => {
       <div style={{marginLeft:'20px'}}>
         <ButtonX onClick={downloadExcel} langkey='expExcel'/>
         <Upload 
-          clientUrl={session.clientUrl} 
           rest={'lang/upload'}
         />
         <ButtonX onClick={update} langkey='commit'/>

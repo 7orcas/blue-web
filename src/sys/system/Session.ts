@@ -12,7 +12,6 @@ import { LabelI } from '../lang/loadLabels'
 export enum SessionType {
   userid,
   params,
-  clientUrl,
   orgNr,
   lang,
   labels,
@@ -31,7 +30,6 @@ export enum ThemeType {
 class Session {
   userid : string = ''
   params : UrlSearchParams = new UrlSearchParams()
-  clientUrl : string = ''
   orgNr : number = 0
   lang : string = ''
   labels : LabelI[] = []

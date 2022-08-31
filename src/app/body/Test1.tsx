@@ -1,15 +1,15 @@
 import { useContext } from 'react'
-import AppContext, { AppContextI } from '../../sys/context/AppContext'
-import { SessionType } from '../../sys/context/Session'
+import AppContext, { AppContextI } from '../../sys/system/AppContext'
+import { SessionType } from '../../sys/system/Session'
 import loadLabels from '../../sys/lang/loadLabels'
 import useLabel from '../../sys/lang/useLabel'
 
 const Test1 = () => {
 
-  const { session, dispatch } = useContext(AppContext) as AppContextI
+  const { session, dispatch, setError } = useContext(AppContext) as AppContextI
   
   const loadLabelsX = async() => {
-    var l = await loadLabels()
+    var l = await loadLabels('', setError)
     if (l !== null) {
       dispatch ({type: SessionType.labels, payload: l})
     }
@@ -29,7 +29,6 @@ const Test1 = () => {
       <p>Userid: {session.userid}</p>
       <p>Org: {session.orgNr}</p>
       <p>Base Url: {session.params.baseUrl}</p>
-      <p>Client Url: {session.clientUrl}</p>
       <p>Initialise Url: {session.params.init}</p>
       <p>Session ID: {session.params.sid}</p>
       <p>Lang: {session.lang}</p>

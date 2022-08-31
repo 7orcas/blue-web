@@ -1,10 +1,10 @@
 import axios from '../api/apiAxiosDownload'
 import { saveAs } from 'file-saver'
 
-const download = async (baseUrl : string, rest : string, filename? : string) => {
+const download = async (rest : string, filename? : string) => {
 
   try {
-    const response = await axios.get(`${baseUrl}${rest}`, {withCredentials: true})
+    const response = await axios.get(`${rest}`)
 
     if (response.status === 200){
       if (filename === null){

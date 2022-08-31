@@ -3,7 +3,9 @@ import axios from '../api/apiAxios'
 import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
 import Session, { SessionType } from './Session'
-import reducer from './SessionReducer'
+import Error from './Error'
+import reducerSession from './SessionReducer'
+import reducerError from './ErrorReducer'
 
 /*
   Application state object
@@ -20,13 +22,16 @@ interface Props {
 export interface AppContextI {
   session: Session
   dispatch: any
+  error: Error
+  setError: any
 }
  
 const AppContext = createContext<AppContextI | null>(null)
 
 export const AppContextProvider: FC<Props> = ({ children }) => {
 
-  const [session, dispatch] = useReducer(reducer, new Session ());
+  const [session, dispatch] = useReducer(reducerSession, new Session ());
+  const [error, setError] = useReducer(reducerError, new Error ());
 
   // Load app defaults
   useEffect(() => {
@@ -40,14 +45,13 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         const response = await axios.get(params.init + '?SessionID=' + params.sid)
 
         dispatch ({ type: SessionType.userid, payload: response.data.data.userid })
-        dispatch ({ type: SessionType.clientUrl, payload: response.data.data.clientUrl })
         dispatch ({ type: SessionType.lang, payload: response.data.data.lang })
         dispatch ({ type: SessionType.orgNr, payload: response.data.data.orgNr })
 
         var roles = response.data.data.roles.split(',')
         dispatch ({ type: SessionType.roles, payload: roles })
 
-        const l = await loadLabels(response.data.data.clientUrl)
+        const l = await loadLabels('', setError)
         dispatch ({ type: SessionType.labels, payload: l })
         
       } catch (err : any) {
@@ -61,6 +65,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const appValue: AppContextI = {
     session: session,
     dispatch: dispatch,
+    error: error,
+    setError: setError
   }
 
   return (

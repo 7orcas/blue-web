@@ -2,11 +2,10 @@ import axios from '../api/apiAxiosUpload'
 import { FC, useState } from 'react'
 
 interface Props {
-  clientUrl : string,
   rest : string,
 }
 
-const Upload : FC<Props> = ({ clientUrl, rest }) => { 
+const Upload : FC<Props> = ({ rest }) => { 
 
   // a local state to store the currently selected file.
   const [selectedFile, setSelectedFile] = useState <any> (null);
@@ -16,8 +15,7 @@ const Upload : FC<Props> = ({ clientUrl, rest }) => {
     try {
       const formData = new FormData();
       formData.append("selectedFile", selectedFile);
-console.log(`${clientUrl}${rest}`)
-      const response = await axios.post(`${clientUrl}${rest}`, formData)
+      const response = await axios.post(`${rest}`, formData)
 
       if (response.status === 200) {
 console.log('uploaded.... credentials embedded ' + response.data.data)

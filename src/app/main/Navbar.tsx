@@ -4,8 +4,8 @@ import '@szhsin/react-menu/dist/transitions/slide.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
-import AppContext, { AppContextI } from '../../sys/context/AppContext'
-import { SessionType, ThemeType } from '../../sys/context/Session'
+import AppContext, { AppContextI } from '../../sys/system/AppContext'
+import { SessionType, ThemeType } from '../../sys/system/Session'
 import MenuItemFactory from '../../sys/menu/MenuItemFactory'
 import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
 import MenuX from "../../sys/menu/MenuX"

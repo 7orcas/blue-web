@@ -1,7 +1,7 @@
 import '../../css/Table.css';
 import React, { useState, useContext } from 'react'
 import { useTable, useFilters, useSortBy } from 'react-table'
-import AppContext, { AppContextI } from '../../sys/context/AppContext'
+import AppContext, { AppContextI } from '../system/AppContext'
 
 //If this file is delete then delete react-table-config.d.ts
 

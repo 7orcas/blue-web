@@ -17,9 +17,6 @@ const reducer = (session : Session, action : any) => {
     case SessionType.params:
       return {...session, params: action.payload};
   
-    case SessionType.clientUrl:
-      return {...session, clientUrl: action.payload};
-
     case SessionType.lang:
       return {...session, lang: action.payload};
 
