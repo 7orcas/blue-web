@@ -21,7 +21,6 @@ const loadLabels = async (loadFlag? : string) => {
     } catch (err : any) {
         console.log('loadLabels' + err.message)
     } finally {
-
     }
 }
 
