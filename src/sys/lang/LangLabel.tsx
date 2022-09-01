@@ -6,17 +6,18 @@ import LabelDialog from '../lang/LabelDialog'
 
 interface Props {
   langkey : string
+  className? : string
 }
 
-const LangLabel : FC<Props> = ({langkey}) => {
+const LangLabel : FC<Props> = ({ langkey, className = '' }) => {
 
   const { session } = useContext(AppContext) as AppContextI
 
   return (
-    <>
+    <span className={className}>
       {useLabel(langkey)}
       {session.editLabels && <LabelDialog langkey={langkey} />}
-    </>
+    </span>
   )
 }
 

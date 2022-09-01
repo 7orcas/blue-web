@@ -24,7 +24,7 @@ const apiGet = async (url : string, setSession : any, setError : any) => {
 
   } catch (err : any) {
     
-    //SC_UNAUTHORIZED, ie logged out
+    //UNAUTHORIZED, ie logged out
     if (err.response.status === 401){
       setSession ({ type: SessionReducer.loggedIn, payload: false })
       return;

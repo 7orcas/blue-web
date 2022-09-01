@@ -1,0 +1,28 @@
+@import './variables.scss';
+
+.relogin {
+  margin-left: 50px;
+
+  button {
+    margin-top: 20px;
+    margin-left: 110px;
+  }
+}
+
+#dark .relogin-button button[disabled]{
+  color : $dark-color;
+  border-color: $dark-color;
+}
+
+.relogin-title {
+  margin-bottom: 30px;
+  font-size: 1.5em;
+  font-family: $title-font-family, sans-serif;
+  text-decoration: underline;
+}
+
+.relogin-label {
+  display: inline-block;
+  width: 110px;
+  margin-bottom: 10px;
+}

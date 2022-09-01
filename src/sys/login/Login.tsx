@@ -6,6 +6,7 @@ import LangLabel from '../lang/LangLabel'
 import useLabel from '../lang/useLabel'
 import login from './login'
 import Button from '../utils/Button';
+import '../../css/Login.css'
 
 const Login = () => {
 
@@ -46,14 +47,14 @@ const Login = () => {
   }
 
   return (
-    <>
-      <section className='title'>
+    <div className='relogin'>
+      <section className='relogin-title'>
         <LangLabel langkey='loginTR' />
       </section>
       <section>
         <form onSubmit={(e) => e.preventDefault()}>
-          <div className='label-field'>
-            <LangLabel langkey='userid' />
+          <div>
+            <LangLabel langkey='userid' className='relogin-label'/>
             <input 
               className='field'
               onSubmit={(e) => e.preventDefault()}
@@ -62,20 +63,25 @@ const Login = () => {
               readOnly
             />
           </div>
-          <div className='label-field'>
-            <LangLabel langkey='pw' />
+          <div>
+            <LangLabel langkey='pw' className='relogin-label'/>
             <input 
               className='field'
               onSubmit={(e) => e.preventDefault()}
               type='password'
               value={pw}
+              autoFocus
               onChange={(e) => setPwX(e.target.value)}
             />
           </div>
-          <Button 
-            langkey='login'
-            disabled={!isPw()}
-            onClick={() => loginX()}/>
+          <div className='relogin-button'>
+            <Button 
+              langkey='login'
+              disabled={!isPw()}
+              onClick={() => loginX()}
+              type='submit'
+            />
+          </div>
         </form>
       </section>
       <section>
@@ -83,7 +89,7 @@ const Login = () => {
           {useLabel(errMessage(err))}
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

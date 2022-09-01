@@ -1,0 +1,25 @@
+.relogin {
+  margin-left: 50px;
+}
+.relogin button {
+  margin-top: 20px;
+  margin-left: 110px;
+}
+
+#dark .relogin-button button[disabled] {
+  color: #cfcbcb;
+  border-color: #cfcbcb;
+}
+
+.relogin-title {
+  margin-bottom: 30px;
+  font-size: 1.5em;
+  font-family: "Sarabun", sans-serif;
+  text-decoration: underline;
+}
+
+.relogin-label {
+  display: inline-block;
+  width: 110px;
+  margin-bottom: 10px;
+}/*# sourceMappingURL=Login.css.map */
