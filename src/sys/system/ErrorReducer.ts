@@ -1,4 +1,4 @@
-import Error, { ErrorType } from './Error'
+import Error, { ErrorReducer } from './Error'
 
 /*
   Error state object reducer
@@ -11,9 +11,15 @@ import Error, { ErrorType } from './Error'
 const reducer = (error : Error, action : any) => {
   switch (action.type) {
 
-    case ErrorType.message:
+    case ErrorReducer.message:
       return {...error, message: action.payload};
 
+    case ErrorReducer.context:
+      return {...error, context: action.payload};
+
+    case ErrorReducer.type:
+      return {...error, type: action.payload};
+  
     default:
       throw new Error();
   }

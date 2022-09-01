@@ -5,4 +5,19 @@
 
 .lang-dialog-content {
   margin-bottom: 20px;
+}
+
+.error-dialog-title {
+  background-color: #ce3419;
+  color: #ffffff;
+  width: 400px;
+}
+
+#error-dialog-close {
+  background-color: #ce3419;
+  color: #ffffff;
+}
+
+.error-dialog-content {
+  margin-bottom: 20px;
 }/*# sourceMappingURL=Utils.css.map */

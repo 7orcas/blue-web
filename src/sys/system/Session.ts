@@ -8,8 +8,9 @@ import { LabelI } from '../lang/loadLabels'
  @author John Stewart
  */
 
-//Used in the dispatch and reducer functions
-export enum SessionType {
+//Used in the setSession and reducer functions
+export enum SessionReducer {
+  loggedIn,
   userid,
   params,
   orgNr,
@@ -28,12 +29,13 @@ export enum ThemeType {
 
 
 class Session {
+  loggedIn : boolean = true
   userid : string = ''
   params : UrlSearchParams = new UrlSearchParams()
   orgNr : number = 0
   lang : string = ''
   labels : LabelI[] = []
-  editLabels : boolean = true
+  editLabels : boolean = false
   roles : string[] = []
   debugMessage: string = ''
   theme : ThemeType = ThemeType.dark

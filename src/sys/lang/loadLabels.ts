@@ -1,5 +1,4 @@
-import axios from '../api/apiAxios'
-import { ErrorType } from '../system/Error'
+import apiGet from '../api/apiGet'
 
 /*
   Retieve the label package
@@ -18,24 +17,20 @@ export interface LabelI {
   label: string
 }
 
-const loadLabels = async (loadFlag : string, setError : any) => {
+const loadLabels = async (loadFlag : string, setSession : any, setError : any) => {
 
-  let loadFlagX = loadFlag === null || typeof loadFlag === 'undefined' || loadFlag.length === 0? '' : `load=${loadFlag}`
+  let loadFlagX = loadFlag === null || typeof loadFlag === 'undefined' || loadFlag.length === 0? '' : `?load=${loadFlag}`
 
   try {
-    const response = await axios.get(`lang/pack?${loadFlagX}`)
+    const data = await apiGet(`lang/pack${loadFlagX}`, setSession, setError)
     let labels : Array<LabelI> = []
-    if (response.status === 200){
-      for (const l of response.data.data) {
-          labels.push ({id : l.id, org : l.org, key : l.code, label : l.label})
-      }
+    
+    for (const l of data) {
+        labels.push ({id : l.id, org : l.org, key : l.code, label : l.label})
     }
+    
     return labels
-
-  } catch (err : any) {
-    setError({ type: ErrorType.message, payload: 'loadLabels: ' + err.message })
-
-  } 
+  } catch (err : any) { } 
 }
 
 export default loadLabels

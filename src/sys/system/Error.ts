@@ -6,13 +6,22 @@
  @author John Stewart
  */
 
-//Used in the dispatch and reducer functions
 export enum ErrorType {
+  error,
+  warn,
+  message
+}
+
+export enum ErrorReducer {
+  type,
   message,
+  context,
 }
 
 class Error {
+  type : ErrorType = ErrorType.message
   message : string = ''
+  context : string = ''
 }
 
 export default Error

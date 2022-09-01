@@ -2,24 +2,25 @@ import { FC, useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import useLabel from '../lang/useLabel'
 import LabelDialog from '../lang/LabelDialog'
-import Button from '@mui/material/Button';
+import ButtonM from '@mui/material/Button';
 
 interface Props {
   langkey : string,
   onClick : any,
+  disabled? : boolean
 }
 
-const ButtonX : FC<Props> = ({ langkey, onClick }) => {
+const Button : FC<Props> = ({ langkey, onClick, disabled }) => {
   
   const { session } = useContext(AppContext) as AppContextI
 
   return (
-    <Button variant="outlined" onClick={onClick}>
+    <ButtonM variant="outlined" onClick={onClick} disabled={disabled}>
       {useLabel(langkey)}
       {session.editLabels && <LabelDialog langkey={langkey} />}
-    </Button>
+    </ButtonM>
   );
   
 }
 
-export default ButtonX
+export default Button

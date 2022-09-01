@@ -1,10 +1,25 @@
 @import './variables.scss';
 
 .lang-dialog-title {
-  background-color: $dialog-title-bg;
-  color: $dialog-title-color;
+  background-color: $lang-dialog-title-bg;
+  color: $lang-dialog-title-color;
 }
 
 .lang-dialog-content {
+  margin-bottom: 20px;
+}
+
+.error-dialog-title {
+  background-color: $error-dialog-title-bg;
+  color: $error-dialog-title-color;
+  width: 400px;
+}
+
+#error-dialog-close {
+  background-color: $error-dialog-title-bg;
+  color: $error-dialog-title-color;
+}
+
+.error-dialog-content {
   margin-bottom: 20px;
 }

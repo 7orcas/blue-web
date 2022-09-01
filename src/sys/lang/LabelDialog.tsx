@@ -22,7 +22,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
   const [open, setOpen] = useState(false);
   const [labels, setlabels] = useState<LangLabelI[]>([]);
-  const { session, dispatch } = useContext(AppContext) as AppContextI
+  const { session, setSession } = useContext(AppContext) as AppContextI
 
   const handleClickOpen = () => {
     const load = async () => {

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
-import { SessionType, ThemeType } from '../../sys/system/Session'
+import { SessionReducer, ThemeType } from '../../sys/system/Session'
 import MenuItemFactory from '../../sys/menu/MenuItemFactory'
 import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
 import MenuX from "../../sys/menu/MenuX"
@@ -21,7 +21,7 @@ import { Menu, MenuButton } from '@szhsin/react-menu';
  */
 const Navbar = () => {
 
-  const { session, dispatch } = useContext(AppContext) as AppContextI
+  const { session, setSession } = useContext(AppContext) as AppContextI
 
   const f = new MenuItemFactory ()
   
@@ -59,13 +59,13 @@ const Navbar = () => {
   admin.menu.push(f.item('chgpw', '/Test3'))
   
   var themeX = f.action(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
-    dispatch ({type: SessionType.tgTheme})
+    setSession ({type: SessionReducer.tgTheme})
   })
   admin.menu.push(themeX)
 
   if (containsRole('LangEdit')) {
     var editLabel = f.checkbox('editLabels', 
-      () => {dispatch ({type: SessionType.editLabels})},
+      () => {setSession ({type: SessionReducer.editLabels})},
       session.editLabels
     )
     admin.menu.push(editLabel)
@@ -75,7 +75,7 @@ const Navbar = () => {
     if (item.type === MenuItemType.action || item.type === MenuItemType.checkbox) {
       item.action()
     }
-    dispatch ({type: SessionType.debugMessage, payload: item.label})
+    setSession ({type: SessionReducer.debugMessage, payload: item.label})
   }
 
   return (

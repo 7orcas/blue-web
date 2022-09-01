@@ -9,6 +9,10 @@ const useLabel = (key : string) => {
     return key + '?'  
   }
 
+  if (key === '') {
+    return key
+  }
+
   for (var i=0; i<session.labels.length; i++) {
     if (session.labels[i].key === key)
       return session.labels[i].label
