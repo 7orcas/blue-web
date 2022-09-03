@@ -35,7 +35,7 @@ class Session {
   orgNr : number = 0
   lang : string = ''
   labels : LabelI[] = []
-  editLabels : boolean = false
+  editLabels : boolean = true
   roles : string[] = []
   debugMessage: string = ''
   theme : ThemeType = ThemeType.dark

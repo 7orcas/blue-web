@@ -14,7 +14,7 @@ const LangLabel : FC<Props> = ({ langkey, className = '' }) => {
   const { session } = useContext(AppContext) as AppContextI
 
   return (
-    <span className={className}>
+    <span className={className} style={{display:'inline-flex'}}>
       {useLabel(langkey)}
       {session.editLabels && <LabelDialog langkey={langkey} />}
     </span>

@@ -7,17 +7,47 @@
   margin-bottom: 20px;
 }
 
-.error-dialog-title {
-  background-color: #ce3419;
-  color: #ffffff;
-  width: 400px;
+.error-dialog {
+  max-width: 600px;
 }
-
-#error-dialog-close {
+.error-dialog .dialog-color {
   background-color: #ce3419;
   color: #ffffff;
 }
+.error-dialog .dialog-content {
+  margin-bottom: 20px;
+}
+.error-dialog .dialog-text {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 
-.error-dialog-content {
+.warn-dialog {
+  max-width: 600px;
+}
+.warn-dialog .dialog-color {
+  background-color: #bfa300;
+  color: #ffffff;
+}
+.warn-dialog .dialog-content {
+  margin-bottom: 20px;
+}
+.warn-dialog .dialog-text {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.message-dialog {
+  max-width: 600px;
+}
+.message-dialog .dialog-color {
+  background-color: #1013da;
+  color: #ffffff;
+}
+.message-dialog .dialog-content {
+  margin-bottom: 20px;
+}
+.message-dialog .dialog-text {
+  font-weight: bold;
   margin-bottom: 20px;
 }/*# sourceMappingURL=Utils.css.map */

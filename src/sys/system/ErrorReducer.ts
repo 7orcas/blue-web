@@ -17,6 +17,9 @@ const reducer = (error : Error, action : any) => {
     case ErrorReducer.context:
       return {...error, context: action.payload};
 
+    case ErrorReducer.detail:
+      return {...error, detail: action.payload};
+  
     case ErrorReducer.type:
       return {...error, type: action.payload};
   

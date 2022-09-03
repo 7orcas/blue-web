@@ -3,27 +3,26 @@ import { SessionReducer } from '../system/Session'
 import { ErrorType, ErrorReducer } from '../system/Error'
 
 /*
-  Generic GET method to contact the server
+  Generic POST method to contact the server
 
   [Licence]
   Created 1/9/22
   @author John Stewart
  */
-const apiGet = async (url : string, setSession : any, setError : any) => {
+const apiPost = async (url : string, data : any, setSession : any, setError : any) => {
   var message = ''
   var detail = ''
 
   try {
-    const response = await axios.get(`${ url }`)
+    const response = await axios.post(`${ url }`, data)
     
     //Valid return object
     if (response.data.valid){
-      return response.data.data
+      return response.data.message
     }
-
     message = response.data.message
     detail = response.data.messageDetail
-
+    
   } catch (err : any) {
     
     //UNAUTHORIZED, ie logged out
@@ -41,4 +40,4 @@ const apiGet = async (url : string, setSession : any, setError : any) => {
   throw message
 }
 
-export default apiGet
+export default apiPost

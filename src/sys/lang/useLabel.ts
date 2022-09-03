@@ -14,10 +14,10 @@ const useLabel = (key : string) => {
   }
 
   for (var i=0; i<session.labels.length; i++) {
-    if (session.labels[i].key === key)
+    if (session.labels[i].key === key) {
       return session.labels[i].label
-      
     }
+  }
   return key + '?'
 }
 

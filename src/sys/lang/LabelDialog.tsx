@@ -1,6 +1,9 @@
 import { FC, useState, useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import axios from '../api/apiAxios'
+import { SessionReducer } from '../system/Session'
+import { LabelI } from './loadLabels'
+import get from '../api/apiGet'
+import post from '../api/apiPost'
 import { Button, TextField } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,6 +15,7 @@ interface LabelDialogProps {
 
 interface LangLabelI {
   id : number
+  langKey : string
   idLangKey : number
   code : string
   org : number
@@ -22,15 +26,16 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
   const [open, setOpen] = useState(false);
   const [labels, setlabels] = useState<LangLabelI[]>([]);
-  const { session, setSession } = useContext(AppContext) as AppContextI
+  const { session, setSession, setError } = useContext(AppContext) as AppContextI
 
   const handleClickOpen = () => {
     const load = async () => {
       try {
-        const response = await axios.get(`lang/label?label=${langkey}`)
+        const data = await get(`lang/label?langKey=${langkey}`, setSession, setError)
+        
         let labels : Array<LangLabelI> = []
-        for (const l of response.data.data) {
-            labels.push ({id : l.id, idLangKey : l.idLangKey, code : l.code, org : l.org, active : l.active})
+        for (const l of data) {
+            labels.push ({id : l.id, langKey : l.langKey, idLangKey : l.idLangKey, code : l.code, org : l.org, active : l.active})
         }
         setlabels(labels)
         setOpen(true);
@@ -45,7 +50,33 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
   const handleCommit = () => {
     const put = async () => {
-      await axios.post('lang/label', labels)
+      await post('lang/label', labels, setSession, setError)
+
+      //Get label for current org
+      let l = {} as LabelI;
+      for (var i=0; i<labels.length; i++) {
+        const x = labels[i]
+        if (x.org === session.orgNr) {
+console.log('new:' + x.langKey)    
+          l = {id: x.id, org: x.org, key: x.langKey, label : x.code}
+          break
+        }
+      }
+      
+      //Update current labels
+      let array : Array<LabelI> = []
+      for (var i=0; i<session.labels.length; i++) {
+        if (session.labels[i].key === l.key) {
+console.log('new')          
+          array.push(l)
+        }
+        else{
+console.log('old')          
+          array.push(session.labels[i])
+        }
+      }
+      setSession ({type: SessionReducer.labels, payload: array})
+
       setOpen(false);
     }
     put()
