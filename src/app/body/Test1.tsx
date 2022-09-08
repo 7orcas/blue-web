@@ -6,10 +6,10 @@ import useLabel from '../../sys/lang/useLabel'
 
 const Test1 = () => {
 
-  const { session, setSession, setError } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   const loadLabelsX = async() => {
-    var l = await loadLabels('', setSession, setError)
+    var l = await loadLabels('', setSession, setMessage)
     if (l !== null) {
       setSession ({type: SessionReducer.labels, payload: l})
     }

@@ -17,12 +17,12 @@ export interface LabelI {
   label: string
 }
 
-const loadLabels = async (loadFlag : string, setSession : any, setError : any) => {
+const loadLabels = async (loadFlag : string, setSession : any, setMessage : any) => {
 
   let loadFlagX = loadFlag === null || typeof loadFlag === 'undefined' || loadFlag.length === 0? '' : `?load=${loadFlag}`
 
   try {
-    const data = await apiGet(`lang/pack${loadFlagX}`, setSession, setError)
+    const data = await apiGet(`lang/pack${loadFlagX}`, setSession, setMessage)
     let labels : Array<LabelI> = []
     
     for (const l of data) {

@@ -3,9 +3,9 @@ import axios from '../api/apiAxios'
 import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
 import Session, { SessionReducer } from './Session'
-import Error from './Error'
+import Message from './Message'
 import reducerSession from './SessionReducer'
-import reducerError from './ErrorReducer'
+import reducerMessage from './MessageReducer'
 
 /*
   Application state object
@@ -22,8 +22,8 @@ interface Props {
 export interface AppContextI {
   session: Session
   setSession: any
-  error: Error
-  setError: any
+  message: Message
+  setMessage: any
 }
  
 const AppContext = createContext<AppContextI | null>(null)
@@ -31,7 +31,7 @@ const AppContext = createContext<AppContextI | null>(null)
 export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, setSession] = useReducer(reducerSession, new Session ());
-  const [error, setError] = useReducer(reducerError, new Error ());
+  const [message, setMessage] = useReducer(reducerMessage, new Message ());
 
   // Load app defaults
   useEffect(() => {
@@ -51,7 +51,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         var roles = response.data.data.roles.split(',')
         setSession ({ type: SessionReducer.roles, payload: roles })
 
-        const l = await loadLabels('', setSession, setError)
+        const l = await loadLabels('', setSession, setMessage)
         setSession ({ type: SessionReducer.labels, payload: l })
         
       } catch (err : any) {
@@ -65,8 +65,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const appValue: AppContextI = {
     session: session,
     setSession: setSession,
-    error: error,
-    setError: setError
+    message: message,
+    setMessage: setMessage
   }
 
   return (

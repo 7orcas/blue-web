@@ -26,6 +26,16 @@
     font-weight: bold;
     margin-bottom: 20px;
   }
+  
+  button {
+    border: 1px solid $error-dialog-title-bg;
+  }
+
+  button:hover {
+    background-color: $error-dialog-title-color;
+    color: $error-dialog-title-bg;
+    border: 1px solid $error-dialog-title-bg;
+  }
 }
 
 .warn-dialog {
@@ -44,6 +54,16 @@
     font-weight: bold;
     margin-bottom: 20px;
   }
+
+  button {
+    border: 1px solid $warn-dialog-title-bg;
+  }
+
+  button:hover {
+    background-color: $warn-dialog-title-color;
+    color: $warn-dialog-title-bg;
+    border: 1px solid $warn-dialog-title-bg;
+  }
 }
 
 .message-dialog {
@@ -61,5 +81,15 @@
   .dialog-text {
     font-weight: bold;
     margin-bottom: 20px;
+  }
+
+  button {
+    border: 1px solid $message-dialog-title-bg;
+  }
+
+  button:hover {
+    background-color: $message-dialog-title-color;
+    color: $message-dialog-title-bg;
+    border: 1px solid $message-dialog-title-bg;
   }
 }

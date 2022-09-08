@@ -1,6 +1,6 @@
 import axios from './apiAxios'
 import { SessionReducer } from '../system/Session'
-import { ErrorType, ErrorReducer } from '../system/Error'
+import { MessageType, MessageReducer } from '../system/Message'
 
 /*
   Generic POST method to contact the server
@@ -9,7 +9,7 @@ import { ErrorType, ErrorReducer } from '../system/Error'
   Created 1/9/22
   @author John Stewart
  */
-const apiPost = async (url : string, data : any, setSession : any, setError : any) => {
+const apiPost = async (url : string, data : any, setSession : any, setMessage : any) => {
   var message = ''
   var detail = ''
 
@@ -18,10 +18,10 @@ const apiPost = async (url : string, data : any, setSession : any, setError : an
     
     //Valid return object
     if (response.data.valid){
-      return response.data.message
+      return response.data
     }
-    message = response.data.message
-    detail = response.data.messageDetail
+    message = response.data.error
+    detail = response.data.errorDetail
     
   } catch (err : any) {
     
@@ -33,10 +33,10 @@ const apiPost = async (url : string, data : any, setSession : any, setError : an
   
     message = err.message
   } 
-  setError({ type: ErrorReducer.type, payload: ErrorType.error })
-  setError({ type: ErrorReducer.context, payload: url })
-  setError({ type: ErrorReducer.message, payload: message })
-  setError({ type: ErrorReducer.detail, payload: detail })
+  setMessage({ type: MessageReducer.type, payload: MessageType.error })
+  setMessage({ type: MessageReducer.context, payload: url })
+  setMessage({ type: MessageReducer.message, payload: message })
+  setMessage({ type: MessageReducer.detail, payload: detail })
   throw message
 }
 

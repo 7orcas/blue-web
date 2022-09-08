@@ -21,6 +21,14 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
+.error-dialog button {
+  border: 1px solid #ce3419;
+}
+.error-dialog button:hover {
+  background-color: #ffffff;
+  color: #ce3419;
+  border: 1px solid #ce3419;
+}
 
 .warn-dialog {
   max-width: 600px;
@@ -36,6 +44,14 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
+.warn-dialog button {
+  border: 1px solid #bfa300;
+}
+.warn-dialog button:hover {
+  background-color: #ffffff;
+  color: #bfa300;
+  border: 1px solid #bfa300;
+}
 
 .message-dialog {
   max-width: 600px;
@@ -50,4 +66,12 @@
 .message-dialog .dialog-text {
   font-weight: bold;
   margin-bottom: 20px;
+}
+.message-dialog button {
+  border: 1px solid #1013da;
+}
+.message-dialog button:hover {
+  background-color: #ffffff;
+  color: #1013da;
+  border: 1px solid #1013da;
 }/*# sourceMappingURL=Utils.css.map */

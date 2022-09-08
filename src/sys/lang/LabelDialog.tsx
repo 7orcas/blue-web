@@ -26,12 +26,12 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
   const [open, setOpen] = useState(false);
   const [labels, setlabels] = useState<LangLabelI[]>([]);
-  const { session, setSession, setError } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
 
   const handleClickOpen = () => {
     const load = async () => {
       try {
-        const data = await get(`lang/label?langKey=${langkey}`, setSession, setError)
+        const data = await get(`lang/label?langKey=${langkey}`, setSession, setMessage)
         
         let labels : Array<LangLabelI> = []
         for (const l of data) {
@@ -50,15 +50,14 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
   const handleCommit = () => {
     const put = async () => {
-      await post('lang/label', labels, setSession, setError)
+      await post('lang/label', labels, setSession, setMessage)
 
       //Get label for current org
       let l = {} as LabelI;
       for (var i=0; i<labels.length; i++) {
         const x = labels[i]
         if (x.org === session.orgNr) {
-console.log('new:' + x.langKey)    
-          l = {id: x.id, org: x.org, key: x.langKey, label : x.code}
+         l = {id: x.id, org: x.org, key: x.langKey, label : x.code}
           break
         }
       }
@@ -67,11 +66,9 @@ console.log('new:' + x.langKey)
       let array : Array<LabelI> = []
       for (var i=0; i<session.labels.length; i++) {
         if (session.labels[i].key === l.key) {
-console.log('new')          
           array.push(l)
         }
         else{
-console.log('old')          
           array.push(session.labels[i])
         }
       }

@@ -13,12 +13,12 @@ import Upload from '../utils/Upload'
 
 const LabelsEditor = () => {
   
-  const { session, setSession, setError } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   const [dataSource, setDataSource] = useState<LabelI[]>([])
   
   useEffect(() => {
     const loadLabelsX = async() => {
-      var l : LabelI[] | undefined = await loadLabels('All', setSession, setError)
+      var l : LabelI[] | undefined = await loadLabels('All', setSession, setMessage)
       if (typeof l !== 'undefined') {
         setDataSource(l)
       }
@@ -67,6 +67,7 @@ const LabelsEditor = () => {
         <Button onClick={downloadExcel} langkey='expExcel'/>
         <Upload 
           rest={'lang/upload'}
+          setMessage={setMessage}
         />
         <Button onClick={update} langkey='commit'/>
       </div>

@@ -39,8 +39,10 @@ const reducer = (session : Session, action : any) => {
       return {...session, labels: action.payload}
 
     case SessionReducer.editLabels:
-        return {...session, editLabels: session.editLabels? false : true}
+      return {...session, editLabels: session.editLabels? false : true}
       
+    case SessionReducer.messageDialog:
+      return {...session, messageDialog: action.payload}
 
     default:
       throw new Error()
