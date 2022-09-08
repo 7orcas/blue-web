@@ -48,10 +48,13 @@ const Upload : FC<Props> = ({ rest, setMessage }) => {
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="filePicker" style={{ background:"grey", padding:"5px 10px" }}>
-      chfile
+        <LangLabel langkey='chfile' />
       </label>
       <input id="filePicker" type="file" onChange={handleFileSelect} style={{visibility:'hidden'}} />
-      <input type="submit" value="upFile" />
+      <label htmlFor="fileUpload" style={{ background:"grey", padding:"5px 10px" }}>
+        <LangLabel langkey='fileup' />
+      </label>
+      <input id='fileUpload' type="submit" value="upFile" style={{visibility:'hidden'}} />
     </form>
   )
 }

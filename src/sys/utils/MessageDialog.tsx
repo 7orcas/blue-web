@@ -12,6 +12,9 @@ const MessageDialog = () => {
   const [title, setTitle] = useState ('message')
   const [classname, setClassname] = useState ('message')
 
+  var context = useLabel(message.context)
+  var detail = useLabel(message.detail)
+
   //Watch message assignment
   useEffect(() => {
     if (message.type !== MessageType.none
@@ -54,12 +57,16 @@ const MessageDialog = () => {
                   <LangLabel langkey='message' className='dialog-text'/>
                     <span className='dialog-text'>: {useLabel(message.message)}</span>
                 </DialogContentText>
-                <DialogContentText style={{display : 'flex'}}>
-                  <LangLabel langkey='context'/>: {useLabel(message.context)}
-                </DialogContentText>
-                <DialogContentText style={{display : 'flex'}}>
-                  <LangLabel langkey='detail'/>: {useLabel(message.detail)}
-                </DialogContentText>
+                {message.type === MessageType.error &&
+                  <DialogContentText style={{display : 'flex'}}>
+                    <LangLabel langkey='context'/>: {context}
+                  </DialogContentText>
+                }
+                {message.type === MessageType.error &&
+                  <DialogContentText style={{display : 'flex'}}>
+                    <LangLabel langkey='detail'/>: {detail}
+                  </DialogContentText>
+                }
               </div>
             </DialogContent>
             <DialogActions>
