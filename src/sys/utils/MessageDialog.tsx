@@ -46,7 +46,11 @@ const MessageDialog = () => {
 
   return (
     <>
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog 
+        onClose={handleClose} 
+        open={open}
+        PaperProps={{ sx: { position: "fixed", top: '15%', left: '30%', m: 0 } }}
+      >
         <div className={classname + '-dialog'}>
             <div className='dialog-color'>
               <DialogTitle><LangLabel langkey={title}/></DialogTitle>

@@ -6,8 +6,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { SessionReducer, ThemeType } from '../../sys/system/Session'
-import MenuItemFactory from '../../sys/menu/MenuItemFactory'
-import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
+import MenuItemFactory, { MenuItem, MenuItemType } from '../../sys/menu/MenuItemFactory'
 import MenuX from "../../sys/menu/MenuX"
 import { Menu, MenuButton } from '@szhsin/react-menu';
 
@@ -52,7 +51,7 @@ const Navbar = () => {
   sub2.menu.push(f.item('shifts', '/Test3'))
 
   //Separate admin icon
-  var admin = new MenuItemX(9999)
+  var admin = new MenuItem(9999)
   admin.label = 'admin'
   admin.link = '/Test3'
   admin.menu.push(f.item('logout', '/Test3'))
@@ -71,7 +70,7 @@ const Navbar = () => {
     admin.menu.push(editLabel)
   }
 
-  const setSelection = (item : MenuItemX) => {
+  const setSelection = (item : MenuItem) => {
     if (item.type === MenuItemType.action || item.type === MenuItemType.checkbox) {
       item.action()
     }

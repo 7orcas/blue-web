@@ -10,7 +10,7 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
-import MenuItemX, { MenuItemType } from "./MenuItemX"
+import MenuItemX, { MenuItemType } from "./MenuItemXDEL"
 import LangLabel from '../lang/LangLabel'
 
 /*
@@ -83,7 +83,7 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
 
       {item.type === MenuItemType.sub &&
         <div className='menu-item'>
-          <Menu 
+          <Menu
             menuButton={<MenuButton><LangLabel langkey={item.label}/></MenuButton>} transition
             theming='dark' /* not working */
             >

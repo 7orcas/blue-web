@@ -6,8 +6,7 @@ import useLabel from './useLabel'
 import { Menu, MenuButton } from '@szhsin/react-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
-import MenuItemFactory from '../../sys/menu/MenuItemFactory'
-import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
+import MenuItemFactory, { MenuItem } from '../../sys/menu/MenuItemFactory'
 import MenuX from "../../sys/menu/MenuX"
 import ReactDataGrid from '@inovua/reactdatagrid-community'
 import { ThemeType } from '../system/Session'
@@ -32,7 +31,7 @@ const LabelsEditor = () => {
       }
     }
     loadLabelsX()
-  },[])
+  },[setSession, setMessage])
 
   const columns = [
     { name: 'id', header : 'ID', type: 'number', defaultWidth: 60, editable: false },
@@ -65,14 +64,14 @@ const LabelsEditor = () => {
 
   //Table Menu
   const f = new MenuItemFactory ()
-  var tableMenu = new MenuItemX(9999)
+  var tableMenu = new MenuItem(9999)
   
   var downloadX = f.action(useLabel('expExcel'), () => download('lang/pack/excel'))
   tableMenu.menu.push(downloadX)
   var uploadX = f.action(useLabel('fileup-label'), () => setOpenUpload(!openUpload))
   tableMenu.menu.push(uploadX)
 
-  const setSelection = (item : MenuItemX) => {
+  const setSelection = (item : MenuItem) => {
    item.action()
   }
 
