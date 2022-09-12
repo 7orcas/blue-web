@@ -12,6 +12,7 @@
 
 .error-dialog {
   max-width: $message-dialog-maxwidth;
+  min-width: $message-dialog-minwidth;
   
   .dialog-color {
     background-color: $error-dialog-title-bg;
@@ -40,6 +41,7 @@
 
 .warn-dialog {
   max-width: $message-dialog-maxwidth;
+  min-width: $message-dialog-minwidth;
   
   .dialog-color {
     background-color: $warn-dialog-title-bg;
@@ -68,6 +70,7 @@
 
 .message-dialog {
   max-width: $message-dialog-maxwidth;
+  min-width: $message-dialog-minwidth;
   
   .dialog-color {
     background-color: $message-dialog-title-bg;
@@ -91,5 +94,64 @@
     background-color: $message-dialog-title-color;
     color: $message-dialog-title-bg;
     border: 1px solid $message-dialog-title-bg;
+  }
+}
+
+.upload-dialog {
+  max-width: $upload-dialog-maxwidth;
+  min-width: $upload-dialog-minwidth;
+
+  
+  .dialog-color {
+    background-color: $upload-dialog-title-bg;
+    color: $upload-dialog-title-color;
+  }
+  
+  .dialog-content {
+    margin-bottom: 20px;
+  }
+
+  .dialog-text {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .dialog-button {
+    margin-right: 30px;
+  }
+  
+  input[type=file] {
+    font-family: $title-font-family;
+    font-weight: bold;
+    border: 1px solid $upload-dialog-title-bg;
+    border-radius: 3px;
+    min-width: $upload-dialog-maxwidth - 50px;
+  }
+
+  input[type=file]::file-selector-button {
+    padding: 6px 8px;
+    background-color: $upload-dialog-title-bg;
+    color: $upload-dialog-title-color;
+    border: 1px solid $upload-dialog-title-bg;
+    transition: 1s;
+    line-height: 1.75;
+    text-transform: uppercase;
+  }
+  
+
+  button {
+    border: 1px solid $upload-dialog-title-bg;
+  }
+
+  button:disabled {
+    background-color: $disabled-button-bg;
+    color: $disabled-button-color;
+    border: 1px solid $disabled-button-color;
+  }
+
+  button:hover {
+    background-color: $upload-dialog-title-color;
+    color: $upload-dialog-title-bg;
+    border: 1px solid $upload-dialog-title-bg;
   }
 }

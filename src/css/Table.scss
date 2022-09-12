@@ -1,5 +1,52 @@
 @import './variables.scss';
 
+
+.table-grid {
+  margin: 0px 20px 0px 20px;
+}
+
+.table-grid-body {
+  // margin: 0px 20px 0px 20px;
+}
+
+
+.table-menu {
+  @if $debug-borders {
+    border: $debug-borders-width solid rgb(124, 0, 128);
+  }
+  text-align: center;
+  font-size: 1.2em;
+  display: flex;
+  margin-bottom: 10px;
+  max-height: 30px;
+}
+
+.table-menu-item {
+  
+  button {
+    display: flex;
+    margin-right: 20px;
+    border: 0; 
+  }
+  .szh-menu__item {
+    text-decoration: none;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+.table-menu-item-dropdown {
+  margin-left: auto;
+  margin-top: 47px;
+  z-index: 1;
+}
+
+
+
+
+//DELETE BELOW IF react-table IS NO LONGER USED
+
 .md-table {
   border-collapse:collapse;
   

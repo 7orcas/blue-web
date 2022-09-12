@@ -1,4 +1,5 @@
 import './App.css'
+import './css/Table.css';
 import 'normalize.css'
 
 import Layout from './app/main/Layout'

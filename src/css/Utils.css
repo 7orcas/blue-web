@@ -9,6 +9,7 @@
 
 .error-dialog {
   max-width: 600px;
+  min-width: 600px;
 }
 .error-dialog .dialog-color {
   background-color: #ce3419;
@@ -32,6 +33,7 @@
 
 .warn-dialog {
   max-width: 600px;
+  min-width: 600px;
 }
 .warn-dialog .dialog-color {
   background-color: #bfa300;
@@ -55,6 +57,7 @@
 
 .message-dialog {
   max-width: 600px;
+  min-width: 600px;
 }
 .message-dialog .dialog-color {
   background-color: #1013da;
@@ -74,4 +77,62 @@
   background-color: #ffffff;
   color: #1013da;
   border: 1px solid #1013da;
+}
+
+.upload-dialog {
+  max-width: 600px;
+  min-width: 600px;
+}
+.upload-dialog .dialog-color {
+  background-color: #497474;
+  color: #ffffff;
+}
+.upload-dialog .dialog-content {
+  margin-bottom: 20px;
+}
+.upload-dialog .dialog-text {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.upload-dialog .dialog-button {
+  margin-right: 30px;
+}
+.upload-dialog input[type=file] {
+  font-family: "Sarabun";
+  font-weight: bold;
+  border: 1px solid #497474;
+  border-radius: 3px;
+  min-width: 550px;
+}
+.upload-dialog input[type=file]::-webkit-file-upload-button {
+  padding: 6px 8px;
+  background-color: #497474;
+  color: #ffffff;
+  border: 1px solid #497474;
+  -webkit-transition: 1s;
+  transition: 1s;
+  line-height: 1.75;
+  text-transform: uppercase;
+}
+.upload-dialog input[type=file]::file-selector-button {
+  padding: 6px 8px;
+  background-color: #497474;
+  color: #ffffff;
+  border: 1px solid #497474;
+  transition: 1s;
+  line-height: 1.75;
+  text-transform: uppercase;
+}
+.upload-dialog button {
+  border: 1px solid #497474;
+}
+.upload-dialog button:disabled {
+  background-color: #ffffff;
+  color: #3d3f4d;
+  border: 1px solid #3d3f4d;
+}
+.upload-dialog button:hover {
+  background-color: #ffffff;
+  color: #497474;
+  border: 1px solid #497474;
 }/*# sourceMappingURL=Utils.css.map */

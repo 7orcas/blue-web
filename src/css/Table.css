@@ -1,3 +1,33 @@
+.table-grid {
+  margin: 0px 20px 0px 20px;
+}
+
+.table-menu {
+  text-align: center;
+  font-size: 1.2em;
+  display: flex;
+  margin-bottom: 10px;
+  max-height: 30px;
+}
+
+.table-menu-item button {
+  display: flex;
+  margin-right: 20px;
+  border: 0;
+}
+.table-menu-item .szh-menu__item {
+  text-decoration: none;
+}
+.table-menu-item a {
+  text-decoration: none;
+}
+
+.table-menu-item-dropdown {
+  margin-left: auto;
+  margin-top: 47px;
+  z-index: 1;
+}
+
 .md-table {
   border-collapse: collapse;
 }

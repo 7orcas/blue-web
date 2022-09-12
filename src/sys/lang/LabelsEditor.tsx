@@ -2,6 +2,13 @@ import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionReducer } from '../system/Session'
 import loadLabels, { LabelI } from './loadLabels'
+import useLabel from './useLabel'
+import { Menu, MenuButton } from '@szhsin/react-menu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+import MenuItemFactory from '../../sys/menu/MenuItemFactory'
+import MenuItemX, { MenuItemType } from '../../sys/menu/MenuItemX'
+import MenuX from "../../sys/menu/MenuX"
 import ReactDataGrid from '@inovua/reactdatagrid-community'
 import { ThemeType } from '../system/Session'
 import '@inovua/reactdatagrid-community/index.css'
@@ -9,12 +16,13 @@ import '@inovua/reactdatagrid-community/theme/default-dark.css'
 import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
 import Button from '../utils/Button'
 import download from '../utils/download'
-import Upload from '../utils/Upload'
+import UploadDialog from '../utils/UploadDialog'
 
 const LabelsEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   const [dataSource, setDataSource] = useState<LabelI[]>([])
+  const [openUpload, setOpenUpload] = useState (false)
   
   useEffect(() => {
     const loadLabelsX = async() => {
@@ -26,8 +34,6 @@ const LabelsEditor = () => {
     loadLabelsX()
   },[])
 
-  const gridStyle = { height: '80vh', margin: 20 };
-  
   const columns = [
     { name: 'id', header : 'ID', type: 'number', defaultWidth: 60, editable: false },
     { name: 'org', header : 'Org', type: 'number', defaultWidth: 60, editable: false },
@@ -57,34 +63,67 @@ const LabelsEditor = () => {
     setSession ({type: SessionReducer.labels, payload: dataSource})
   }
 
-  const downloadExcel = () => {
-    download('lang/pack/excel')
+  // const downloadExcel = () => {
+  //   download('lang/pack/excel')
+  // }
+
+  // const openUploadDialog = () => {
+
+  //   setOpenUpload(!openUpload)
+  // }
+
+
+  const f = new MenuItemFactory ()
+  var tableMenu = new MenuItemX(9999)
+  
+  var downloadX = f.action(useLabel('expExcel'), () => download('lang/pack/excel'))
+  tableMenu.menu.push(downloadX)
+  var uploadX = f.action(useLabel('fileup-label'), () => setOpenUpload(!openUpload))
+  tableMenu.menu.push(uploadX)
+
+  const setSelection = (item : MenuItemX) => {
+   console.log(item.label)
+   item.action()
   }
 
   return (
-    <>
-      <div style={{marginLeft:'20px'}}>
-        <Button onClick={downloadExcel} langkey='expExcel'/>
-        <Upload 
-          rest={'lang/upload'}
-          setMessage={setMessage}
-        />
+    <div className='table-grid'>
+      <div className='table-menu'>
         <Button onClick={update} langkey='commit'/>
+        <div className='table-menu-item-dropdown menu-item button'>
+          <Menu 
+            menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
+            className='table-menu-item'
+            >
+            {tableMenu.menu.map(i => (
+              <MenuX key={i.key} item={i} setSelection={setSelection}/>
+            ))}
+          </Menu>
+        </div>
       </div>
-      <ReactDataGrid
-        idProperty='id'
-        style={gridStyle}
-        theme={session.theme === ThemeType.dark? 'default-dark' : 'default-light'}
-        defaultFilterValue={defaultFilterValue}
-        columns={columns}
-        columnOrder={columnOrder}
-        // onColumnOrderChange={setColumnOrder}
-        dataSource={dataSource}
-        showColumnMenuTool={false}
-        editable={true}
-        onEditComplete={onEditComplete}
+      <div className='table-grid-body'>
+        <ReactDataGrid
+          idProperty='id'
+          style={{height: '80vh'}}
+          theme={session.theme === ThemeType.dark? 'default-dark' : 'default-light'}
+          defaultFilterValue={defaultFilterValue}
+          columns={columns}
+          columnOrder={columnOrder}
+          dataSource={dataSource}
+          showColumnMenuTool={false}
+          editable={true}
+          onEditComplete={onEditComplete}
+        />
+      </div>
+      <UploadDialog 
+        title='fileup-label'
+        rest={'lang/upload'}
+        clazz='upload'
+        setMessage={setMessage}
+        openUpload={openUpload}
+        setOpenUpload={setOpenUpload}
       />
-    </>
+    </div>
   );
   
 }

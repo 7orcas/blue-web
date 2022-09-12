@@ -1,15 +1,24 @@
 
 $title-font-family: "Sarabun";
 
+$message-dialog-maxwidth: 600px;
+$message-dialog-minwidth: 600px;
 $lang-dialog-title-bg: #1979CE;
 $lang-dialog-title-color:#cccccc;
-$message-dialog-maxwidth: 600px;
 $error-dialog-title-bg: #ce3419;
 $error-dialog-title-color:#ffffff;
 $warn-dialog-title-bg: #bfa300;
 $warn-dialog-title-color:#ffffff;
 $message-dialog-title-bg: #1013da;
 $message-dialog-title-color:#ffffff;
+
+$disabled-button-bg: #ffffff;
+$disabled-button-color:#3d3f4d;
+
+$upload-dialog-maxwidth: 600px;
+$upload-dialog-minwidth: 600px;
+$upload-dialog-title-bg: #497474;
+$upload-dialog-title-color:#ffffff;
 
 
 $light-bg:white;
