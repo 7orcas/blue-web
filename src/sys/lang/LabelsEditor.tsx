@@ -59,20 +59,11 @@ const LabelsEditor = () => {
     setDataSource (data)
   }, [dataSource])
 
-  const update = () => {
+  const showInClient = () => {
     setSession ({type: SessionReducer.labels, payload: dataSource})
   }
 
-  // const downloadExcel = () => {
-  //   download('lang/pack/excel')
-  // }
-
-  // const openUploadDialog = () => {
-
-  //   setOpenUpload(!openUpload)
-  // }
-
-
+  //Table Menu
   const f = new MenuItemFactory ()
   var tableMenu = new MenuItemX(9999)
   
@@ -82,14 +73,13 @@ const LabelsEditor = () => {
   tableMenu.menu.push(uploadX)
 
   const setSelection = (item : MenuItemX) => {
-   console.log(item.label)
    item.action()
   }
 
   return (
     <div className='table-grid'>
       <div className='table-menu'>
-        <Button onClick={update} langkey='commit'/>
+        <Button onClick={showInClient} langkey='showchange'/>
         <div className='table-menu-item-dropdown menu-item button'>
           <Menu 
             menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition

@@ -24,9 +24,10 @@ interface LangLabelI {
 
 const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+  
   const [open, setOpen] = useState(false);
   const [labels, setlabels] = useState<LangLabelI[]>([]);
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
 
   const handleClickOpen = () => {
     const load = async () => {
@@ -57,14 +58,14 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
       for (var i=0; i<labels.length; i++) {
         const x = labels[i]
         if (x.org === session.orgNr) {
-         l = {id: x.id, org: x.org, key: x.langKey, label : x.code}
+          l = {id: x.id, org: x.org, key: x.langKey, label : x.code}
           break
         }
       }
       
       //Update current labels
       let array : Array<LabelI> = []
-      for (var i=0; i<session.labels.length; i++) {
+      for (i=0; i<session.labels.length; i++) {
         if (session.labels[i].key === l.key) {
           array.push(l)
         }
