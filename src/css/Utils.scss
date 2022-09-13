@@ -5,12 +5,18 @@
   display: flex;
 
   .editor1-left {
-    flex: auto;
+    flex-grow: 0;
+    // flex: auto;
   }
 
   .editor1-right {
     flex: auto;
   }
+}
+
+.editor-detail {
+  height: 80vh;
+  border: 1px solid white;
 }
 
 .lang-dialog {

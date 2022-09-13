@@ -2,10 +2,15 @@
   display: flex;
 }
 .editor1 .editor1-left {
-  flex: auto;
+  flex-grow: 0;
 }
 .editor1 .editor1-right {
   flex: auto;
+}
+
+.editor-detail {
+  height: 80vh;
+  border: 1px solid white;
 }
 
 .lang-dialog .lang-dialog-title {

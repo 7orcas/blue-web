@@ -3,7 +3,7 @@ import AppContext, { AppContextI } from '../system/AppContext'
 import useLabel from '../lang/useLabel'
 import loadOrgs, { OrgI } from './loadOrgs'
 import OrgDetail from './OrgDetail'
-import { DataGrid, GridColDef, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
 
 
 
@@ -35,8 +35,7 @@ const OrgEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   const [dataSource, setDataSource] = useState<OrgI[]>([])
-  const [finalClickInfo, setFinalClickInfo] = useState <GridCellParams | null>(null);
-
+  const [editor, setEditor] = useState<Array<number>>([])
   
   useEffect(() => {
     const loadOrgsX = async() => {
@@ -62,38 +61,12 @@ const OrgEditor = () => {
     },
   ];
 
-  const onEditComplete = useCallback(( editInfo : TypeEditInfo )  => {
-    const data : OrgI[] = [...dataSource];
-    const id = parseInt(editInfo.rowId)
-    for (let i=0;i<data.length;i++){
-      if (data[i].id === id){
-        data[i].code = editInfo.value
-        break;
-      }
+  const onSelectionModelChange = (ids : GridSelectionModel) => {
+    let x: Array<number> = []
+    if (ids !== null && typeof ids !== 'undefined') {
+      ids.forEach((id) => x.push(typeof id === 'number'? id : parseInt(id)))
     }
-    setDataSource (data)
-  }, [dataSource])
-
-
-  const handleEvent: GridEventListener<'rowClick'> = (
-    params : GridRowParams,
-    event : any, // MuiEvent<React.MouseEvent<HTMLElement>>
-    details : any, // GridCallbackDetails
-  ) => {
-    console.log(`Row "${params.row.__check__}" clicked`);
-  };
-
-  const handleOnCellClick = (params : GridCellParams) => {
-    console.log(`Row "${params.row.__check__}" clicked`);
-    setFinalClickInfo(params);
-  };
-
-  const onSelectionModelChange = (ids:any) => {
-    const selectedIDs = new Set(ids);
-    const selectedRowData = dataSource.filter((row) =>
-      selectedIDs.has(row.id.toString())
-    );
-    console.log('selectedRowData=' + ids);
+    setEditor(x);
   }
 
 
@@ -112,7 +85,7 @@ const OrgEditor = () => {
     <div className='editor1'>
       <div className='editor1-left table-grid'>
         <div className='table-menu'>
-          <div className='table-menu-item-dropdown menu-item button'>
+          <div className='menu-item button'>
             <Menu 
               menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
               className='table-menu-item'
@@ -123,27 +96,23 @@ const OrgEditor = () => {
             </Menu>
           </div>
         </div>
-        <div style={{ height: 400, width: '40%' }}>
+        <div style={{ height: '80vh', width: '100%', minWidth : 500, maxWidth : 500 }}>
           <DataGrid
             sx={{color: 'white'}}
             rows={dataSource}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={25}
+            rowsPerPageOptions={[25]}
             checkboxSelection
-            onRowClick={handleEvent} 
-            onCellClick={handleOnCellClick}
             onSelectionModelChange={onSelectionModelChange}
           />
         </div>
       </div>
-      <div className='editor1-right'>
-        <OrgDetail />
-        {finalClickInfo &&
-        `Final clicked id = ${finalClickInfo.id}, 
-        Final clicked field = ${finalClickInfo.field}, 
-        Final clicked value = ${finalClickInfo.value}`}
-      </div>
+      {editor.map((id,i) => 
+        <div className='editor1-right'>
+          <OrgDetail key={id} id={id}/>
+        </div>
+      )}
     </div>
   );
 
