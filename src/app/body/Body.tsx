@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import LabelsEditor from '../../sys/lang/LabelsEditor'
+import OrgEditor from '../../sys/org/OrgEditor'
 import Login, {LoginSuccess} from '../../sys/login/Login'
 import Test1 from './Test1'
 import Test2 from './Test2'
@@ -26,6 +27,7 @@ const Body = () => {
         <Route path="relogin" element={<Login />} />
         <Route path="reloginok" element={<LoginSuccess />} />
         <Route path="labels" element={<LabelsEditor />} />
+        <Route path="orgadmin" element={<OrgEditor />} />
         <Route path="test2" element={<Test2 />} />
         <Route path="test3" element={<Test3 />} />
         <Route path="*"

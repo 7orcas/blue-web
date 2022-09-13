@@ -1,10 +1,34 @@
-.lang-dialog-title {
-  background-color: #1979CE;
-  color: #cccccc;
+.editor1 {
+  display: flex;
+}
+.editor1 .editor1-left {
+  flex: auto;
+}
+.editor1 .editor1-right {
+  flex: auto;
 }
 
-.lang-dialog-content {
+.lang-dialog .lang-dialog-title {
+  background-color: #1979CE;
+  color: #ffffff;
+}
+.lang-dialog .lang-dialog-content {
   margin-bottom: 20px;
+}
+.lang-dialog .dialog-color {
+  background-color: #1979CE;
+  color: #ffffff;
+}
+.lang-dialog .dialog-button {
+  margin-right: 30px;
+}
+.lang-dialog button {
+  border: 1px solid #1979CE;
+}
+.lang-dialog button:hover {
+  background-color: #ffffff;
+  color: #1979CE;
+  border: 1px solid #1979CE;
 }
 
 .error-dialog {
@@ -21,6 +45,9 @@
 .error-dialog .dialog-text {
   font-weight: bold;
   margin-bottom: 20px;
+}
+.error-dialog .dialog-button {
+  margin-right: 30px;
 }
 .error-dialog button {
   border: 1px solid #ce3419;
@@ -46,6 +73,9 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
+.warn-dialog .dialog-button {
+  margin-right: 30px;
+}
 .warn-dialog button {
   border: 1px solid #bfa300;
 }
@@ -69,6 +99,9 @@
 .message-dialog .dialog-text {
   font-weight: bold;
   margin-bottom: 20px;
+}
+.message-dialog .dialog-button {
+  margin-right: 30px;
 }
 .message-dialog button {
   border: 1px solid #1013da;

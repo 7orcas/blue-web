@@ -130,37 +130,38 @@ const LabelDialogX : FC<LabelDialogXProps> = ({ onClose, onCommit, selectedValue
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <div className='lang-dialog-title'>
-        <DialogTitle>Language Label</DialogTitle>
-      </div>
-      <DialogContent>
-        <div className='lang-dialog-content'>
-          <DialogContentText>
-            LangKey: {selectedValue}
-            ID: 34
-          </DialogContentText>
+      <div className='lang-dialog'>
+        <div className='lang-dialog-title'>
+          <DialogTitle>Language Label</DialogTitle>
         </div>
-        {labels.map((l,i) => {return(
-          <TextField
-            key={l.id}
-            autoFocus={i === 0}
-            margin='dense'
-            id='name'
-            label={'Org: ' + l.org}
-            type='text'
-            fullWidth
-            value={l.code}
-            onChange={e => handleOnChange(e,i)}
-            variant='outlined'
-            error={!l.code}
-          />)}
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleCommit}>Commit</Button>
-      </DialogActions>
-
+        <DialogContent>
+          <div className='lang-dialog-content'>
+            <DialogContentText>
+              LangKey: {selectedValue}
+              ID: 34
+            </DialogContentText>
+          </div>
+          {labels.map((l,i) => {return(
+            <TextField
+              key={l.id}
+              autoFocus={i === 0}
+              margin='dense'
+              id='name'
+              label={'Org: ' + l.org}
+              type='text'
+              fullWidth
+              value={l.code}
+              onChange={e => handleOnChange(e,i)}
+              variant='outlined'
+              error={!l.code}
+            />)}
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCommit} className='dialog-color dialog-button'>Commit</Button>
+          <Button onClick={handleClose} className='dialog-color'>Cancel</Button>
+        </DialogActions>
+      </div>
     </Dialog>
   );
 }

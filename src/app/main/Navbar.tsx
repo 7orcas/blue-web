@@ -29,7 +29,7 @@ const Navbar = () => {
   }
 
   //Top Level
-  f.main('labeladmin', '/Labels')
+  f.main('orgadmin', '/orgadmin')
   f.main('planmat', '/')
   f.main('startmo', '/Test2')
   f.main('simus', '/Test2')
@@ -56,6 +56,10 @@ const Navbar = () => {
   admin.link = '/Test3'
   admin.menu.push(f.item('logout', '/Test3'))
   admin.menu.push(f.item('chgpw', '/Test3'))
+  admin.menu.push(f.div())
+  admin.menu.push(f.item('labeladmin', '/labels'))
+  admin.menu.push(f.item('orgadmin', '/orgadmin'))
+
   
   var themeX = f.action(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
     setSession ({type: SessionReducer.tgTheme})

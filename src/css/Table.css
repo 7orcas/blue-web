@@ -1,28 +1,28 @@
 .table-grid {
   margin: 0px 20px 0px 20px;
 }
-
-.table-menu {
+.table-grid .table-grid-header {
+  font-size: 1.2em;
+}
+.table-grid .table-menu {
   text-align: center;
   font-size: 1.2em;
   display: flex;
   margin-bottom: 10px;
   max-height: 30px;
 }
-
-.table-menu-item button {
+.table-grid .table-menu-item button {
   display: flex;
   margin-right: 20px;
   border: 0;
 }
-.table-menu-item .szh-menu__item {
+.table-grid .table-menu-item .szh-menu__item {
   text-decoration: none;
 }
-.table-menu-item a {
+.table-grid .table-menu-item a {
   text-decoration: none;
 }
-
-.table-menu-item-dropdown {
+.table-grid .table-menu-item-dropdown {
   margin-left: auto;
   margin-top: 47px;
   z-index: 1;

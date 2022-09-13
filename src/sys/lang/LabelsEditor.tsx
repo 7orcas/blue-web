@@ -17,6 +17,14 @@ import Button from '../utils/Button'
 import download from '../utils/download'
 import UploadDialog from '../utils/UploadDialog'
 
+/*
+  List, export and update language labels
+
+  [Licence]
+  Created 13.09.22
+  @author John Stewart
+ */
+
 const LabelsEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI

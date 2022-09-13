@@ -2,7 +2,7 @@ import apiGet from '../api/apiGet'
 
 /*
   Retieve the label package
-  If laodFlag is empty the retieve all labels
+  If loadFlag is empty then retieve all labels
   The server will only return labels for the logged in lanaguage for this client
 
   [Licence]
