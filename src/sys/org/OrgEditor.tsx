@@ -1,24 +1,14 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import useLabel from '../lang/useLabel'
-import loadOrgs, { OrgI } from './loadOrgs'
+import loadOrgs, { OrgListI } from './loadOrgs'
 import OrgDetail from './OrgDetail'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
-
-
-
 import { Menu, MenuButton } from '@szhsin/react-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import MenuItemFactory, { MenuItem } from '../../sys/menu/MenuItemFactory'
 import MenuX from "../../sys/menu/MenuX"
-import ReactDataGrid from '@inovua/reactdatagrid-community'
-import { ThemeType } from '../system/Session'
-import CheckBox from '@inovua/reactdatagrid-community/packages/CheckBox'
-import '@inovua/reactdatagrid-community/index.css'
-import '@inovua/reactdatagrid-community/theme/default-dark.css'
-import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
-import Button from '../utils/Button'
 import download from '../utils/download'
 
 
@@ -34,12 +24,12 @@ const OrgEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
-  const [dataSource, setDataSource] = useState<OrgI[]>([])
+  const [dataSource, setDataSource] = useState<OrgListI[]>([])
   const [editor, setEditor] = useState<Array<number>>([])
   
   useEffect(() => {
     const loadOrgsX = async() => {
-      var l : OrgI[] | undefined = await loadOrgs('All', setSession, setMessage)
+      var l : OrgListI[] | undefined = await loadOrgs('All', setSession, setMessage)
       if (typeof l !== 'undefined') {
         setDataSource(l)
       }

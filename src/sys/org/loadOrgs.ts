@@ -8,7 +8,7 @@ import apiGet from '../api/apiGet'
   @author John Stewart
  */
 
-export interface OrgI {
+export interface OrgListI {
   id: number
   org: number
   code: string
@@ -19,7 +19,7 @@ const loadOrgs = async (loadFlag : string, setSession : any, setMessage : any) =
 
   try {
     const data = await apiGet(`org/org-list`, setSession, setMessage)
-    let orgs : Array<OrgI> = []
+    let orgs : Array<OrgListI> = []
     
     for (const l of data) {
         orgs.push ({id : l.id, org : l.org, code : l.code, dvalue : l.dvalue})
