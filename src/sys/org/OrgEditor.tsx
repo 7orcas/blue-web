@@ -39,16 +39,10 @@ const OrgEditor = () => {
 
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', type: 'number', width: 50 },
-    { field: 'org', headerName: useLabel('orgnr-s'), type: 'number', width: 100 },
-    { field: 'code', headerName: 'Code', width: 130, editable: true  },
-    {
-      field: 'dvalue',
-      headerName: 'DValue',
-      description: 'Default organisation',
-      sortable: false,
-      width: 100
-    },
+    { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
+    { field: 'org', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
+    { field: 'code', headerName: useLabel('code'), width: 200 },
+    { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
   ];
 
   const onSelectionModelChange = (ids : GridSelectionModel) => {
@@ -86,7 +80,7 @@ const OrgEditor = () => {
             </Menu>
           </div>
         </div>
-        <div style={{ height: '80vh', width: '100%', minWidth : 500, maxWidth : 500 }}>
+        <div style={{ height: '80vh', width: '100%', minWidth : 450, maxWidth : 500 }}>
           <DataGrid
             sx={{color: 'white'}}
             rows={dataSource}

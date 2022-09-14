@@ -17,7 +17,7 @@ interface OrgProps {
 
 const OrgDetail : React.FC<OrgProps> = ({ id }) => {
   
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+  const { setSession, setMessage } = useContext(AppContext) as AppContextI
 
   const [dataSource, setDataSource] = useState<OrgI>()
 
