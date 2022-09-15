@@ -1,7 +1,10 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import useLabel from '../lang/useLabel'
-import loadOrgs, { OrgListI } from './loadOrgs'
+// import useLabel from '../lang/useLabel'
+import { loadList, jsonReplacer, useLabel } from '../utils/editor'
+import { OrgListI, OrgEntI, loadOrgEnt } from './org'
+
+// import loadOrgs, { OrgListI } from './loadOrgs'
 import loadOrg, { OrgI } from './loadOrg'
 import OrgDetail from './OrgDetail'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
@@ -25,22 +28,17 @@ const OrgEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
-  // const [dataSource, setDataSource] = useState<Map<number,OrgListI>>(new Map())
   const [list, setList] = useState<OrgListI[]>([])
   const [editors, setEditors] = useState<Array<number>>([])
-  const [orgs, setOrgs] = useState<Map<number,OrgI>>(new Map())
+  const [orgs, setOrgs] = useState<Map<number,OrgEntI>>(new Map())
 
-  
+  //Initial load of base list
   useEffect(() => {
     const loadOrgsX = async() => {
-      var l : OrgListI[] | undefined = await loadOrgs('All', setSession, setMessage)
-      if (typeof l !== 'undefined') {
-        setList(l)
-        var m : Map<number,OrgListI> = new Map()
-        l.forEach((o) => {
-          m.set(o.id, o)
-        })
-        // setDataSource(m)
+      let orgs : Array<OrgListI> = []
+      var data = await loadList(orgs, 'org/org-list', setSession, setMessage)
+      if (typeof data !== 'undefined') {
+        setList(orgs)
       }
     }
     loadOrgsX()
@@ -56,10 +54,7 @@ const OrgEditor = () => {
   ];
 
 
-  function replacer(key : string, value : any) {
-      if (key==="originalValue") return undefined;
-      else return value;
-  }
+  
 
   const getListObject = (id : number) : OrgListI | null => {
     for (var i=0;i<list.length;i++){
@@ -71,9 +66,9 @@ const OrgEditor = () => {
   }
 
 
-  const updateList = (id : number, org : OrgI) => {
+  const updateList = (id : number, org : OrgEntI) => {
 console.log('updateList id=' + id)   
-    var x = JSON.stringify(org, replacer)
+    var x = JSON.stringify(org, jsonReplacer)
     var o = getListObject(id)
 console.log('updateList originalValue=' + org.originalValue + '  current=' + x + '  o=' + o)         
     if (o !== null) {
@@ -93,14 +88,14 @@ console.log('updateList code='  + org.code)
     }
   }
 
-  const updateOrg = (id : number, org : OrgI) => {
+  const updateOrg = (id : number, org : OrgEntI) => {
 console.log('updateOrg id=' + id)        
     setOrgs(new Map(orgs.set(id,org)))
     updateList(id, org)
   }
 
   const loadOrgX = async(id : number) => {
-    var l : OrgI | undefined = await loadOrg(id, setSession, setMessage)
+    var l : OrgEntI | undefined = await loadOrg(id, setSession, setMessage)
     if (typeof l !== 'undefined') {
       updateOrg(id,l)
     }
