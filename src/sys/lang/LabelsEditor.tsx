@@ -98,20 +98,18 @@ const LabelsEditor = () => {
           </Menu>
         </div>
       </div>
-      <div className='table-grid-body'>
-        <ReactDataGrid
-          idProperty='id'
-          style={{height: '80vh'}}
-          theme={session.theme === ThemeType.dark? 'default-dark' : 'default-light'}
-          defaultFilterValue={defaultFilterValue}
-          columns={columns}
-          columnOrder={columnOrder}
-          dataSource={dataSource}
-          showColumnMenuTool={false}
-          editable={true}
-          onEditComplete={onEditComplete}
-        />
-      </div>
+      <ReactDataGrid
+        idProperty='id'
+        style={{height: '80vh'}}
+        theme={session.theme === ThemeType.dark? 'default-dark' : 'default-light'}
+        defaultFilterValue={defaultFilterValue}
+        columns={columns}
+        columnOrder={columnOrder}
+        dataSource={dataSource}
+        showColumnMenuTool={false}
+        editable={true}
+        onEditComplete={onEditComplete}
+      />
       <UploadDialog 
         title='fileup-label'
         rest={'lang/upload'}

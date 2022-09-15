@@ -2,6 +2,7 @@ import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import useLabel from '../lang/useLabel'
 import loadOrgs, { OrgListI } from './loadOrgs'
+import loadOrg, { OrgI } from './loadOrg'
 import OrgDetail from './OrgDetail'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
 import { Menu, MenuButton } from '@szhsin/react-menu';
@@ -24,14 +25,22 @@ const OrgEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
-  const [dataSource, setDataSource] = useState<OrgListI[]>([])
-  const [editor, setEditor] = useState<Array<number>>([])
+  // const [dataSource, setDataSource] = useState<Map<number,OrgListI>>(new Map())
+  const [list, setList] = useState<OrgListI[]>([])
+  const [editors, setEditors] = useState<Array<number>>([])
+  const [orgs, setOrgs] = useState<Map<number,OrgI>>(new Map())
+
   
   useEffect(() => {
     const loadOrgsX = async() => {
       var l : OrgListI[] | undefined = await loadOrgs('All', setSession, setMessage)
       if (typeof l !== 'undefined') {
-        setDataSource(l)
+        setList(l)
+        var m : Map<number,OrgListI> = new Map()
+        l.forEach((o) => {
+          m.set(o.id, o)
+        })
+        // setDataSource(m)
       }
     }
     loadOrgsX()
@@ -43,14 +52,73 @@ const OrgEditor = () => {
     { field: 'org', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
     { field: 'code', headerName: useLabel('code'), width: 200 },
     { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
+    { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
+
+
+  function replacer(key : string, value : any) {
+      if (key==="originalValue") return undefined;
+      else return value;
+  }
+
+  const getListObject = (id : number) : OrgListI | null => {
+    for (var i=0;i<list.length;i++){
+      if (list[i].id === id) {
+        return list[i]
+      }
+    }
+    return null;
+  }
+
+
+  const updateList = (id : number, org : OrgI) => {
+console.log('updateList id=' + id)   
+    var x = JSON.stringify(org, replacer)
+    var o = getListObject(id)
+console.log('updateList originalValue=' + org.originalValue + '  current=' + x + '  o=' + o)         
+    if (o !== null) {
+      o.changed = org.originalValue !== x
+      o.active = org.active
+      o.code = org.code
+console.log('updateList code='  + org.code)
+      var l : OrgListI[] = []
+      for (var i=0;i<list.length;i++){
+        if (list[i].id === id) {
+          l.push(o)
+        } else {
+          l.push(list[i])
+        }
+      }
+      setList(l)
+    }
+  }
+
+  const updateOrg = (id : number, org : OrgI) => {
+console.log('updateOrg id=' + id)        
+    setOrgs(new Map(orgs.set(id,org)))
+    updateList(id, org)
+  }
+
+  const loadOrgX = async(id : number) => {
+    var l : OrgI | undefined = await loadOrg(id, setSession, setMessage)
+    if (typeof l !== 'undefined') {
+      updateOrg(id,l)
+    }
+  }
+
 
   const onSelectionModelChange = (ids : GridSelectionModel) => {
     let x: Array<number> = []
     if (ids !== null && typeof ids !== 'undefined') {
       ids.forEach((id) => x.push(typeof id === 'number'? id : parseInt(id)))
     }
-    setEditor(x);
+    x.map((id) => {
+      if (!orgs.has(id)) {
+console.log('onSelectionModelChange id=' + id)        
+      loadOrgX (id)
+      }
+    })
+    setEditors(x);
   }
 
 
@@ -80,21 +148,29 @@ const OrgEditor = () => {
             </Menu>
           </div>
         </div>
-        <div style={{ height: '80vh', width: '100%', minWidth : 450, maxWidth : 500 }}>
+        <div style={{ height: '80vh', width: '100%', minWidth : 500, maxWidth : 500 }}>
           <DataGrid
-            sx={{color: 'white'}}
-            rows={dataSource}
+            // sx={{color: 'yellow'}} //text color
+            rows={list}
             columns={columns}
             pageSize={25}
             rowsPerPageOptions={[25]}
             checkboxSelection
             onSelectionModelChange={onSelectionModelChange}
+            getCellClassName={(params: GridCellParams<number>) => {
+              return 'table-cell';
+            }}
           />
         </div>
       </div>
-      {editor.map((id,i) => 
+      {editors.map((id,i) => 
         <div className='editor1-right'>
-          <OrgDetail key={id} id={id}/>
+          <OrgDetail 
+            key={id} 
+            id={id}
+            org={orgs.get(id)}
+            updateOrg={updateOrg}
+          />
         </div>
       )}
     </div>

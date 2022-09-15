@@ -13,6 +13,7 @@ export interface OrgListI {
   org: number
   code: string
   active: boolean
+  changed: boolean
 }
 
 const loadOrgs = async (loadFlag : string, setSession : any, setMessage : any) => {
@@ -22,7 +23,7 @@ const loadOrgs = async (loadFlag : string, setSession : any, setMessage : any) =
     let orgs : Array<OrgListI> = []
     
     for (const l of data) {
-        orgs.push ({id : l.id, org : l.org, code : l.code, active : l.active})
+        orgs.push ({id : l.id, org : l.org, code : l.code, active : l.active, changed : false})
     }
     
     return orgs

@@ -4,15 +4,28 @@
 .table-grid {
   margin: 0px 20px 0px 20px;
   
+//Mui datagrid
+.MuiDataGrid-columnHeader {
+color: red !important;  
+// font-weight: bold; doesn't work
+}
+.MuiSvgIcon-root {
+color: red !important;
+}
+.MuiDataGrid-footerContainer {
+color: red !important;
+}
+.MuiTablePagination-displayedRows {
+color: red !important;  
+}
+.table-cell {
+color: red !important;  
+}
+
 
   .table-grid-header {
     font-size: 1.2em;
   }
-
-  .table-grid-body {
-    
-  }
-
 
   .table-menu {
     @if $debug-borders {

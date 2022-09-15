@@ -1,6 +1,21 @@
 .table-grid {
   margin: 0px 20px 0px 20px;
 }
+.table-grid .MuiDataGrid-columnHeader {
+  color: red !important;
+}
+.table-grid .MuiSvgIcon-root {
+  color: red !important;
+}
+.table-grid .MuiDataGrid-footerContainer {
+  color: red !important;
+}
+.table-grid .MuiTablePagination-displayedRows {
+  color: red !important;
+}
+.table-grid .table-cell {
+  color: red !important;
+}
 .table-grid .table-grid-header {
   font-size: 1.2em;
 }

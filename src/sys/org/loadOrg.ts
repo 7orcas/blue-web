@@ -14,6 +14,7 @@ export interface OrgI {
   code: string
   active: boolean
   dvalue: boolean
+  originalValue: string | undefined
 }
 
 const loadOrg = async (id : number, setSession : any, setMessage : any) => {
@@ -25,9 +26,10 @@ const loadOrg = async (id : number, setSession : any, setMessage : any) => {
       org : d.org,
       code : d.code,
       active : d.active,
-      dvalue : d.dvalue
+      dvalue : d.dvalue,
+      originalValue : undefined
     }
-
+    org.originalValue = JSON.stringify(org)
     return org
   } catch (err : any) { } 
 }
