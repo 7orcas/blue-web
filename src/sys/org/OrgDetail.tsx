@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { Checkbox, TextField } from '@mui/material';
-import loadOrg, { OrgI } from './loadOrg'
+import loadOrg, { OrgI } from './loadOrgDEL'
 import LangLabel from '../lang/LangLabel';
 
 /*
@@ -21,20 +21,6 @@ interface OrgProps {
 
 const OrgDetail : React.FC<OrgProps> = ({ id, org, updateOrg }) => {
   
-  // const { setSession, setMessage } = useContext(AppContext) as AppContextI
-
-  // const [dataSource, setDataSource] = useState<OrgI>()
-
-  // useEffect(() => {
-  //   const loadOrgX = async() => {
-  //     var l : OrgI | undefined = await loadOrg(id, setSession, setMessage)
-  //     if (typeof l !== 'undefined') {
-  //       setDataSource(l)
-  //     }
-  //   }
-  //   loadOrgX()
-  // },[])
-
   const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (typeof org !== 'undefined'){
       org.active = event.target.checked;

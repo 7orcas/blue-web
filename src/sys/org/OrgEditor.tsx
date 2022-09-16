@@ -1,11 +1,11 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-// import useLabel from '../lang/useLabel'
-import { loadList, jsonReplacer, useLabel } from '../component/editor/editor'
+import { loadList, useLabel, updateList, onListSelectionSetEditors } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 
-// import loadOrgs, { OrgListI } from './loadOrgs'
-import loadOrg, { OrgI } from './loadOrg'
+import Button from '../component/utils/Button'
+
+
 import OrgDetail from './OrgDetail'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
 import { Menu, MenuButton } from '@szhsin/react-menu';
@@ -28,23 +28,43 @@ const OrgEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
+  //Local State
   const [list, setList] = useState<OrgListI[]>([])
+  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map())
   const [editors, setEditors] = useState<Array<number>>([])
-  const [orgs, setOrgs] = useState<Map<number,OrgEntI>>(new Map())
 
   //Initial load of base list
   useEffect(() => {
-    const loadOrgsX = async() => {
-      let orgs : Array<OrgListI> = []
-      var data = await loadList(orgs, 'org/org-list', setSession, setMessage)
+    const loadListX = async() => {
+      let list : Array<OrgListI> = []
+      var data = await loadList('org/org-list', list, setSession, setMessage)
       if (typeof data !== 'undefined') {
-        setList(orgs)
+        setList(list)
       }
     }
-    loadOrgsX()
+    loadListX()
   },[setSession, setMessage])
 
+  //Load entity
+  const loadOrgX = async(id : number) => {
+    var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
+    if (typeof entity !== 'undefined') {
+      updateEntities(id, entity)
+    }
+  }
 
+  //Update list and entities state
+  const updateEntities = (id : number, entity : OrgEntI) => {
+    setEntities(new Map(entities.set(id, entity)))
+    updateList (id, entity, list, setList)
+  }
+
+  //Set the list selections (to display editors)  
+  const onSelectionModelChange = (ids : GridSelectionModel) => {
+    onListSelectionSetEditors(ids, setEditors, entities, loadOrgX)
+  }
+
+  //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
     { field: 'org', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
@@ -53,67 +73,8 @@ const OrgEditor = () => {
     { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
 
-
-  
-
-  const getListObject = (id : number) : OrgListI | null => {
-    for (var i=0;i<list.length;i++){
-      if (list[i].id === id) {
-        return list[i]
-      }
-    }
-    return null;
-  }
-
-
-  const updateList = (id : number, org : OrgEntI) => {
-console.log('updateList id=' + id)   
-    var x = JSON.stringify(org, jsonReplacer)
-    var o = getListObject(id)
-console.log('updateList originalValue=' + org.originalValue + '  current=' + x + '  o=' + o)         
-    if (o !== null) {
-      o.changed = org.originalValue !== x
-      o.active = org.active
-      o.code = org.code
-console.log('updateList code='  + org.code)
-      var l : OrgListI[] = []
-      for (var i=0;i<list.length;i++){
-        if (list[i].id === id) {
-          l.push(o)
-        } else {
-          l.push(list[i])
-        }
-      }
-      setList(l)
-    }
-  }
-
-  const updateOrg = (id : number, org : OrgEntI) => {
-console.log('updateOrg id=' + id)        
-    setOrgs(new Map(orgs.set(id,org)))
-    updateList(id, org)
-  }
-
-  const loadOrgX = async(id : number) => {
-    var l : OrgEntI | undefined = await loadOrg(id, setSession, setMessage)
-    if (typeof l !== 'undefined') {
-      updateOrg(id,l)
-    }
-  }
-
-
-  const onSelectionModelChange = (ids : GridSelectionModel) => {
-    let x: Array<number> = []
-    if (ids !== null && typeof ids !== 'undefined') {
-      ids.forEach((id) => x.push(typeof id === 'number'? id : parseInt(id)))
-    }
-    x.map((id) => {
-      if (!orgs.has(id)) {
-console.log('onSelectionModelChange id=' + id)        
-      loadOrgX (id)
-      }
-    })
-    setEditors(x);
+  const handleCommit = () => {
+    console.log('COMMIT')
   }
 
 
@@ -132,7 +93,7 @@ console.log('onSelectionModelChange id=' + id)
     <div className='editor1'>
       <div className='editor1-left table-grid'>
         <div className='table-menu'>
-          <div className='menu-item button'>
+          
             <Menu 
               menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
               className='table-menu-item'
@@ -141,7 +102,10 @@ console.log('onSelectionModelChange id=' + id)
                 <MenuX key={i.key} item={i} setSelection={setSelection}/>
               ))}
             </Menu>
-          </div>
+            
+              <Button onClick={handleCommit} langkey='commit' className='menu-item'/>
+            
+          
         </div>
         <div style={{ height: '80vh', width: '100%', minWidth : 500, maxWidth : 500 }}>
           <DataGrid
@@ -163,8 +127,8 @@ console.log('onSelectionModelChange id=' + id)
           <OrgDetail 
             key={id} 
             id={id}
-            org={orgs.get(id)}
-            updateOrg={updateOrg}
+            org={entities.get(id)}
+            updateOrg={updateEntities}
           />
         </div>
       )}

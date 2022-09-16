@@ -1,3 +1,4 @@
+import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
 import apiGet from '../../api/apiGet'
 import useLabelX from '../../lang/useLabel'
 
@@ -19,7 +20,7 @@ export interface BaseListI {
   changed: boolean
 }
 
-export const loadList = async <T extends BaseListI>(list : Array<T>, url : string, setSession : any, setMessage : any) => {
+export const loadList = async <T extends BaseListI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
   try {
     const data = await apiGet(url, setSession, setMessage)
     
@@ -40,8 +41,8 @@ export const loadList = async <T extends BaseListI>(list : Array<T>, url : strin
 
 
 export interface BaseEntI {
-  id: number
-  org: number
+  id: number  //should not be changed
+  org: number  //should not be changed
   code: string
   active: boolean
   originalValue: string | undefined
@@ -66,10 +67,80 @@ export const jsonReplacer = (key : string, value : any) => {
 }
 
 /**
- * Conveniece method to return a label
+ * Return a label
  * @param key 
  * @returns 
  */
 export const useLabel = (key : string) => {
   return useLabelX(key)
+}
+
+/**
+ * Return list object by it's id
+ * @param id 
+ * @param list 
+ * @returns 
+ */
+export const getListObjectById = <T extends BaseListI>(id : number, list : Array<T>) => {
+  for (var i=0;i<list.length;i++){
+    if (list[i].id === id) {
+      return list[i]
+    }
+  }
+  return null;
+}
+
+/**
+ * Update the editor list
+ * @param entity id 
+ * @param updated entity 
+ * @param list 
+ * @param setList 
+ */
+export const updateList = <T extends BaseListI, E extends BaseEntI>(id : number, entity : E, list : Array<T>, setList : any) => {
+
+  var x = JSON.stringify(entity, jsonReplacer)
+  var o = getListObjectById(id, list)
+
+  if (o !== null) {
+    o.changed = entity.originalValue !== x
+    o.active = entity.active
+    o.code = entity.code
+
+    var newList : T[] = []
+    for (var i=0;i<list.length;i++){
+      if (list[i].id === id) {
+        newList.push(o)
+      } else {
+        newList.push(list[i])
+      }
+    }
+    setList(newList);
+  }
+}
+
+/**
+ * Action a list multi-selection
+ * - load entity if required
+ * - store selected editors in state
+ * @param ids 
+ * @param setEditors 
+ * @param entities 
+ * @param loadEntity 
+ */
+export const onListSelectionSetEditors = <T extends BaseEntI>(ids : GridSelectionModel, setEditors : any, entities : Map<number, T>, loadEntity : any) => {
+  let newEditors: Array<number> = []
+
+  //Iterate selected list ids
+  if (ids !== null && typeof ids !== 'undefined') {
+    ids.forEach((id) => newEditors.push(typeof id === 'number'? id : parseInt(id)))
+  }
+
+  //Save selected ids for each editor in state
+  newEditors.map((id) => {
+    if (!entities.has(id)) {
+      loadEntity (id)
+    }
+  })
+  setEditors(newEditors);
 }
