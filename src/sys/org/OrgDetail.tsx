@@ -1,8 +1,6 @@
-import { useState, useContext, useEffect } from 'react'
-import AppContext, { AppContextI } from '../system/AppContext'
-import { Checkbox, TextField } from '@mui/material';
-import loadOrg, { OrgI } from './loadOrgDEL'
+import { OrgEntI } from './org'
 import LangLabel from '../lang/LangLabel';
+import { Checkbox, TextField } from '@mui/material';
 
 /*
   Show organisational detail
@@ -14,7 +12,7 @@ import LangLabel from '../lang/LangLabel';
 
 interface OrgProps {
   id : number
-  org : OrgI | undefined
+  org : OrgEntI | undefined
   updateOrg : any
 }
   

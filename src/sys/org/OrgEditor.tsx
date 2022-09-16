@@ -90,8 +90,8 @@ const OrgEditor = () => {
   }
   
   return (
-    <div className='editor1'>
-      <div className='editor1-left table-grid'>
+    <div className='editor-multi-select'>
+      <div className='editor-left table-grid'>
         <div className='table-menu'>
           
             <Menu 
@@ -102,8 +102,10 @@ const OrgEditor = () => {
                 <MenuX key={i.key} item={i} setSelection={setSelection}/>
               ))}
             </Menu>
-            
-              <Button onClick={handleCommit} langkey='commit' className='menu-item'/>
+            <div className='table-menu-item'>
+            <Button onClick={handleCommit} langkey='commit' className='table-menu-item'/>
+            </div>
+            <Button onClick={handleCommit} langkey='commit2' className='table-menu-item'/>
             
           
         </div>
@@ -123,7 +125,7 @@ const OrgEditor = () => {
         </div>
       </div>
       {editors.map((id,i) => 
-        <div className='editor1-right'>
+        <div className='editor-right'>
           <OrgDetail 
             key={id} 
             id={id}

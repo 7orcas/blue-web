@@ -1,0 +1,27 @@
+@import '../../css/variables.scss';
+
+
+.editor-multi-select {
+  display: flex;
+
+  .editor-left {
+    flex-grow: 0;
+    // flex: auto;
+  }
+
+  .editor-right {
+    flex: auto;
+
+    input {
+      color: white;
+      border: 1px solid white;
+    }
+  }
+}
+
+.editor-detail {
+  height: 80vh;
+  margin-top: 20px;
+  border: 1px solid white;
+}
+

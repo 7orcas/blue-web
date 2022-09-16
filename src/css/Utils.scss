@@ -1,29 +1,5 @@
 @import './variables.scss';
 
-
-.editor1 {
-  display: flex;
-
-  .editor1-left {
-    flex-grow: 0;
-    // flex: auto;
-  }
-
-  .editor1-right {
-    flex: auto;
-
-    input {
-      color: white;
-      border: 1px solid white;
-    }
-  }
-}
-
-.editor-detail {
-  height: 80vh;
-  border: 1px solid white;
-}
-
 .lang-dialog {
 
   .lang-dialog-title {
