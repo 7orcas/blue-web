@@ -1,8 +1,8 @@
-import axios from '../api/apiAxiosUpload'
+import axios from '../../api/apiAxiosUpload'
 import { FC, useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { MessageType, MessageReducer } from '../system/Message'
-import LangLabel from '../lang/LangLabel'
+import { MessageType, MessageReducer } from '../../system/Message'
+import LangLabel from '../../lang/LangLabel'
 
 interface Props {
   title: string,

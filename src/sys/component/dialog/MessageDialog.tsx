@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react'
-import AppContext, { AppContextI } from '../../sys/system/AppContext'
+import AppContext, { AppContextI } from '../../system/AppContext'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import LangLabel from '../../sys/lang/LangLabel'
-import useLabel from '../../sys/lang/useLabel'
-import { MessageType, MessageReducer } from '../system/Message'
+import LangLabel from '../../lang/LangLabel'
+import useLabel from '../../lang/useLabel'
+import { MessageType, MessageReducer } from '../../system/Message'
 
 const MessageDialog = () => {
   

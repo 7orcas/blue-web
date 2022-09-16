@@ -7,6 +7,10 @@
 .editor1 .editor1-right {
   flex: auto;
 }
+.editor1 .editor1-right input {
+  color: white;
+  border: 1px solid white;
+}
 
 .editor-detail {
   height: 80vh;

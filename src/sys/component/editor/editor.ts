@@ -1,5 +1,5 @@
-import apiGet from '../api/apiGet'
-import useLabelX from '../lang/useLabel'
+import apiGet from '../../api/apiGet'
+import useLabelX from '../../lang/useLabel'
 
 /*
   Editor utility functions

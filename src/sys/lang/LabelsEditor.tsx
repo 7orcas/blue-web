@@ -13,9 +13,9 @@ import { ThemeType } from '../system/Session'
 import '@inovua/reactdatagrid-community/index.css'
 import '@inovua/reactdatagrid-community/theme/default-dark.css'
 import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
-import Button from '../utils/Button'
-import download from '../utils/download'
-import UploadDialog from '../utils/UploadDialog'
+import Button from '../component/utils/Button'
+import download from '../component/utils/download'
+import UploadDialog from '../component/dialog/UploadDialog'
 
 /*
   List, export and update language labels

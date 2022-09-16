@@ -1,4 +1,4 @@
-import axios from '../api/apiAxiosDownload'
+import axios from '../../api/apiAxiosDownload'
 import { saveAs } from 'file-saver'
 
 const download = async (rest : string, filename? : string) => {

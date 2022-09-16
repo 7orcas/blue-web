@@ -1,5 +1,5 @@
 import apiGet from '../api/apiGet'
-import { BaseListI, BaseEntI, loadList, loadEnt } from "../utils/editor"
+import { BaseListI, BaseEntI, loadList, loadEnt } from "../component/editor/editor"
 
 /*
   Organisations

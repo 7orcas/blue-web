@@ -11,6 +11,11 @@
 
   .editor1-right {
     flex: auto;
+
+    input {
+      color: white;
+      border: 1px solid white;
+    }
   }
 }
 

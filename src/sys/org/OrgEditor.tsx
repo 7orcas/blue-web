@@ -1,7 +1,7 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 // import useLabel from '../lang/useLabel'
-import { loadList, jsonReplacer, useLabel } from '../utils/editor'
+import { loadList, jsonReplacer, useLabel } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 
 // import loadOrgs, { OrgListI } from './loadOrgs'
@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import MenuItemFactory, { MenuItem } from '../../sys/menu/MenuItemFactory'
 import MenuX from "../../sys/menu/MenuX"
-import download from '../utils/download'
+import download from '../component/utils/download'
 
 
 /*

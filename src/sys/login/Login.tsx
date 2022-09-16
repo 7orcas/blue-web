@@ -5,7 +5,7 @@ import { SessionReducer } from '../system/Session'
 import LangLabel from '../lang/LangLabel'
 import useLabel from '../lang/useLabel'
 import login from './login'
-import Button from '../utils/Button';
+import Button from '../component/utils/Button';
 import '../../css/Login.css'
 
 const Login = () => {
