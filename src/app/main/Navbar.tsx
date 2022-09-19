@@ -1,4 +1,4 @@
-import '../../css/Navbar.css';
+import './navbar.css';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -31,7 +31,17 @@ const Navbar = () => {
   //Top Level
   f.main('orgadmin', '/orgadmin')
   f.main('planmat', '/')
-  f.main('startmo', '/Test2')
+  f.main('labeladmin', '/labels')
+  
+  f.button(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
+    setSession ({type: SessionReducer.tgTheme})
+  })
+
+  f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', () => {
+    setSession ({type: SessionReducer.editLabels})
+  })
+
+
   f.main('simus', '/Test2')
   var sub1 = f.sub('mastdat')
 
@@ -75,7 +85,9 @@ const Navbar = () => {
   }
 
   const setSelection = (item : MenuItem) => {
-    if (item.type === MenuItemType.action || item.type === MenuItemType.checkbox) {
+    if (item.type === MenuItemType.action 
+      || item.type === MenuItemType.checkbox
+      || item.type === MenuItemType.button) {
       item.action()
     }
     setSession ({type: SessionReducer.debugMessage, payload: item.label})

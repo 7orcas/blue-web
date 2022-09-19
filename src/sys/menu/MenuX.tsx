@@ -10,7 +10,7 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
-import MenuItemX, { MenuItemType } from "./MenuItemXDEL"
+import { MenuItem as MenuItemX, MenuItemType } from './MenuItemFactory'
 import LangLabel from '../lang/LangLabel'
 
 /*
@@ -58,6 +58,14 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
               <LangLabel langkey={item.label}/>
             </MenuItem>
           </Link>
+        </div>
+      }
+
+      {item.type === MenuItemType.button &&
+        <div className='menu-item'>
+            <button onClick={() => setSelection(item)}>
+              <LangLabel langkey={item.label}/>
+            </button>
         </div>
       }
 

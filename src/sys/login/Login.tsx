@@ -1,3 +1,4 @@
+import './login.css'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AppContext, { AppContextI } from '../system/AppContext'
@@ -6,7 +7,6 @@ import LangLabel from '../lang/LangLabel'
 import useLabel from '../lang/useLabel'
 import login from './login'
 import Button from '../component/utils/Button';
-import '../../css/Login.css'
 
 const Login = () => {
 

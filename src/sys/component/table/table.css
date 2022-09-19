@@ -2,19 +2,19 @@
   margin: 0px 20px 0px 20px;
 }
 .table-grid .MuiDataGrid-columnHeader {
-  color: red !important;
+  color: #cfcbcb !important;
 }
 .table-grid .MuiSvgIcon-root {
-  color: red !important;
+  color: #cfcbcb !important;
 }
 .table-grid .MuiDataGrid-footerContainer {
-  color: red !important;
+  color: #cfcbcb !important;
 }
 .table-grid .MuiTablePagination-displayedRows {
-  color: red !important;
+  color: #cfcbcb !important;
 }
 .table-grid .table-cell {
-  color: red !important;
+  color: #cfcbcb !important;
 }
 .table-grid .table-grid-header {
   font-size: 1.2em;
@@ -26,70 +26,11 @@
   margin-bottom: 10px;
   max-height: 30px;
 }
-.table-grid .table-menu-item button {
-  display: flex;
+.table-grid .table-menu .table-menu-item {
   margin-right: 20px;
-  border: 0;
-}
-.table-grid .table-menu-item .szh-menu__item {
-  text-decoration: none;
-}
-.table-grid .table-menu-item a {
-  text-decoration: none;
 }
 .table-grid .table-menu-item-dropdown {
   margin-left: auto;
   margin-top: 47px;
   z-index: 1;
-}
-
-.md-table {
-  border-collapse: collapse;
-}
-.md-table th {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0; /* required for the stickiness */
-}
-
-.table-header {
-  font-weight: bold;
-}
-
-#light .md-table {
-  border: 1px solid rgb(29, 28, 28);
-}
-#light .md-table th {
-  background-color: #759ac7;
-  color: white;
-  border: solid 1px rgb(29, 28, 28);
-}
-#light .md-table .table-row-0 {
-  background-color: white;
-}
-#light .md-table .table-row-1 {
-  background-color: #e1e1e1;
-}
-#light .md-table td {
-  border: solid 1px rgb(29, 28, 28);
-  color: rgb(29, 28, 28);
-}
-
-#dark .md-table {
-  border: 1px solid #cfcbcb;
-}
-#dark .md-table th {
-  background-color: #303442;
-  color: #cfcbcb;
-  border: solid 1px #cfcbcb;
-}
-#dark .md-table .table-row-0 {
-  background-color: #1e1e1e;
-}
-#dark .md-table .table-row-1 {
-  background-color: #343333;
-}
-#dark .md-table td {
-  border: solid 1px #cfcbcb;
-  color: #cfcbcb;
-}/*# sourceMappingURL=Table.css.map */
+}/*# sourceMappingURL=table.css.map */

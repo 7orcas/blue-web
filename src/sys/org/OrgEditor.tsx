@@ -102,9 +102,7 @@ const OrgEditor = () => {
                 <MenuX key={i.key} item={i} setSelection={setSelection}/>
               ))}
             </Menu>
-            <div className='table-menu-item'>
             <Button onClick={handleCommit} langkey='commit' className='table-menu-item'/>
-            </div>
             <Button onClick={handleCommit} langkey='commit2' className='table-menu-item'/>
             
           

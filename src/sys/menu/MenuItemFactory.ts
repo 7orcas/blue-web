@@ -13,6 +13,7 @@ export enum MenuItemType {
   item,
   checkbox,
   action,
+  button,
   sub,
   subx,
   head,
@@ -64,6 +65,16 @@ export default class MenuItemFactory {
     this.items.push(i)
     return i
   }
+  
+  //Top level item
+  button = (label : string, action : any) => {
+    var i = new MenuItem(this.key++)
+    i.type = MenuItemType.button
+    i.label = label
+    i.action = action
+    this.items.push(i)
+    return i
+  }
 
   item = (label : string, link : string) => {
     var i = new MenuItem(this.key++)
@@ -72,6 +83,7 @@ export default class MenuItemFactory {
     i.label = label
     return i
   }
+
 
   checkbox = (label : string, action : any, checked : boolean) => {
     var i = new MenuItem(this.key++)

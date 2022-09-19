@@ -1,5 +1,4 @@
-import '../../css/Layout.css'
-import '../../css/Utils.css'
+import './layout.css'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { ThemeType } from '../../sys/system/Session'

@@ -1,6 +1,7 @@
-import './App.css'
+import './app.css'
 import './sys/component/table/table.css';
 import './sys/component/editor/editor.css';
+import './sys/component/utils/utils.css'
 import 'normalize.css'
 
 import Layout from './app/main/Layout'

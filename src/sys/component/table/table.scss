@@ -1,26 +1,26 @@
-@import './variables.scss';
+@import '../../css/variables.scss';
 
 
 .table-grid {
   margin: 0px 20px 0px 20px;
   
-//Mui datagrid
-.MuiDataGrid-columnHeader {
-color: red !important;  
-// font-weight: bold; doesn't work
-}
-.MuiSvgIcon-root {
-color: red !important;
-}
-.MuiDataGrid-footerContainer {
-color: red !important;
-}
-.MuiTablePagination-displayedRows {
-color: red !important;  
-}
-.table-cell {
-color: red !important;  
-}
+  //Mui datagrid
+  .MuiDataGrid-columnHeader {
+    color: $dark-color !important;  
+  // font-weight: bold; doesn't work
+  }
+  .MuiSvgIcon-root {
+    color: $dark-color !important;
+  }
+  .MuiDataGrid-footerContainer {
+    color: $dark-color !important;
+  }
+  .MuiTablePagination-displayedRows {
+    color: $dark-color !important;
+  }
+  .table-cell {
+    color: $dark-color !important;
+  }
 
 
   .table-grid-header {
@@ -36,22 +36,23 @@ color: red !important;
     display: flex;
     margin-bottom: 10px;
     max-height: 30px;
+    
+    .table-menu-item {
+      margin-right: 20px;
+      
+      // button {
+      //   display: flex;
+      // }
+
+      // .szh-menu__item {
+      //   text-decoration: none;
+      // }
+      // a {
+      //   text-decoration: none;
+      // }
+    }
   }
 
-  .table-menu-item {
-    margin-right: 20px;
-    
-    button {
-      display: flex;
-      
-    }
-    .szh-menu__item {
-      text-decoration: none;
-    }
-    a {
-      text-decoration: none;
-    }
-  }
 
   .table-menu-item-dropdown {
     margin-left: auto;
@@ -64,56 +65,56 @@ color: red !important;
 
 //DELETE BELOW IF react-table IS NO LONGER USED
 
-.md-table {
-  border-collapse:collapse;
+// .md-table {
+//   border-collapse:collapse;
   
-  th {
-    position: sticky;
-    top: 0; /* required for the stickiness */
-  }
-}
+//   th {
+//     position: sticky;
+//     top: 0; /* required for the stickiness */
+//   }
+// }
 
-.table-header {
-  font-weight: bold;
-  // border-bottom: 3px solid red;
-}
+// .table-header {
+//   font-weight: bold;
+//   // border-bottom: 3px solid red;
+// }
 
-#light .md-table {
-  border: 1px solid $light-color;
+// #light .md-table {
+//   border: 1px solid $light-color;
   
-  th {
-    background-color: $light-table-header-bg;
-    color: $light-table-header-color;
-    border: solid 1px $light-color;
-  }
-  .table-row-0 {
-    background-color: $light-table-row-0;
-  }
-  .table-row-1 {
-    background-color: $light-table-row-1;
-  }
-  td {
-    border: solid 1px $light-color;
-    color: $light-color;
-  }
-}
+//   th {
+//     background-color: $light-table-header-bg;
+//     color: $light-table-header-color;
+//     border: solid 1px $light-color;
+//   }
+//   .table-row-0 {
+//     background-color: $light-table-row-0;
+//   }
+//   .table-row-1 {
+//     background-color: $light-table-row-1;
+//   }
+//   td {
+//     border: solid 1px $light-color;
+//     color: $light-color;
+//   }
+// }
 
-#dark .md-table {
-  border: 1px solid $dark-color;
+// #dark .md-table {
+//   border: 1px solid $dark-color;
   
-  th {
-    background-color: $dark-table-header-bg;
-    color: $dark-table-header-color;
-    border: solid 1px $dark-color;
-  }
-  .table-row-0 {
-    background-color: $dark-table-row-0;
-  }
-  .table-row-1 {
-    background-color: $dark-table-row-1;
-  }
-  td {
-    border: solid 1px $dark-color;
-    color: $dark-color;
-  }
-}
+//   th {
+//     background-color: $dark-table-header-bg;
+//     color: $dark-table-header-color;
+//     border: solid 1px $dark-color;
+//   }
+//   .table-row-0 {
+//     background-color: $dark-table-row-0;
+//   }
+//   .table-row-1 {
+//     background-color: $dark-table-row-1;
+//   }
+//   td {
+//     border: solid 1px $dark-color;
+//     color: $dark-color;
+//   }
+// }
