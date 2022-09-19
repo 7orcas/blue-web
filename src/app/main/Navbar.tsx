@@ -2,7 +2,7 @@ import './navbar.css';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { SessionReducer, ThemeType } from '../../sys/system/Session'
@@ -36,13 +36,10 @@ const Navbar = () => {
   f.main('labeladmin', '/labels')
   f.main('planmat', '/')
   
-  // f.button(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
-  //   setSession ({type: SessionReducer.tgTheme})
-  // })
-
-  f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', () => {
-    setSession ({type: SessionReducer.editLabels})
-  })
+  f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', 
+    () => {setSession ({type: SessionReducer.editLabels})},
+    true
+  )
 
 
   f.main('simus', '/Test2')
@@ -63,13 +60,6 @@ const Navbar = () => {
   sub2.menu.push(f.item('machines', '/Test3'))
   sub2.menu.push(f.item('shifts', '/Test3'))
 
-  //Theme icon
-  // f.action(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
-  //   setSession ({type: SessionReducer.tgTheme})
-  // })
-
-
-
   //Separate admin icon
   var admin = new MenuItem(9999)
   admin.label = 'admin'
@@ -80,11 +70,11 @@ const Navbar = () => {
   admin.menu.push(f.item('labeladmin', '/labels'))
   admin.menu.push(f.item('orgadmin', '/orgadmin'))
 
-  
-  var themeX = f.action(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
-    setSession ({type: SessionReducer.tgTheme})
-  })
-  admin.menu.push(themeX)
+  //Separate theme icon  
+  var themeX = f.button('', 
+    () => {setSession ({type: SessionReducer.tgTheme})},
+    false)
+
 
   if (containsRole('LangEdit')) {
     var editLabel = f.checkbox('editLabels', 
@@ -108,23 +98,21 @@ const Navbar = () => {
       {f.items.map(i => (
         <Menu key={i.key} item={i} setSelection={setSelection}/>
       ))}
-      <Menu key={998} item={themeX} setSelection={setSelection}/>
 
       {/* Admin menu option */}
       <div className='menu-item menu-item-right'>
-
-        {/* <div className='menu-item'>
-          <MenuItemS onClick={() => setSelection(themeX)}>
-            xx
-          </MenuItemS>
-        </div> */}
-        <MenuS 
-          menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
-          >
-          {admin.menu.map(i => (
-            <Menu key={i.key} item={i} setSelection={setSelection}/>
-          ))}
-        </MenuS>
+        <Menu key={998} item={themeX} setSelection={setSelection}>
+          <FontAwesomeIcon icon={session.theme === ThemeType.dark? faSun : faMoon } />
+        </Menu>
+          <div className='last-menut-item'>
+          <MenuS
+            menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
+            >
+            {admin.menu.map(i => (
+              <Menu key={i.key} item={i} setSelection={setSelection}/>
+            ))}
+          </MenuS>
+          </div>
       </div>
     </nav>
   )

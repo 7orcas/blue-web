@@ -17,6 +17,27 @@
     .MuiSvgIcon-root {
       color: $light-color !important;
     }
+
+    .table-menu {
+      button {
+        color : $light-button-color;
+        background: $light-button-bg;
+        border: 1px solid $light-button-bg;
+      }
+
+      button:hover {
+        color : $light-button-color;
+        background: $light-button-bg-hover;
+        border: 1px solid $light-button-bg-hover;
+      }
+
+      button:disabled {
+        color : $light-button-bg;
+        background: $light-bg;
+        border: 1px solid $light-button-color;
+      }
+    }
+
   }
   
   .editor-detail {
@@ -41,6 +62,26 @@
     input {
       color: $dark-color;
       border: 1px solid $dark-border-color;
+    }
+  }
+
+  .table-menu {
+    button {
+      color : $dark-button-color;
+      background: $dark-button-bg;
+      border: 1px solid $dark-button-bg;
+    }
+
+    button:hover {
+      color : $dark-button-color;
+      background: $dark-button-bg-hover;
+      border: 1px solid $dark-button-bg-hover;
+    }
+
+    button:disabled {
+      color : $dark-button-bg;
+      background: $dark-bg;
+      border: 1px solid $dark-button-color;
     }
   }
 }

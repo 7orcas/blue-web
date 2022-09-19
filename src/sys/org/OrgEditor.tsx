@@ -21,9 +21,11 @@ const OrgEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //Local State
-  const [list, setList] = useState<OrgListI[]>([])
-  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map())
-  const [editors, setEditors] = useState<Array<number>>([])
+  const [list, setList] = useState<OrgListI[]>([])  //left list of all records
+  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
+  const [editors, setEditors] = useState<Array<number>>([])  //detailed editors
+  const [changed, setChanged] = useState(false)  //Control the commit button
+
 
   //Initial load of base list
   useEffect(() => {
@@ -37,6 +39,7 @@ const OrgEditor = () => {
     loadListX()
   },[setSession, setMessage])
 
+
   //Load entity
   const loadOrgX = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
@@ -48,7 +51,7 @@ const OrgEditor = () => {
   //Update list and entities state
   const updateEntities = (id : number, entity : OrgEntI) => {
     setEntities(new Map(entities.set(id, entity)))
-    updateList (id, entity, list, setList)
+    updateList (id, entity, list, setList, setChanged)
   }
 
   //Set the list selections (to display editors)  
@@ -73,8 +76,7 @@ const OrgEditor = () => {
     <div className='editor'>
       <div className='menu-header'>
         <TableMenu exportExcelUrl='org/excel'>
-          <Button onClick={handleCommit} langkey='commit' className='table-menu-item'/>
-          <Button onClick={handleCommit} langkey='commit2' className='table-menu-item'/>
+          <Button onClick={handleCommit} langkey='commit' className='table-menu-item' disabled={!changed}/>
         </TableMenu>
       </div>
       <div className='editor-multi-select'>

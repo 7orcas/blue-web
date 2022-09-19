@@ -19,6 +19,13 @@
 
 .menu-item-right {
   margin-left: auto;
+  display: flex;
+}
+.menu-item-right button {
+  margin-right: 5px;
+}
+.menu-item-right .last-menut-item button {
+  margin-right: 20px;
 }
 
 .menu-item-unchecked li {

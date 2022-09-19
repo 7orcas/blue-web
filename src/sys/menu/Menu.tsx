@@ -24,10 +24,11 @@ import LangLabel from '../lang/LangLabel'
 interface Props {
   item: MenuItemX 
   setSelection: any
+  children?: any
 }
 
 
-const Menu : FC<Props> = ({ item, setSelection }) => {
+const Menu : FC<Props> = ({ item, setSelection, children }) => {
 
   return (
     <>
@@ -64,7 +65,8 @@ const Menu : FC<Props> = ({ item, setSelection }) => {
       {item.type === MenuItemType.button &&
         <div className='menu-item'>
             <button onClick={() => setSelection(item)}>
-              <LangLabel langkey={item.label}/>
+              {item.label.length > 0 && <LangLabel langkey={item.label}/>}
+              {children}
             </button>
         </div>
       }

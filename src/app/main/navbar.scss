@@ -27,6 +27,15 @@
 
 .menu-item-right {
   margin-left: auto;
+  display: flex;
+  
+  button {
+    margin-right: 5px;
+  }
+
+  .last-menut-item button {
+    margin-right: 20px;
+  }
 }
 
 .menu-item-unchecked li {

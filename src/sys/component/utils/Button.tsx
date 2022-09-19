@@ -18,7 +18,7 @@ const Button : FC<Props> = ({ langkey, onClick, disabled = false, className = ''
 
   return (
     <ButtonM 
-      variant='outlined'
+      variant='contained'
       onClick={onClick} 
       disabled={disabled} 
       className={className}

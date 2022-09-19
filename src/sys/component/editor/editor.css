@@ -10,6 +10,21 @@
 #light .editor .MuiSvgIcon-root {
   color: rgb(29, 28, 28) !important;
 }
+#light .editor .table-menu button {
+  color: #f1f1f1;
+  background: #3a8fe4;
+  border: 1px solid #3a8fe4;
+}
+#light .editor .table-menu button:hover {
+  color: #f1f1f1;
+  background: #1568BD;
+  border: 1px solid #1568BD;
+}
+#light .editor .table-menu button:disabled {
+  color: #3a8fe4;
+  background: white;
+  border: 1px solid #f1f1f1;
+}
 #light .editor-detail {
   border: 1px solid #a6a8b3;
 }
@@ -27,6 +42,21 @@
 #dark .editor .editor-detail input {
   color: #cfcbcb;
   border: 1px solid #cfcbcb;
+}
+#dark .editor .table-menu button {
+  color: #cccccc;
+  background: #3a8fe4;
+  border: 1px solid #3a8fe4;
+}
+#dark .editor .table-menu button:hover {
+  color: #cccccc;
+  background: #1568BD;
+  border: 1px solid #1568BD;
+}
+#dark .editor .table-menu button:disabled {
+  color: #3a8fe4;
+  background: #1e1e1e;
+  border: 1px solid #cccccc;
 }
 
 .editor {

@@ -96,8 +96,14 @@ export const getListObjectById = <T extends BaseListI>(id : number, list : Array
  * @param updated entity 
  * @param list 
  * @param setList 
+ * @param setChanged
  */
-export const updateList = <T extends BaseListI, E extends BaseEntI>(id : number, entity : E, list : Array<T>, setList : any) => {
+export const updateList = <T extends BaseListI, E extends BaseEntI>(
+    id : number, 
+    entity : E, 
+    list : Array<T>, 
+    setList : any,
+    setChanged : any) => {
 
   var x = JSON.stringify(entity, jsonReplacer)
   var o = getListObjectById(id, list)
@@ -116,6 +122,17 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(id : number,
       }
     }
     setList(newList);
+
+    //Set changed (eg to activate the Commit button)
+    setChanged(false)
+    for (i=0;i<newList.length;i++){
+      if (newList[i].changed === true) {
+        setChanged(true)
+        return
+      } 
+    }
+
+    return newList
   }
 }
 

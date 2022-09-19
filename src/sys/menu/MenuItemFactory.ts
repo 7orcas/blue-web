@@ -28,6 +28,7 @@ export class MenuItem {
   menu : any [] = []
   action : any
   checked : boolean = false
+  addToMenu? : boolean = false
 
   constructor (key : number) {
     this.key = key
@@ -66,13 +67,15 @@ export default class MenuItemFactory {
     return i
   }
   
-  //Top level item
-  button = (label : string, action : any) => {
+  //(Can be a) top level item
+  button = (label : string, action : any, addToMenu : boolean) => {
     var i = new MenuItem(this.key++)
     i.type = MenuItemType.button
     i.label = label
     i.action = action
-    this.items.push(i)
+    if (addToMenu === true) {
+      this.items.push(i)
+    }
     return i
   }
 
