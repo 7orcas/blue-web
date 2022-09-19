@@ -1,19 +1,11 @@
-import { useState, useContext, useCallback, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
+import OrgDetail from './OrgDetail'
+import TableMenu from '../component/table/TableMenu'
+import Button from '../component/utils/Button'
 import { loadList, useLabel, updateList, onListSelectionSetEditors } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
-
-import Button from '../component/utils/Button'
-
-
-import OrgDetail from './OrgDetail'
-import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
-import { Menu, MenuButton } from '@szhsin/react-menu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
-import MenuItemFactory, { MenuItem } from '../../sys/menu/MenuItemFactory'
-import MenuX from "../../sys/menu/MenuX"
-import download from '../component/utils/download'
+import { DataGrid, GridColDef, GridSelectionModel, GridCellParams } from '@mui/x-data-grid';
 
 
 /*
@@ -76,65 +68,45 @@ const OrgEditor = () => {
   const handleCommit = () => {
     console.log('COMMIT')
   }
-
-
-  //Table Menu
-  const f = new MenuItemFactory ()
-  var tableMenu = new MenuItem(9999)
-  
-  var downloadX = f.action(useLabel('expExcel'), () => download('org/excel'))
-  tableMenu.menu.push(downloadX)
-
-  const setSelection = (item : MenuItem) => {
-   item.action()
-  }
   
   return (
-    <div className='editor-multi-select'>
-      <div className='editor-left table-grid'>
-        <div className='table-menu'>
-          
-            <Menu 
-              menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
-              className='table-menu-item'
-              >
-              {tableMenu.menu.map(i => (
-                <MenuX key={i.key} item={i} setSelection={setSelection}/>
-              ))}
-            </Menu>
-            <Button onClick={handleCommit} langkey='commit' className='table-menu-item'/>
-            <Button onClick={handleCommit} langkey='commit2' className='table-menu-item'/>
-            
-          
-        </div>
-        <div style={{ height: '80vh', width: '100%', minWidth : 500, maxWidth : 500 }}>
-          <DataGrid
-            // sx={{color: 'yellow'}} //text color
-            rows={list}
-            columns={columns}
-            pageSize={25}
-            rowsPerPageOptions={[25]}
-            checkboxSelection
-            onSelectionModelChange={onSelectionModelChange}
-            getCellClassName={(params: GridCellParams<number>) => {
-              return 'table-cell';
-            }}
-          />
-        </div>
+    <div className='editor'>
+      <div className='menu-header'>
+        <TableMenu exportExcelUrl='org/excel'>
+          <Button onClick={handleCommit} langkey='commit' className='table-menu-item'/>
+          <Button onClick={handleCommit} langkey='commit2' className='table-menu-item'/>
+        </TableMenu>
       </div>
-      {editors.map((id,i) => 
-        <div className='editor-right'>
-          <OrgDetail 
-            key={id} 
-            id={id}
-            org={entities.get(id)}
-            updateOrg={updateEntities}
-          />
+      <div className='editor-multi-select'>
+        <div className='editor-left table-grid'>
+          <div style={{ height: '80vh', minWidth : 500, maxWidth : 500 }}>
+            <DataGrid
+              // sx={{color: 'yellow'}} //text color
+              rows={list}
+              columns={columns}
+              pageSize={25}
+              rowsPerPageOptions={[25]}
+              checkboxSelection
+              onSelectionModelChange={onSelectionModelChange}
+              getCellClassName={(params: GridCellParams<number>) => {
+                return 'table-cell';
+              }}
+            />
+          </div>
         </div>
-      )}
+        {editors.map((id,i) => 
+          <div className='editor-right'>
+            <OrgDetail 
+              key={id} 
+              id={id}
+              org={entities.get(id)}
+              updateOrg={updateEntities}
+            />
+          </div>
+        )}
+      </div>
     </div>
-  );
-
+  )
 }
 
 export default OrgEditor

@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Menu,
-  MenuItem,
+  Menu as MenuS,
+  MenuItem as MenuItemS,
   MenuButton,
   MenuHeader,
   MenuDivider,
@@ -27,7 +27,7 @@ interface Props {
 }
 
 
-const MenuX : FC<Props> = ({ item, setSelection }) => {
+const Menu : FC<Props> = ({ item, setSelection }) => {
 
   return (
     <>
@@ -54,9 +54,9 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
       {item.type === MenuItemType.item &&
         <div className='menu-item'>
           <Link to={item.link}>
-            <MenuItem onClick={() => setSelection(item)}>
+            <MenuItemS onClick={() => setSelection(item)}>
               <LangLabel langkey={item.label}/>
-            </MenuItem>
+            </MenuItemS>
           </Link>
         </div>
       }
@@ -71,41 +71,41 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
 
       {item.type === MenuItemType.action &&
         <div className='menu-item'>
-          <MenuItem onClick={() => setSelection(item)}>
+          <MenuItemS onClick={() => setSelection(item)}>
             <LangLabel langkey={item.label}/>
-          </MenuItem>
+          </MenuItemS>
         </div>
       }
 
       {item.type === MenuItemType.checkbox &&
         <div className={'menu-item ' + (!item.checked?'menu-item-unchecked':'')}>
-          <MenuItem 
+          <MenuItemS 
             type='checkbox' 
             onClick={() => setSelection(item)}
             checked={item.checked}
             >
             <LangLabel langkey={item.label}/>
-          </MenuItem>
+          </MenuItemS>
         </div>
       }
 
       {item.type === MenuItemType.sub &&
         <div className='menu-item'>
-          <Menu
+          <MenuS
             menuButton={<MenuButton><LangLabel langkey={item.label}/></MenuButton>} transition
             theming='dark' /* not working */
             >
             {item.menu.map(i => (
-              <MenuX key={i.key} item={i} setSelection={setSelection}/>
+              <Menu key={i.key} item={i} setSelection={setSelection}/>
             ))}
-          </Menu>
+          </MenuS>
         </div>
       }
 
       {item.type === MenuItemType.subx &&
         <SubMenu label= {item.label}>
           {item.menu.map(i => (
-            <MenuX key={i.key} item={i} setSelection={setSelection}/>
+            <Menu key={i.key} item={i} setSelection={setSelection}/>
           ))}
         </SubMenu>
       }
@@ -123,4 +123,4 @@ const MenuX : FC<Props> = ({ item, setSelection }) => {
   )
 }
 
-export default MenuX
+export default Menu

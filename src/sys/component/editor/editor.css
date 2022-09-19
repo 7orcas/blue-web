@@ -1,19 +1,45 @@
+#light .editor .MuiSvgIcon-root {
+  color: rgb(29, 28, 28) !important;
+}
+
+#dark .editor .MuiSvgIcon-root {
+  color: #cfcbcb !important;
+}
+
+#light .editor-detail {
+  border: 1px solid #a6a8b3;
+}
+#light .editor-detail input {
+  color: rgb(29, 28, 28);
+  border: 1px solid #a6a8b3;
+}
+
+#dark .editor-detail {
+  border: 1px solid #cfcbcb;
+}
+#dark .editor-detail input {
+  color: #cfcbcb;
+  border: 1px solid #cfcbcb;
+}
+
+.editor-menu {
+  display: flex;
+}
+
 .editor-multi-select {
   display: flex;
 }
 .editor-multi-select .editor-left {
   flex-grow: 0;
+  margin: 0px 20px 0px 20px;
 }
 .editor-multi-select .editor-right {
   flex: auto;
 }
-.editor-multi-select .editor-right input {
-  color: white;
-  border: 1px solid white;
-}
 
 .editor-detail {
   height: 80vh;
-  margin-top: 20px;
-  border: 1px solid white;
+  margin: 0px 5px 0px 0px;
+  padding: 5px;
+  border-radius: 5px;
 }/*# sourceMappingURL=editor.css.map */

@@ -2,20 +2,13 @@ import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionReducer } from '../system/Session'
 import loadLabels, { LabelI } from './loadLabels'
-import useLabel from './useLabel'
-import { Menu, MenuButton } from '@szhsin/react-menu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
-import MenuItemFactory, { MenuItem } from '../../sys/menu/MenuItemFactory'
-import MenuX from "../../sys/menu/MenuX"
+import TableMenu from '../component/table/TableMenu'
 import ReactDataGrid from '@inovua/reactdatagrid-community'
 import { ThemeType } from '../system/Session'
 import '@inovua/reactdatagrid-community/index.css'
 import '@inovua/reactdatagrid-community/theme/default-dark.css'
 import { TypeEditInfo } from '@inovua/reactdatagrid-community/types'
 import Button from '../component/utils/Button'
-import download from '../component/utils/download'
-import UploadDialog from '../component/dialog/UploadDialog'
 
 /*
   List, export and update language labels
@@ -29,7 +22,6 @@ const LabelsEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   const [dataSource, setDataSource] = useState<LabelI[]>([])
-  const [openUpload, setOpenUpload] = useState (false)
   
   useEffect(() => {
     const loadLabelsX = async() => {
@@ -70,34 +62,15 @@ const LabelsEditor = () => {
     setSession ({type: SessionReducer.labels, payload: dataSource})
   }
 
-  //Table Menu
-  const f = new MenuItemFactory ()
-  var tableMenu = new MenuItem(9999)
-  
-  var downloadX = f.action(useLabel('expExcel'), () => download('lang/pack/excel'))
-  tableMenu.menu.push(downloadX)
-  var uploadX = f.action(useLabel('fileup-label'), () => setOpenUpload(!openUpload))
-  tableMenu.menu.push(uploadX)
-
-  const setSelection = (item : MenuItem) => {
-   item.action()
-  }
-
   return (
     <div className='table-grid'>
-      <div className='table-menu'>
+      <TableMenu 
+        exportExcelUrl='lang/pack/excel'
+        uploadExcelUrl='lang/upload'
+        uploadExcelLangKey='fileup-label'
+      >
         <Button onClick={showInClient} langkey='showchange'/>
-        <div className='table-menu-item-dropdown menu-item button'>
-          <Menu 
-            menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
-            className='table-menu-item'
-            >
-            {tableMenu.menu.map(i => (
-              <MenuX key={i.key} item={i} setSelection={setSelection}/>
-            ))}
-          </Menu>
-        </div>
-      </div>
+      </TableMenu>
       <ReactDataGrid
         idProperty='id'
         style={{height: '80vh'}}
@@ -110,17 +83,8 @@ const LabelsEditor = () => {
         editable={true}
         onEditComplete={onEditComplete}
       />
-      <UploadDialog 
-        title='fileup-label'
-        rest={'lang/upload'}
-        clazz='upload'
-        setMessage={setMessage}
-        openUpload={openUpload}
-        setOpenUpload={setOpenUpload}
-      />
     </div>
-  );
-  
+  )
 }
 
 export default LabelsEditor

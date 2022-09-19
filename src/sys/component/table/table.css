@@ -1,35 +1,62 @@
+#light .table-grid {
+  border: 1px solid #a6a8b3;
+}
+#light .table-grid .MuiDataGrid-columnHeader {
+  color: rgb(29, 28, 28) !important;
+}
+#light .table-grid .MuiSvgIcon-root {
+  color: rgb(29, 28, 28) !important;
+}
+#light .table-grid .MuiDataGrid-footerContainer {
+  color: rgb(29, 28, 28) !important;
+}
+#light .table-grid .MuiTablePagination-displayedRows {
+  color: rgb(29, 28, 28) !important;
+}
+#light .table-grid .table-cell {
+  color: rgb(29, 28, 28) !important;
+}
+
+#dark .table-grid {
+  border: 1px solid #cfcbcb;
+}
+#dark .table-grid .MuiDataGrid-columnHeader {
+  color: #cfcbcb !important;
+}
+#dark .table-grid .MuiSvgIcon-root {
+  color: #cfcbcb !important;
+}
+#dark .table-grid .MuiDataGrid-footerContainer {
+  color: #cfcbcb !important;
+}
+#dark .table-grid .MuiTablePagination-displayedRows {
+  color: #cfcbcb !important;
+}
+#dark .table-grid .table-cell {
+  color: #cfcbcb !important;
+}
+
 .table-grid {
+  border-radius: 5px;
+}
+
+.menu-header {
   margin: 0px 20px 0px 20px;
 }
-.table-grid .MuiDataGrid-columnHeader {
-  color: #cfcbcb !important;
-}
-.table-grid .MuiSvgIcon-root {
-  color: #cfcbcb !important;
-}
-.table-grid .MuiDataGrid-footerContainer {
-  color: #cfcbcb !important;
-}
-.table-grid .MuiTablePagination-displayedRows {
-  color: #cfcbcb !important;
-}
-.table-grid .table-cell {
-  color: #cfcbcb !important;
-}
-.table-grid .table-grid-header {
+.menu-header .table-grid-header {
   font-size: 1.2em;
 }
-.table-grid .table-menu {
+.menu-header .table-menu {
   text-align: center;
   font-size: 1.2em;
   display: flex;
   margin-bottom: 10px;
   max-height: 30px;
 }
-.table-grid .table-menu .table-menu-item {
+.menu-header .table-menu .table-menu-item {
   margin-right: 20px;
 }
-.table-grid .table-menu-item-dropdown {
+.menu-header .table-menu-item-dropdown {
   margin-left: auto;
   margin-top: 47px;
   z-index: 1;

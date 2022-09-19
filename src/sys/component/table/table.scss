@@ -1,13 +1,31 @@
 @import '../../css/variables.scss';
 
-
-.table-grid {
-  margin: 0px 20px 0px 20px;
+#light .table-grid {
+  border: 1px solid $light-border-color;
   
-  //Mui datagrid
+  .MuiDataGrid-columnHeader {
+    color: $light-color !important;  
+  // font-weight: bold; doesn't work
+  }
+  .MuiSvgIcon-root {
+    color: $light-color !important;
+  }
+  .MuiDataGrid-footerContainer {
+    color: $light-color !important;
+  }
+  .MuiTablePagination-displayedRows {
+    color: $light-color !important;
+  }
+  .table-cell {
+    color: $light-color !important;
+  }
+}
+
+#dark .table-grid {
+  border: 1px solid $dark-border-color;
+
   .MuiDataGrid-columnHeader {
     color: $dark-color !important;  
-  // font-weight: bold; doesn't work
   }
   .MuiSvgIcon-root {
     color: $dark-color !important;
@@ -21,8 +39,16 @@
   .table-cell {
     color: $dark-color !important;
   }
+}
+
+.table-grid {
+  border-radius: 5px;
+}
 
 
+.menu-header {
+  margin: 0px 20px 0px 20px;
+  
   .table-grid-header {
     font-size: 1.2em;
   }
@@ -39,27 +65,14 @@
     
     .table-menu-item {
       margin-right: 20px;
-      
-      // button {
-      //   display: flex;
-      // }
-
-      // .szh-menu__item {
-      //   text-decoration: none;
-      // }
-      // a {
-      //   text-decoration: none;
-      // }
     }
   }
-
 
   .table-menu-item-dropdown {
     margin-left: auto;
     margin-top: 47px;
     z-index: 1;
   }
-
 }
 
 

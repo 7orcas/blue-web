@@ -7,8 +7,8 @@ import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { SessionReducer, ThemeType } from '../../sys/system/Session'
 import MenuItemFactory, { MenuItem, MenuItemType } from '../../sys/menu/MenuItemFactory'
-import MenuX from "../../sys/menu/MenuX"
-import { Menu, MenuButton } from '@szhsin/react-menu';
+import Menu from "../../sys/menu/Menu"
+import { Menu as MenuS, MenuButton } from '@szhsin/react-menu';
 
 /*
   Application main menu
@@ -96,18 +96,18 @@ const Navbar = () => {
   return (
     <nav className='main-menu'>
       {f.items.map(i => (
-        <MenuX key={i.key} item={i} setSelection={setSelection}/>
+        <Menu key={i.key} item={i} setSelection={setSelection}/>
       ))}
 
       {/* Admin menu option */}
       <div className='menu-item menu-item-right'>
-        <Menu 
+        <MenuS 
           menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
           >
           {admin.menu.map(i => (
-            <MenuX key={i.key} item={i} setSelection={setSelection}/>
+            <Menu key={i.key} item={i} setSelection={setSelection}/>
           ))}
-        </Menu>
+        </MenuS>
       </div>
     </nav>
   )
