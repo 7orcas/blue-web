@@ -1,11 +1,15 @@
+/*
+  Editor(s) CSS
+
+  - Borders 
+
+  [Licence]
+  Created 13.09.22
+  @author John Stewart
+*/
 #light .editor .MuiSvgIcon-root {
   color: rgb(29, 28, 28) !important;
 }
-
-#dark .editor .MuiSvgIcon-root {
-  color: #cfcbcb !important;
-}
-
 #light .editor-detail {
   border: 1px solid #a6a8b3;
 }
@@ -14,12 +18,20 @@
   border: 1px solid #a6a8b3;
 }
 
-#dark .editor-detail {
+#dark .editor .MuiSvgIcon-root {
+  color: #cfcbcb !important;
+}
+#dark .editor .editor-detail {
   border: 1px solid #cfcbcb;
 }
-#dark .editor-detail input {
+#dark .editor .editor-detail input {
   color: #cfcbcb;
   border: 1px solid #cfcbcb;
+}
+
+.editor {
+  margin: 0 10px 0 20px;
+  border-radius: 5px;
 }
 
 .editor-menu {
@@ -31,7 +43,7 @@
 }
 .editor-multi-select .editor-left {
   flex-grow: 0;
-  margin: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
 }
 .editor-multi-select .editor-right {
   flex: auto;

@@ -8,7 +8,10 @@ import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { SessionReducer, ThemeType } from '../../sys/system/Session'
 import MenuItemFactory, { MenuItem, MenuItemType } from '../../sys/menu/MenuItemFactory'
 import Menu from "../../sys/menu/Menu"
-import { Menu as MenuS, MenuButton } from '@szhsin/react-menu';
+import { 
+  Menu as MenuS, 
+  MenuItem as MenuItemS,
+  MenuButton } from '@szhsin/react-menu';
 
 /*
   Application main menu
@@ -30,12 +33,12 @@ const Navbar = () => {
 
   //Top Level
   f.main('orgadmin', '/orgadmin')
-  f.main('planmat', '/')
   f.main('labeladmin', '/labels')
+  f.main('planmat', '/')
   
-  f.button(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
-    setSession ({type: SessionReducer.tgTheme})
-  })
+  // f.button(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
+  //   setSession ({type: SessionReducer.tgTheme})
+  // })
 
   f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', () => {
     setSession ({type: SessionReducer.editLabels})
@@ -59,6 +62,13 @@ const Navbar = () => {
   sub2.menu.push(f.head('headX'))
   sub2.menu.push(f.item('machines', '/Test3'))
   sub2.menu.push(f.item('shifts', '/Test3'))
+
+  //Theme icon
+  // f.action(session.theme === ThemeType.dark? 'themeL' : 'themeD', () => {
+  //   setSession ({type: SessionReducer.tgTheme})
+  // })
+
+
 
   //Separate admin icon
   var admin = new MenuItem(9999)
@@ -98,9 +108,16 @@ const Navbar = () => {
       {f.items.map(i => (
         <Menu key={i.key} item={i} setSelection={setSelection}/>
       ))}
+      <Menu key={998} item={themeX} setSelection={setSelection}/>
 
       {/* Admin menu option */}
       <div className='menu-item menu-item-right'>
+
+        {/* <div className='menu-item'>
+          <MenuItemS onClick={() => setSelection(themeX)}>
+            xx
+          </MenuItemS>
+        </div> */}
         <MenuS 
           menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
           >

@@ -1,8 +1,19 @@
 @import '../../css/variables.scss';
 
+/*
+  Table CSS
+
+  - Table colors
+  - Menu header (for tables)
+  - Note borders are defined in editors.scss
+
+  [Licence]
+  Created 13.09.22
+  @author John Stewart
+*/
+
 #light .table-grid {
-  border: 1px solid $light-border-color;
-  
+
   .MuiDataGrid-columnHeader {
     color: $light-color !important;  
   // font-weight: bold; doesn't work
@@ -22,7 +33,6 @@
 }
 
 #dark .table-grid {
-  border: 1px solid $dark-border-color;
 
   .MuiDataGrid-columnHeader {
     color: $dark-color !important;  
@@ -41,13 +51,9 @@
   }
 }
 
-.table-grid {
-  border-radius: 5px;
-}
-
 
 .menu-header {
-  margin: 0px 20px 0px 20px;
+  margin: 0px 20px 0px 0px;
   
   .table-grid-header {
     font-size: 1.2em;

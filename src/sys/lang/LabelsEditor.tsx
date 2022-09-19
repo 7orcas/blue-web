@@ -63,26 +63,30 @@ const LabelsEditor = () => {
   }
 
   return (
-    <div className='table-grid'>
-      <TableMenu 
-        exportExcelUrl='lang/pack/excel'
-        uploadExcelUrl='lang/upload'
-        uploadExcelLangKey='fileup-label'
-      >
-        <Button onClick={showInClient} langkey='showchange'/>
-      </TableMenu>
-      <ReactDataGrid
-        idProperty='id'
-        style={{height: '80vh'}}
-        theme={session.theme === ThemeType.dark? 'default-dark' : 'default-light'}
-        defaultFilterValue={defaultFilterValue}
-        columns={columns}
-        columnOrder={columnOrder}
-        dataSource={dataSource}
-        showColumnMenuTool={false}
-        editable={true}
-        onEditComplete={onEditComplete}
-      />
+    <div className='editor'>
+      <div className='table-grid'>
+        <div className='menu-header'>
+          <TableMenu 
+            exportExcelUrl='lang/pack/excel'
+            uploadExcelUrl='lang/upload'
+            uploadExcelLangKey='fileup-label'
+          >
+            <Button onClick={showInClient} langkey='showchange'/>
+          </TableMenu>
+        </div>
+        <ReactDataGrid
+          idProperty='id'
+          style={{height: '80vh'}}
+          theme={session.theme === ThemeType.dark? 'default-dark' : 'default-light'}
+          defaultFilterValue={defaultFilterValue}
+          columns={columns}
+          columnOrder={columnOrder}
+          dataSource={dataSource}
+          showColumnMenuTool={false}
+          editable={true}
+          onEditComplete={onEditComplete}
+        />
+      </div>
     </div>
   )
 }
