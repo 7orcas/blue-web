@@ -25,17 +25,19 @@ const MessageDialog = () => {
       if (message.type === MessageType.error) {
         setTitle('error')
         setClassname('error')
+        setOpen(true)
       }
       if (message.type === MessageType.warn) {
         setTitle('warn')
         setClassname('warn')
+        setOpen(true)
       } 
       if (message.type === MessageType.message) {
         setTitle('message')
         setClassname('message')
+        setOpen(true)
       }
 
-      setOpen(true)
     }
   },[message])
 

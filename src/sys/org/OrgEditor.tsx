@@ -6,7 +6,7 @@ import Button from '../component/utils/Button'
 import { loadList, useLabel, updateList, onListSelectionSetEditors } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams } from '@mui/x-data-grid';
-
+import usePrompt from "../component/editor/usePrompt";
 
 /*
   List, export and update organisations
@@ -24,20 +24,23 @@ const OrgEditor = () => {
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors
-  const [changed, setChanged] = useState(false)  //Control the commit button
+  
+  //Warn the user of unsaved changes
+  usePrompt(session.changed, setMessage);
 
+  //Load records
+  const loadListX = async() => {
+    let list : Array<OrgListI> = []
+    var data = await loadList('org/org-list', list, setSession, setMessage)
+    if (typeof data !== 'undefined') {
+      setList(list)
+    }
+  }
 
   //Initial load of base list
   useEffect(() => {
-    const loadListX = async() => {
-      let list : Array<OrgListI> = []
-      var data = await loadList('org/org-list', list, setSession, setMessage)
-      if (typeof data !== 'undefined') {
-        setList(list)
-      }
-    }
     loadListX()
-  },[setSession, setMessage])
+  },[])
 
 
   //Load entity
@@ -51,11 +54,11 @@ const OrgEditor = () => {
   //Update list and entities state
   const updateEntities = (id : number, entity : OrgEntI) => {
     setEntities(new Map(entities.set(id, entity)))
-    updateList (id, entity, list, setList, setChanged)
+    updateList (id, entity, list, setList, setSession)
   }
 
   //Set the list selections (to display editors)  
-  const onSelectionModelChange = (ids : GridSelectionModel) => {
+  const handleSelection = (ids : GridSelectionModel) => {
     onListSelectionSetEditors(ids, setEditors, entities, loadOrgX)
   }
 
@@ -68,15 +71,25 @@ const OrgEditor = () => {
     { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
 
-  const handleCommit = () => {
+  const handleCreate = () => {
+    console.log('CREATE')
+  }
+
+  const handleUpdate = () => {
     console.log('COMMIT')
   }
   
+  const handleDelete = () => {
+    console.log('DELETE')
+  }
+
   return (
     <div className='editor'>
       <div className='menu-header'>
         <TableMenu exportExcelUrl='org/excel'>
-          <Button onClick={handleCommit} langkey='commit' className='table-menu-item' disabled={!changed}/>
+          <Button onClick={handleUpdate} langkey='save' className='table-menu-item' disabled={!session.changed}/>
+          <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+          <Button onClick={handleDelete} langkey='delete' className='table-menu-item' disabled={editors.length === 0}/>
         </TableMenu>
       </div>
       <div className='editor-multi-select'>
@@ -89,7 +102,7 @@ const OrgEditor = () => {
               pageSize={25}
               rowsPerPageOptions={[25]}
               checkboxSelection
-              onSelectionModelChange={onSelectionModelChange}
+              onSelectionModelChange={handleSelection}
               getCellClassName={(params: GridCellParams<number>) => {
                 return 'table-cell';
               }}
@@ -101,8 +114,8 @@ const OrgEditor = () => {
             <OrgDetail 
               key={id} 
               id={id}
-              org={entities.get(id)}
-              updateOrg={updateEntities}
+              entity={entities.get(id)}
+              updateEntity={updateEntities}
             />
           </div>
         )}

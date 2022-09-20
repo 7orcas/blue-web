@@ -73,6 +73,11 @@
     color: $warn-dialog-title-color;
   }
 
+  .dialog-red {
+    background-color: $caution-bg;
+    color: $caution-color;
+  }
+
   .dialog-content {
     margin-bottom: 20px;
   }

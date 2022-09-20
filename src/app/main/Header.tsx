@@ -9,10 +9,10 @@ const Header = () => {
 
   return (
     <div className='main-header'>
+      {session.loggedIn && <Navbar />}
       <div className='main-title'>
         <LangLabel langkey='appname' />
       </div>
-      {session.loggedIn && <Navbar />}
     </div>
   )
 }

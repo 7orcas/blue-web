@@ -23,6 +23,9 @@ const reducer = (message : Message, action : any) => {
     case MessageReducer.type:
       return {...message, type: action.payload};
   
+    case MessageReducer.transition:
+      return {...message, transition: action.payload};
+    
     default:
       throw new Message();
   }

@@ -1,4 +1,4 @@
-import { OrgEntI } from './org'
+import { OrgEntI as EntityI } from './org'
 import LangLabel from '../lang/LangLabel';
 import { Checkbox, TextField } from '@mui/material';
 
@@ -12,36 +12,36 @@ import { Checkbox, TextField } from '@mui/material';
 
 interface OrgProps {
   id : number
-  org : OrgEntI | undefined
-  updateOrg : any
+  entity : EntityI | undefined
+  updateEntity : any
 }
   
 
-const OrgDetail : React.FC<OrgProps> = ({ id, org, updateOrg }) => {
+const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
   
   const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (typeof org !== 'undefined'){
-      org.active = event.target.checked;
-      updateOrg(id, org)
+    if (typeof entity !== 'undefined'){
+      entity.active = event.target.checked;
+      updateEntity(id, entity)
     }
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (typeof org !== 'undefined'){
+    if (typeof entity !== 'undefined'){
       const { name } = event.target;
       switch (name) {
-        case 'dvalue': org.dvalue = org.dvalue = event.target.checked; break
+        case 'dvalue': entity.dvalue = entity.dvalue = event.target.checked; break
         case 'code': 
-          org.code = event.target.value; 
-console.log('code=' + org.code + '  e='+event.target.value)          
+          entity.code = event.target.value; 
+console.log('code=' + entity.code + '  e='+event.target.value)          
           break
       }
-      updateOrg(id, org)
+      updateEntity(id, entity)
     }
   };
 
   const title = () => {
-    if (typeof org !== 'undefined') {
-      return org.code
+    if (typeof entity !== 'undefined') {
+      return entity.code
     }
     return '?'
   }
@@ -50,14 +50,14 @@ console.log('code=' + org.code + '  e='+event.target.value)
     <div className='editor-detail'>
       <>
         <p>DETAIL for {title()}</p>
-        <p>active= {typeof org !== 'undefined' ? org.active ? 'true' : 'false' : 'n/a'}</p>
+        <p>active= {typeof entity !== 'undefined' ? entity.active ? 'true' : 'false' : 'n/a'}</p>
       </>
-      {typeof org !== 'undefined' &&
+      {typeof entity !== 'undefined' &&
         <>
           <div> 
             <LangLabel langkey='active'/>
             <Checkbox
-              checked={org.active}
+              checked={entity.active}
               onChange={handleChangeActive}
             />
           </div>
@@ -66,7 +66,7 @@ console.log('code=' + org.code + '  e='+event.target.value)
             <TextField
               name='code'
               type='text'
-              value={org.code}
+              value={entity.code}
               onChange={handleChange}
             />
           </div>
@@ -74,7 +74,7 @@ console.log('code=' + org.code + '  e='+event.target.value)
             <LangLabel langkey='dvalue'/>
             <Checkbox
               name='dvalue'
-              checked={org.dvalue}
+              checked={entity.dvalue}
               onChange={handleChange}
             />
           </div>

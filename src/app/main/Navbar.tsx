@@ -85,6 +85,11 @@ const Navbar = () => {
   }
 
   const setSelection = (item : MenuItem) => {
+
+    if (session.changed) {
+      return
+    }
+
     if (item.type === MenuItemType.action 
       || item.type === MenuItemType.checkbox
       || item.type === MenuItemType.button) {

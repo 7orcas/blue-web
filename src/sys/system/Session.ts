@@ -21,6 +21,7 @@ export enum SessionReducer {
   debugMessage,
   tgTheme,
   messageDialog,
+  changed,
 }
 
 export enum ThemeType {
@@ -41,6 +42,7 @@ class Session {
   debugMessage: string = ''
   theme : ThemeType = ThemeType.dark
   messageDialog : string = ''
+  changed : boolean = false
 }
 
 export default Session

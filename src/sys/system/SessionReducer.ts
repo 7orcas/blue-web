@@ -44,6 +44,10 @@ const reducer = (session : Session, action : any) => {
     case SessionReducer.messageDialog:
       return {...session, messageDialog: action.payload}
 
+    case SessionReducer.changed:
+      return {...session, changed: action.payload}
+  
+
     default:
       throw new Error()
   }

@@ -1,6 +1,7 @@
-import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowParams, GridEventListener, GridValueGetterParams } from '@mui/x-data-grid';
+import { SessionReducer } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import useLabelX from '../../lang/useLabel'
+import { GridSelectionModel } from '@mui/x-data-grid';
 
 /*
   Editor utility functions
@@ -96,14 +97,14 @@ export const getListObjectById = <T extends BaseListI>(id : number, list : Array
  * @param updated entity 
  * @param list 
  * @param setList 
- * @param setChanged
+ * @param setSession
  */
 export const updateList = <T extends BaseListI, E extends BaseEntI>(
     id : number, 
     entity : E, 
     list : Array<T>, 
     setList : any,
-    setChanged : any) => {
+    setSession : any) => {
 
   var x = JSON.stringify(entity, jsonReplacer)
   var o = getListObjectById(id, list)
@@ -124,14 +125,15 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
     setList(newList);
 
     //Set changed (eg to activate the Commit button)
-    setChanged(false)
+    var changed = false
     for (i=0;i<newList.length;i++){
       if (newList[i].changed === true) {
-        setChanged(true)
-        return
+        changed = true
+        break
       } 
     }
-
+    setSession ({type: SessionReducer.changed, payload : changed})
+    
     return newList
   }
 }

@@ -11,7 +11,8 @@ export enum MessageType {
   error,
   warn,
   message,
-  detail
+  detail,
+  unsaved
 }
 
 export enum MessageReducer {
@@ -19,6 +20,7 @@ export enum MessageReducer {
   message,
   context,
   detail,
+  transition
 }
 
 class Message {
@@ -26,6 +28,7 @@ class Message {
   message : string = ''
   context : string = ''
   detail : string = ''
+  transition : any = undefined
 }
 
 export default Message
