@@ -17,7 +17,7 @@ export interface OrgEntI extends BaseEntI {
 
 export const loadOrgEnt = async (id : number, setSession : any, setMessage : any) => {
   try {
-    const d = await apiGet(`org?id=${id}`, setSession, setMessage)
+    const d = await apiGet(`org/get?id=${id}`, setSession, setMessage)
     var org : OrgEntI = {} as OrgEntI
     loadEnt (d, org)
 

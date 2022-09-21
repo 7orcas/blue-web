@@ -29,11 +29,9 @@ const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
     if (typeof entity !== 'undefined'){
       const { name } = event.target;
       switch (name) {
-        case 'dvalue': entity.dvalue = entity.dvalue = event.target.checked; break
-        case 'code': 
-          entity.code = event.target.value; 
-console.log('code=' + entity.code + '  e='+event.target.value)          
-          break
+        case 'delete': entity.delete = event.target.checked; break
+        case 'dvalue': entity.dvalue = event.target.checked; break
+        case 'code': entity.code = event.target.value; break
       }
       updateEntity(id, entity)
     }
@@ -75,6 +73,14 @@ console.log('code=' + entity.code + '  e='+event.target.value)
             <Checkbox
               name='dvalue'
               checked={entity.dvalue}
+              onChange={handleChange}
+            />
+          </div>
+          <div> 
+            <LangLabel langkey='delete'/>
+            <Checkbox
+              name='delete'
+              checked={entity.delete}
               onChange={handleChange}
             />
           </div>

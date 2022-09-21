@@ -1,12 +1,14 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useId } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadList, useLabel, updateList, onListSelectionSetEditors } from '../component/editor/editor'
+import { loadList, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams } from '@mui/x-data-grid';
 import usePrompt from "../component/editor/usePrompt";
+
+import apiPost from '../api/apiPost'
 
 /*
   List, export and update organisations
@@ -21,6 +23,7 @@ const OrgEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //Local State
+  const [newId, setNewId] = useState (0)
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors
@@ -31,7 +34,7 @@ const OrgEditor = () => {
   //Load records
   const loadListX = async() => {
     let list : Array<OrgListI> = []
-    var data = await loadList('org/org-list', list, setSession, setMessage)
+    var data = await loadList('org/list', list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       setList(list)
     }
@@ -65,23 +68,50 @@ const OrgEditor = () => {
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
-    { field: 'org', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
+    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
     { field: 'code', headerName: useLabel('code'), width: 200 },
     { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
     { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
 
-  const handleCreate = () => {
-    console.log('CREATE')
+  //Generate temp new ids (negative)
+  const getNextNewId = () => {
+    var id = newId - 1
+    setNewId(id)
+    return id
   }
 
-  const handleUpdate = () => {
-    console.log('COMMIT')
+  const handleCreate = () => {
+    var l : OrgListI = {} as OrgListI
+    l.id = getNextNewId() 
+    var newList = [l, ...list]
+    setList (newList)
+    
+    var e : OrgEntI = {} as OrgEntI
+    e.id = l.id
+    setEntities(new Map(entities.set(e.id, e)))
+
+  }
+
+  const handleUpdate = async() => {
+    try {
+      if (entities === null) return
+
+      var newList : OrgEntI[] = []
+      for (var i=0;i<list.length;i++){
+        if (list[i].changed === true) {
+          var e = entities.get(list[i].id)
+          if (e !== null && e !== undefined) {
+            newList.push(e)
+          }
+        }
+      }
+      
+      const d = await apiPost(`org/post`, newList, setSession, setMessage)
+      
+    } catch (err : any) { } 
   }
   
-  const handleDelete = () => {
-    console.log('DELETE')
-  }
 
   return (
     <div className='editor'>
@@ -89,7 +119,6 @@ const OrgEditor = () => {
         <TableMenu exportExcelUrl='org/excel'>
           <Button onClick={handleUpdate} langkey='save' className='table-menu-item' disabled={!session.changed}/>
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
-          <Button onClick={handleDelete} langkey='delete' className='table-menu-item' disabled={editors.length === 0}/>
         </TableMenu>
       </div>
       <div className='editor-multi-select'>

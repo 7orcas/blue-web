@@ -12,11 +12,16 @@ import { GridSelectionModel } from '@mui/x-data-grid';
 */
 
 
-export interface BaseListI {
-  id: number
-  org: number
+export interface BaseI {
+  id: number //should not be changed
+  orgNr: number
   code: string
   active: boolean
+  delete: boolean
+}
+
+
+export interface BaseListI extends BaseI {
   descr: string
   changed: boolean
 }
@@ -28,7 +33,7 @@ export const loadList = async <T extends BaseListI>(url : string, list : Array<T
     for (const l of data) {
       var base : T = {} as T  
       base.id = l.id
-      base.org = l.org
+      base.orgNr = l.orgNr
       base.code = l.code
       base.descr = ''
       base.active = l.active
@@ -41,17 +46,13 @@ export const loadList = async <T extends BaseListI>(url : string, list : Array<T
 }
 
 
-export interface BaseEntI {
-  id: number  //should not be changed
-  org: number  //should not be changed
-  code: string
-  active: boolean
+export interface BaseEntI extends BaseI {
   originalValue: string | undefined
 }
 
 export const loadEnt = (data : any, ent : BaseEntI) => {
   ent.id = data.id
-  ent.org = data.org
+  ent.orgNr = data.orgNr
   ent.code = data.code
   ent.active = data.active
 }
@@ -77,12 +78,12 @@ export const useLabel = (key : string) => {
 }
 
 /**
- * Return list object by it's id
+ * Return object by it's id
  * @param id 
  * @param list 
  * @returns 
  */
-export const getListObjectById = <T extends BaseListI>(id : number, list : Array<T>) => {
+export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => {
   for (var i=0;i<list.length;i++){
     if (list[i].id === id) {
       return list[i]
@@ -107,7 +108,7 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
     setSession : any) => {
 
   var x = JSON.stringify(entity, jsonReplacer)
-  var o = getListObjectById(id, list)
+  var o = getObjectById(id, list)
 
   if (o !== null) {
     o.changed = entity.originalValue !== x
