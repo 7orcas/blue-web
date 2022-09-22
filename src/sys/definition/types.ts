@@ -8,8 +8,9 @@
 */
 
 
-export enum ClientStatusType {
+export enum EntityStatusType {
   valid = 0,
   changed = 1,
+  delete = 2,
   invalid = 9,
 }

@@ -10,6 +10,38 @@
   @author John Stewart
 */
 
+@mixin status {
+  //changed
+  .table-grid-status-1 {
+    background-color: $status-changed-bg !important;
+    color: $status-changed-color !important;
+    font-weight: bold;
+
+    .MuiSvgIcon-root {
+      color: $status-changed-color !important;
+    }
+  }
+  //delete
+  .table-grid-status-2 {
+    background-color: $status-delete-bg !important;
+    color: $status-delete-color !important;
+    font-weight: bold;
+
+    .MuiSvgIcon-root {
+      color: $status-delete-color !important;
+    }
+  }
+  //invalid
+  .table-grid-status-9 {
+    background-color: $status-invalid-bg !important;
+    color: $status-invalid-color !important;
+    font-weight: bold;
+
+    .MuiSvgIcon-root {
+      color: $status-invalid-color !important;
+    }
+  }
+}
 
 #light {
 
@@ -58,25 +90,7 @@
       }
     }
 
-    .table-grid-status-1 {
-      background-color: $status-changed-bg !important;
-      color: $status-changed-color !important;
-      font-weight: bold;
-
-      .MuiSvgIcon-root {
-        color: $status-changed-color !important;
-      }
-    }
-    
-    .table-grid-status-9 {
-      background-color: $status-invalid-bg !important;
-      color: $status-invalid-color !important;
-      font-weight: bold;
-
-      .MuiSvgIcon-root {
-        color: $status-invalid-color !important;
-      }
-    }
+    @include status;
 
   }
   
@@ -147,29 +161,12 @@
       color: $dark-color !important;
     }
 
+    @include status;
+
     .table-grid-status-0 {
-      color: $dark-color !important;
+      color: $dark-color !important;  
     }
 
-    .table-grid-status-1 {
-      background-color: $status-changed-bg !important;
-      color: $status-changed-color !important;
-      font-weight: bold;
-
-      .MuiSvgIcon-root {
-        color: $status-changed-color !important;
-      }
-    }
-    
-    .table-grid-status-9 {
-      background-color: $status-invalid-bg !important;
-      color: $status-invalid-color !important;
-      font-weight: bold;
-
-      .MuiSvgIcon-root {
-        color: $status-invalid-color !important;
-      }
-    }
   }
   
 }

@@ -1,4 +1,4 @@
-import { ClientStatusType } from "./types"
+import { EntityStatusType } from "./types"
 
 /*
   Entity Interfaces
@@ -15,7 +15,7 @@ export interface BaseI {
   code: string
   active: boolean
   delete: boolean
-  clientStatus: ClientStatusType
+  entityStatus: EntityStatusType
 }
 
 export interface BaseListI extends BaseI {

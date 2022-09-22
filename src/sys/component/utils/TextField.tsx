@@ -12,6 +12,7 @@ import { TextField as MuiTextField } from '@mui/material';
 */
 
 interface Props {
+  type : string
   entity : any
   field : string
   inputProps : object

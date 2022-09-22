@@ -7,8 +7,11 @@ import { loadList, useLabel, updateList, onListSelectionSetEditors, getObjectByI
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
 import usePrompt from "../component/editor/usePrompt";
+import { EntityStatusType as Status } from '../definition/types';
+import { MessageType, MessageReducer } from '../system/Message'
 
 import apiPost from '../api/apiPost'
+import { BaseEntI, BaseListI } from '../definition/interfaces'
 
 /*
   List, export and update organisations
@@ -50,14 +53,18 @@ const OrgEditor = () => {
   const loadOrgX = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
     if (typeof entity !== 'undefined') {
-      updateEntities(id, entity)
+      updateEntity(id, entity)
     }
   }
 
+  const updateCallback = <L extends BaseListI, E extends BaseEntI>(list : L, entity : E) => {
+console.log('updateCallback')
+  }
+
   //Update list and entities state
-  const updateEntities = (id : number, entity : OrgEntI) => {
+  const updateEntity = (id : number, entity : OrgEntI) => {
     setEntities(new Map(entities.set(id, entity)))
-    updateList (id, entity, list, setList, setSession)
+    updateList (id, entity, list, updateCallback, setList, setSession)
   }
 
   //Set the list selections (to display editors)  
@@ -68,7 +75,6 @@ const OrgEditor = () => {
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
-    { field: 'valid', headerName: useLabel('valid'), width: 60, type: 'boolean', hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
     { field: 'code', headerName: useLabel('code'), width: 200 },
     { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
@@ -86,27 +92,39 @@ const OrgEditor = () => {
   const handleCreate = () => {
     var l : OrgListI = {} as OrgListI
     l.id = getNextNewId() 
+    l.orgNr = 0
     l.code = ''
+    l.descr = ''
     l.active = true
+    l.changed = true
+    l.delete = false
+    l.entityStatus = Status.invalid
     var newList = [l, ...list]
     setList (newList)
     
     var e : OrgEntI = {} as OrgEntI
     e.id = l.id
     e.code = ''
-    e.active = true
+    e.active = l.active
     e.dvalue = false
+    e.delete = l.delete
+    e.entityStatus = l.entityStatus
     setEntities(new Map(entities.set(e.id, e)))
-
-  }
-
-  const isValidEntity = (id : number) => {
 
   }
 
   const handleUpdate = async() => {
     try {
       if (entities === null) return
+
+      for (var i=0;i<list.length;i++){
+        if (list[i].entityStatus === Status.invalid) {
+          setMessage({ type: MessageReducer.type, payload: MessageType.error })
+          setMessage({ type: MessageReducer.message, payload: 'there are errors' }) //ToDo
+          setMessage({ type: MessageReducer.detail, payload: 'must be fixed before commit' }) //ToDo
+          return
+        }
+      }
 
       var newList : OrgEntI[] = []
       for (var i=0;i<list.length;i++){
@@ -143,7 +161,7 @@ const OrgEditor = () => {
               rowsPerPageOptions={[25]}
               checkboxSelection
               onSelectionModelChange={handleSelection}
-              getRowClassName={(params) => `table-grid-status-${params.row.clientStatus}`}
+              getRowClassName={(params) => `table-grid-status-${params.row.entityStatus}`}
               getCellClassName={(params: GridCellParams<number>) => {
                 return 'table-cell';
               }}
@@ -156,7 +174,7 @@ const OrgEditor = () => {
               key={id} 
               id={id}
               entity={entities.get(id)}
-              updateEntity={updateEntities}
+              updateEntity={updateEntity}
             />
           </div>
         )}

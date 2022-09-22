@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useContext, FC } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { OrgEntI as EntityI } from './org'
 import LangLabel from '../lang/LangLabel';
@@ -15,14 +15,14 @@ import useLabel from '../lang/useLabel';
   @author John Stewart
 */
 
-interface OrgProps {
+interface Props {
   id : number
   entity : EntityI | undefined
   updateEntity : any
 }
   
 
-const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
+const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
   
   const { session } = useContext(AppContext) as AppContextI
   
@@ -32,16 +32,7 @@ const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
       updateEntity(id, entity)
     }
   };
-  const handleChangeCode = (event: React.FocusEvent<HTMLInputElement>) => {
-console.log('event.target.value=' + event.target.value)    
-    if (typeof entity !== 'undefined'){
-      entity.code = event.target.value;
-      // entity.code = value;
-      updateEntity(id, entity)
-    }
-  };
  
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // setValue(event.target.value)
     if (typeof entity !== 'undefined'){
@@ -62,8 +53,6 @@ console.log('event.target.value=' + event.target.value)
     }
     return '?'
   }
-
-  const codel = useLabel('code')
 
   return (
     <div className='editor-detail'>
