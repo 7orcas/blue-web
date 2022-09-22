@@ -1,6 +1,8 @@
 import { SessionReducer } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import useLabelX from '../../lang/useLabel'
+import { ClientStatusType } from '../../definition/types';
+import { BaseI, BaseListI, BaseEntI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
 /*
@@ -11,20 +13,6 @@ import { GridSelectionModel } from '@mui/x-data-grid';
   @author John Stewart
 */
 
-
-export interface BaseI {
-  id: number //should not be changed
-  orgNr: number
-  code: string
-  active: boolean
-  delete: boolean
-}
-
-
-export interface BaseListI extends BaseI {
-  descr: string
-  changed: boolean
-}
 
 export const loadList = async <T extends BaseListI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
   try {
@@ -38,6 +26,7 @@ export const loadList = async <T extends BaseListI>(url : string, list : Array<T
       base.descr = ''
       base.active = l.active
       base.changed = false
+      base.clientStatus = ClientStatusType.valid
       list.push (base)
     }
     
@@ -45,10 +34,6 @@ export const loadList = async <T extends BaseListI>(url : string, list : Array<T
   } catch (err : any) { } 
 }
 
-
-export interface BaseEntI extends BaseI {
-  originalValue: string | undefined
-}
 
 export const loadEnt = (data : any, ent : BaseEntI) => {
   ent.id = data.id
@@ -111,9 +96,11 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
   var o = getObjectById(id, list)
 
   if (o !== null) {
-    o.changed = entity.originalValue !== x
-    o.active = entity.active
-    o.code = entity.code
+//ToDo move to callback
+o.changed = entity.originalValue !== x
+o.active = entity.active
+o.code = entity.code
+o.clientStatus = o.code.length === 0 ? ClientStatusType.invalid : o.changed ? ClientStatusType.changed : ClientStatusType.valid
 
     var newList : T[] = []
     for (var i=0;i<list.length;i++){

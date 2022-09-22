@@ -40,7 +40,7 @@ const UnsavedDialog = () => {
             <div className='dialog-color'>
               <DialogTitle><LangLabel langkey={'warnchanges'}/></DialogTitle>
             </div>
-            <DialogContent>
+            {/* <DialogContent>
               <div className='dialog-content'>
                 <DialogContentText style={{display : 'flex'}}>
                   <div className='dialog-text'>{useLabel('savechanges1')}</div>
@@ -49,7 +49,7 @@ const UnsavedDialog = () => {
                   <div className='dialog-text'>{useLabel('savechanges2')}</div>
                 </DialogContentText>
               </div>
-            </DialogContent>
+            </DialogContent> */}
             <DialogActions>
               <Button onClick={handleContinue} className='dialog-red dialog-button'><LangLabel langkey='continue'/></Button>
               <Button onClick={handleCancel} className='dialog-color'><LangLabel langkey='cancel'/></Button>

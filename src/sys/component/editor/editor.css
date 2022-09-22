@@ -25,6 +25,37 @@
   background: white;
   border: 1px solid #f1f1f1;
 }
+#light .editor .table-grid .MuiDataGrid-columnHeader {
+  color: rgb(29, 28, 28) !important;
+}
+#light .editor .table-grid .MuiSvgIcon-root {
+  color: rgb(29, 28, 28) !important;
+}
+#light .editor .table-grid .MuiDataGrid-footerContainer {
+  color: rgb(29, 28, 28) !important;
+}
+#light .editor .table-grid .MuiTablePagination-displayedRows {
+  color: rgb(29, 28, 28) !important;
+}
+#light .editor .table-grid .table-grid-valid-true {
+  color: rgb(29, 28, 28) !important;
+}
+#light .editor .table-grid-status-1 {
+  background-color: rgb(93, 117, 94) !important;
+  color: white !important;
+  font-weight: bold;
+}
+#light .editor .table-grid-status-1 .MuiSvgIcon-root {
+  color: white !important;
+}
+#light .editor .table-grid-status-9 {
+  background-color: rgb(192, 44, 44) !important;
+  color: white !important;
+  font-weight: bold;
+}
+#light .editor .table-grid-status-9 .MuiSvgIcon-root {
+  color: white !important;
+}
 #light .editor-detail {
   border: 1px solid #a6a8b3;
 }
@@ -43,6 +74,9 @@
   color: #cfcbcb;
   border: 1px solid #cfcbcb;
 }
+#dark .editor .editor-detail legend span {
+  color: #cfcbcb;
+}
 #dark .editor .table-menu button {
   color: #cccccc;
   background: #3a8fe4;
@@ -57,6 +91,40 @@
   color: #3a8fe4;
   background: #1e1e1e;
   border: 1px solid #cccccc;
+}
+#dark .editor .table-grid .MuiDataGrid-columnHeader {
+  color: #cfcbcb !important;
+}
+#dark .editor .table-grid .MuiSvgIcon-root {
+  color: #cfcbcb !important;
+}
+#dark .editor .table-grid .MuiDataGrid-footerContainer {
+  color: #cfcbcb !important;
+}
+#dark .editor .table-grid .MuiTablePagination-displayedRows {
+  color: #cfcbcb !important;
+}
+#dark .editor .table-grid .table-grid-valid-true {
+  color: #cfcbcb !important;
+}
+#dark .editor .table-grid .table-grid-status-0 {
+  color: #cfcbcb !important;
+}
+#dark .editor .table-grid .table-grid-status-1 {
+  background-color: rgb(93, 117, 94) !important;
+  color: white !important;
+  font-weight: bold;
+}
+#dark .editor .table-grid .table-grid-status-1 .MuiSvgIcon-root {
+  color: white !important;
+}
+#dark .editor .table-grid .table-grid-status-9 {
+  background-color: rgb(192, 44, 44) !important;
+  color: white !important;
+  font-weight: bold;
+}
+#dark .editor .table-grid .table-grid-status-9 .MuiSvgIcon-root {
+  color: white !important;
 }
 
 .editor {

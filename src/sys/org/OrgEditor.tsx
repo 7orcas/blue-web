@@ -1,11 +1,11 @@
-import { useState, useContext, useEffect, useId } from 'react'
+import { useState, useContext, useEffect, useMemo } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadList, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
-import { DataGrid, GridColDef, GridSelectionModel, GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
 import usePrompt from "../component/editor/usePrompt";
 
 import apiPost from '../api/apiPost'
@@ -68,6 +68,7 @@ const OrgEditor = () => {
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
+    { field: 'valid', headerName: useLabel('valid'), width: 60, type: 'boolean', hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
     { field: 'code', headerName: useLabel('code'), width: 200 },
     { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
@@ -81,15 +82,25 @@ const OrgEditor = () => {
     return id
   }
 
+  //ToDo get from server
   const handleCreate = () => {
     var l : OrgListI = {} as OrgListI
     l.id = getNextNewId() 
+    l.code = ''
+    l.active = true
     var newList = [l, ...list]
     setList (newList)
     
     var e : OrgEntI = {} as OrgEntI
     e.id = l.id
+    e.code = ''
+    e.active = true
+    e.dvalue = false
     setEntities(new Map(entities.set(e.id, e)))
+
+  }
+
+  const isValidEntity = (id : number) => {
 
   }
 
@@ -132,14 +143,15 @@ const OrgEditor = () => {
               rowsPerPageOptions={[25]}
               checkboxSelection
               onSelectionModelChange={handleSelection}
+              getRowClassName={(params) => `table-grid-status-${params.row.clientStatus}`}
               getCellClassName={(params: GridCellParams<number>) => {
                 return 'table-cell';
               }}
             />
           </div>
         </div>
-        {editors.map((id,i) => 
-          <div className='editor-right'>
+        {editors.map((id) => 
+          <div key={id} className='editor-right'>
             <OrgDetail 
               key={id} 
               id={id}

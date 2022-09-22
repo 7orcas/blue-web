@@ -38,6 +38,46 @@
       }
     }
 
+    .table-grid {
+
+      .MuiDataGrid-columnHeader {
+        color: $light-color !important;  
+      // font-weight: bold; doesn't work
+      }
+      .MuiSvgIcon-root {
+        color: $light-color !important;
+      }
+      .MuiDataGrid-footerContainer {
+        color: $light-color !important;
+      }
+      .MuiTablePagination-displayedRows {
+        color: $light-color !important;
+      }
+      .table-grid-valid-true {
+        color: $light-color !important;
+      }
+    }
+
+    .table-grid-status-1 {
+      background-color: $status-changed-bg !important;
+      color: $status-changed-color !important;
+      font-weight: bold;
+
+      .MuiSvgIcon-root {
+        color: $status-changed-color !important;
+      }
+    }
+    
+    .table-grid-status-9 {
+      background-color: $status-invalid-bg !important;
+      color: $status-invalid-color !important;
+      font-weight: bold;
+
+      .MuiSvgIcon-root {
+        color: $status-invalid-color !important;
+      }
+    }
+
   }
   
   .editor-detail {
@@ -63,6 +103,10 @@
       color: $dark-color;
       border: 1px solid $dark-border-color;
     }
+
+    legend span {
+      color: $dark-color;
+    }
   }
 
   .table-menu {
@@ -84,6 +128,50 @@
       border: 1px solid $dark-button-color;
     }
   }
+
+  .table-grid {
+
+    .MuiDataGrid-columnHeader {
+      color: $dark-color !important;  
+    }
+    .MuiSvgIcon-root {
+      color: $dark-color !important;
+    }
+    .MuiDataGrid-footerContainer {
+      color: $dark-color !important;
+    }
+    .MuiTablePagination-displayedRows {
+      color: $dark-color !important;
+    }
+    .table-grid-valid-true {
+      color: $dark-color !important;
+    }
+
+    .table-grid-status-0 {
+      color: $dark-color !important;
+    }
+
+    .table-grid-status-1 {
+      background-color: $status-changed-bg !important;
+      color: $status-changed-color !important;
+      font-weight: bold;
+
+      .MuiSvgIcon-root {
+        color: $status-changed-color !important;
+      }
+    }
+    
+    .table-grid-status-9 {
+      background-color: $status-invalid-bg !important;
+      color: $status-invalid-color !important;
+      font-weight: bold;
+
+      .MuiSvgIcon-root {
+        color: $status-invalid-color !important;
+      }
+    }
+  }
+  
 }
 
 .editor {

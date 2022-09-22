@@ -12,46 +12,6 @@
   @author John Stewart
 */
 
-#light .table-grid {
-
-  .MuiDataGrid-columnHeader {
-    color: $light-color !important;  
-  // font-weight: bold; doesn't work
-  }
-  .MuiSvgIcon-root {
-    color: $light-color !important;
-  }
-  .MuiDataGrid-footerContainer {
-    color: $light-color !important;
-  }
-  .MuiTablePagination-displayedRows {
-    color: $light-color !important;
-  }
-  .table-cell {
-    color: $light-color !important;
-  }
-}
-
-#dark .table-grid {
-
-  .MuiDataGrid-columnHeader {
-    color: $dark-color !important;  
-  }
-  .MuiSvgIcon-root {
-    color: $dark-color !important;
-  }
-  .MuiDataGrid-footerContainer {
-    color: $dark-color !important;
-  }
-  .MuiTablePagination-displayedRows {
-    color: $dark-color !important;
-  }
-  .table-cell {
-    color: $dark-color !important;
-  }
-}
-
-
 .menu-header {
   margin: 0px 20px 0px 0px;
   

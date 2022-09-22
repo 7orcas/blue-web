@@ -85,9 +85,9 @@ const Test2 = () => {
       <p>Test2</p>
       {session.debugMessage}
       <div>
-        <Typography variant="subtitle1" component="div">
           Selected: {selectedValue}
-        </Typography>
+        {/* <Typography variant="subtitle1" component="div">
+        </Typography> */}
         <br />
         <Button variant="outlined" onClick={handleClickLogin}>
           Goto Login PAge

@@ -26,6 +26,11 @@ $upload-dialog-title-color:#ffffff;
 
 $editor-margin: 0 10px 0 20px;
 
+$status-changed-bg: rgb(93, 117, 94);
+$status-changed-color: white;
+$status-invalid-bg: rgb(192, 44, 44);
+$status-invalid-color: white;
+
 $light-bg:white;
 $light-color:rgb(29, 28, 28);
 $light-navbar-bg: #3d3f4d;
@@ -37,8 +42,6 @@ $light-border-color: #a6a8b3;
 $light-button-bg:#3a8fe4;
 $light-button-color:$light-navbar-item-color;
 $light-button-bg-hover:#1568BD;
-
-
 
 $dark-bg:#1e1e1e;
 $dark-color:#cfcbcb;

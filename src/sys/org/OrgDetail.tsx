@@ -1,6 +1,11 @@
+import { useState, useEffect, useContext } from 'react'
+import AppContext, { AppContextI } from '../system/AppContext'
 import { OrgEntI as EntityI } from './org'
 import LangLabel from '../lang/LangLabel';
-import { Checkbox, TextField } from '@mui/material';
+import { Checkbox, FormControl } from '@mui/material'
+import TextField from '../component/utils/TextField'
+import useLabel from '../lang/useLabel';
+
 
 /*
   Show organisational detail
@@ -19,13 +24,26 @@ interface OrgProps {
 
 const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
   
+  const { session } = useContext(AppContext) as AppContextI
+  
   const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (typeof entity !== 'undefined'){
       entity.active = event.target.checked;
       updateEntity(id, entity)
     }
   };
+  const handleChangeCode = (event: React.FocusEvent<HTMLInputElement>) => {
+console.log('event.target.value=' + event.target.value)    
+    if (typeof entity !== 'undefined'){
+      entity.code = event.target.value;
+      // entity.code = value;
+      updateEntity(id, entity)
+    }
+  };
+ 
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // setValue(event.target.value)
     if (typeof entity !== 'undefined'){
       const { name } = event.target;
       switch (name) {
@@ -37,12 +55,15 @@ const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
     }
   };
 
+  
   const title = () => {
     if (typeof entity !== 'undefined') {
       return entity.code
     }
     return '?'
   }
+
+  const codel = useLabel('code')
 
   return (
     <div className='editor-detail'>
@@ -59,15 +80,14 @@ const OrgDetail : React.FC<OrgProps> = ({ id, entity, updateEntity }) => {
               onChange={handleChangeActive}
             />
           </div>
-          <div> 
-            <LangLabel langkey='code'/>
             <TextField
-              name='code'
-              type='text'
-              value={entity.code}
-              onChange={handleChange}
+              inputProps={{ maxLength: 50 }}
+              entity={entity}
+              field='code'
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
             />
-          </div>
           <div> 
             <LangLabel langkey='dvalue'/>
             <Checkbox

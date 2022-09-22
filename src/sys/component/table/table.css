@@ -9,38 +9,6 @@
   Created 13.09.22
   @author John Stewart
 */
-#light .table-grid .MuiDataGrid-columnHeader {
-  color: rgb(29, 28, 28) !important;
-}
-#light .table-grid .MuiSvgIcon-root {
-  color: rgb(29, 28, 28) !important;
-}
-#light .table-grid .MuiDataGrid-footerContainer {
-  color: rgb(29, 28, 28) !important;
-}
-#light .table-grid .MuiTablePagination-displayedRows {
-  color: rgb(29, 28, 28) !important;
-}
-#light .table-grid .table-cell {
-  color: rgb(29, 28, 28) !important;
-}
-
-#dark .table-grid .MuiDataGrid-columnHeader {
-  color: #cfcbcb !important;
-}
-#dark .table-grid .MuiSvgIcon-root {
-  color: #cfcbcb !important;
-}
-#dark .table-grid .MuiDataGrid-footerContainer {
-  color: #cfcbcb !important;
-}
-#dark .table-grid .MuiTablePagination-displayedRows {
-  color: #cfcbcb !important;
-}
-#dark .table-grid .table-cell {
-  color: #cfcbcb !important;
-}
-
 .menu-header {
   margin: 0px 20px 0px 0px;
 }
