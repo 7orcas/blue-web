@@ -26,3 +26,8 @@ export interface BaseListI extends BaseI {
 export interface BaseEntI extends BaseI {
   originalValue: string | undefined
 }
+
+export interface ConfigI  {
+  entity: string
+  fields: []
+}

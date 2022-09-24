@@ -8,8 +8,10 @@ import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
 import usePrompt from "../component/editor/usePrompt";
 import { EntityStatusType as Status } from '../definition/types';
+import { ConfigI } from '../definition/interfaces';
 import { MessageType, MessageReducer } from '../system/Message'
-
+import { ConfigReducer } from '../system/Config'
+import apiGet from '../api/apiGet'
 import apiPost from '../api/apiPost'
 import { BaseEntI, BaseListI } from '../definition/interfaces'
 
@@ -23,14 +25,15 @@ import { BaseEntI, BaseListI } from '../definition/interfaces'
 
 const OrgEditor = () => {
   
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage, config, setConfig } = useContext(AppContext) as AppContextI
   
   //Local State
   const [newId, setNewId] = useState (0)
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors
-  
+  const [configX, setConfigX] = useState<ConfigI>()
+
   //Warn the user of unsaved changes
   usePrompt(session.changed, setMessage);
 
@@ -45,6 +48,14 @@ const OrgEditor = () => {
 
   //Initial load of base list
   useEffect(() => {
+    const loadConfigX = async() => {
+      var data = await apiGet('org/config?entity=system.org.ent.EntOrg', setSession, setMessage)
+      if (typeof data !== 'undefined') {
+        setConfigX(data)
+        setConfig({ type: ConfigReducer.entity, payload: data }) //ToDo
+      }
+    } 
+    loadConfigX()
     loadListX()
   },[])
 

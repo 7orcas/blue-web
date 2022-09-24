@@ -4,8 +4,10 @@ import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
 import Session, { SessionReducer } from './Session'
 import Message from './Message'
+import Config from './Config'
 import reducerSession from './SessionReducer'
 import reducerMessage from './MessageReducer'
+import reducerConfig from './ConfigReducer'
 
 /*
   Application state object
@@ -24,6 +26,8 @@ export interface AppContextI {
   setSession: any
   message: Message
   setMessage: any
+  config: Config
+  setConfig: any
 }
  
 const AppContext = createContext<AppContextI | null>(null)
@@ -32,6 +36,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, setSession] = useReducer(reducerSession, new Session ());
   const [message, setMessage] = useReducer(reducerMessage, new Message ());
+  const [config, setConfig] = useReducer(reducerConfig, new Config ());
 
   // Load app defaults
   useEffect(() => {
@@ -66,7 +71,9 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
     session: session,
     setSession: setSession,
     message: message,
-    setMessage: setMessage
+    setMessage: setMessage,
+    config: config,
+    setConfig: setConfig
   }
 
   return (
