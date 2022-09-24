@@ -1,9 +1,10 @@
-import { FC, createContext, useEffect, useReducer } from 'react'
+import { FC, createContext, useEffect, useState, useReducer } from 'react'
 import axios from '../api/apiAxios'
 import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
 import Session, { SessionReducer } from './Session'
 import Message from './Message'
+import { ConfigI } from '../definition/interfaces';
 import Config from './Config'
 import reducerSession from './SessionReducer'
 import reducerMessage from './MessageReducer'
@@ -26,7 +27,7 @@ export interface AppContextI {
   setSession: any
   message: Message
   setMessage: any
-  config: Config
+  config: Map<string, ConfigI>
   setConfig: any
 }
  
@@ -36,7 +37,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, setSession] = useReducer(reducerSession, new Session ());
   const [message, setMessage] = useReducer(reducerMessage, new Message ());
-  const [config, setConfig] = useReducer(reducerConfig, new Config ());
+  const [config, setConfig] = useState(new Map());
 
   // Load app defaults
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { useContext, FC } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { OrgEntI as EntityI } from './org'
+import { ConfigI, ConfigFieldI } from '../definition/interfaces';
 import LangLabel from '../lang/LangLabel';
 import { Checkbox, FormControl } from '@mui/material'
 import TextField from '../component/utils/TextField'
@@ -17,12 +18,13 @@ import useLabel from '../lang/useLabel';
 
 interface Props {
   id : number
+  config : ConfigI | undefined
   entity : EntityI | undefined
   updateEntity : any
 }
   
 
-const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
+const OrgDetail : FC<Props> = ({ id, config, entity, updateEntity }) => {
   
   const { session } = useContext(AppContext) as AppContextI
   
@@ -46,7 +48,17 @@ const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
     }
   };
 
-  
+  const maxLength = (field : string) => {
+    if (typeof config !== 'undefined') {
+      for (var i=0;i<config.fields.length;i++) {
+        if (config.fields[i].name === field){
+          return config.fields[i].max
+        }
+      }
+    }
+    return 30
+  }
+
   const title = () => {
     if (typeof entity !== 'undefined') {
       return entity.code
@@ -82,7 +94,7 @@ const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
             />
             <TextField
               label='code'
-              inputProps={{ maxLength: 50 }}
+              inputProps={{ maxLength: maxLength('code') }}
               entity={entity}
               field='code'
               updateEntity={updateEntity}

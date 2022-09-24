@@ -27,7 +27,13 @@ export interface BaseEntI extends BaseI {
   originalValue: string | undefined
 }
 
+export interface ConfigFieldI  {
+  name : string
+  max? : number
+  min? : number
+  nonNull : boolean
+}
+
 export interface ConfigI  {
-  entity: string
-  fields: []
+  fields: ConfigFieldI []
 }

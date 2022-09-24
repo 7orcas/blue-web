@@ -49,10 +49,15 @@ const OrgEditor = () => {
   //Initial load of base list
   useEffect(() => {
     const loadConfigX = async() => {
-      var data = await apiGet('org/config?entity=system.org.ent.EntOrg', setSession, setMessage)
-      if (typeof data !== 'undefined') {
-        setConfigX(data)
-        setConfig({ type: ConfigReducer.entity, payload: data }) //ToDo
+      if (config.has('system.org.ent.EntOrg')) {
+        setConfigX(config.get('system.org.ent.EntOrg'))
+      }
+      else {
+        var data = await apiGet('org/config?entity=system.org.ent.EntOrg', setSession, setMessage)
+        if (typeof data !== 'undefined') {
+          setConfigX(data)
+          setConfig(new Map(config.set('system.org.ent.EntOrg', data))) //ToDo
+        }
       }
     } 
     loadConfigX()
@@ -184,6 +189,7 @@ console.log('updateCallback')
             <OrgDetail 
               key={id} 
               id={id}
+              config={configX}
               entity={entities.get(id)}
               updateEntity={updateEntity}
             />
