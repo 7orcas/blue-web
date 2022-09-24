@@ -100,6 +100,7 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
 
     o.changed = entity.originalValue !== x
     o.active = entity.active
+    o.orgNr = entity.orgNr
     o.code = entity.code
 
     //Set status

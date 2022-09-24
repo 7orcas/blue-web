@@ -99,8 +99,6 @@ console.log('updateCallback')
     l.changed = true
     l.delete = false
     l.entityStatus = Status.invalid
-    var newList = [l, ...list]
-    setList (newList)
     
     var e : OrgEntI = {} as OrgEntI
     e.id = l.id
@@ -110,7 +108,9 @@ console.log('updateCallback')
     e.delete = l.delete
     e.entityStatus = l.entityStatus
     setEntities(new Map(entities.set(e.id, e)))
-
+    
+    var newList = [l, ...list]
+    setList (newList)
   }
 
   const handleUpdate = async() => {

@@ -70,6 +70,18 @@ const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
             />
           </div>
             <TextField
+              type='number'
+              label='orgnr-s'
+              inputProps={{ maxLength: 5 }}
+              entity={entity}
+              field='orgNr'
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+              readonly={entity.id > 0}
+            />
+            <TextField
+              label='code'
               inputProps={{ maxLength: 50 }}
               entity={entity}
               field='code'

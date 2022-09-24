@@ -12,19 +12,21 @@ import { TextField as MuiTextField } from '@mui/material';
 */
 
 interface Props {
-  type : string
+  type? : 'text' | 'number'
+  label : string
   entity : any
   field : string
   inputProps : object
   updateEntity : (id : number, entity : any) => void
   theme: ThemeType
   required? : boolean
+  readonly? : boolean
 }
   
 
-const TextField : FC<Props> = ({ entity, field, inputProps, updateEntity, theme, required=false }) => {
+const TextField : FC<Props> = ({ type='text', label, entity, field, inputProps, updateEntity, theme, required=false, readonly=false }) => {
   
-  const [value, setValue] = useState ('')
+  const [value, setValue] = useState (type==='text'?'':0)
 
   //Initialise the field value state
   useEffect(() => {
@@ -45,20 +47,31 @@ const TextField : FC<Props> = ({ entity, field, inputProps, updateEntity, theme,
     setValue(event.target.value)
   };
 
-  const label = useLabel('code')
+  const labelX = useLabel(label)
+
+  const isValid = () => {
+    if (type === 'text') {
+      return value.toString.length > 0
+    }
+    return true
+  }
 
   return (
     <MuiTextField
-      error={required && value.length === 0}
-      type='text'
+      error={required && !isValid}
+      type={type}
       inputProps={inputProps}
       value={value}
       onChange={handleChange}
       onBlur={handleBlur}
-      label={label}
+      label={labelX}
       required={required}
       InputLabelProps={{
         style: { color: theme === ThemeType.dark? '#cfcbcb' : '#3d3f4d' },
+      }}
+      InputProps={{
+        readOnly: readonly,
+        disableUnderline : readonly
       }}
       variant='filled'
     />
