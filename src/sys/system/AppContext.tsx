@@ -5,10 +5,8 @@ import loadLabels from '../lang/loadLabels'
 import Session, { SessionReducer } from './Session'
 import Message from './Message'
 import { ConfigI } from '../definition/interfaces';
-import Config from './Config'
 import reducerSession from './SessionReducer'
 import reducerMessage from './MessageReducer'
-import reducerConfig from './ConfigReducer'
 
 /*
   Application state object
@@ -27,8 +25,8 @@ export interface AppContextI {
   setSession: any
   message: Message
   setMessage: any
-  config: Map<string, ConfigI>
-  setConfig: any
+  configs: Map<string, ConfigI>
+  setConfigs: any
 }
  
 const AppContext = createContext<AppContextI | null>(null)
@@ -37,7 +35,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, setSession] = useReducer(reducerSession, new Session ());
   const [message, setMessage] = useReducer(reducerMessage, new Message ());
-  const [config, setConfig] = useState(new Map());
+  const [configs, setConfigs] = useState(new Map());
 
   // Load app defaults
   useEffect(() => {
@@ -73,8 +71,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
     setSession: setSession,
     message: message,
     setMessage: setMessage,
-    config: config,
-    setConfig: setConfig
+    configs: configs,
+    setConfigs: setConfigs
   }
 
   return (

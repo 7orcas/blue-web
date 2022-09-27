@@ -1,4 +1,4 @@
-import Config, { ConfigReducer } from './Config'
+import Config, { ConfigReducer } from './ConfigDEL'
 
 /*
   Message state object reducer

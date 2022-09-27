@@ -10,7 +10,9 @@ import { loadEnt } from '../component/editor/editor'
   @author John Stewart
  */
 
-export interface OrgListI extends BaseListI {}
+export interface OrgListI extends BaseListI {
+  dvalue: boolean
+}
 
 export interface OrgEntI extends BaseEntI {
   dvalue: boolean

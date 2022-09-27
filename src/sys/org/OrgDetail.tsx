@@ -23,7 +23,6 @@ interface Props {
   updateEntity : any
 }
   
-
 const OrgDetail : FC<Props> = ({ id, config, entity, updateEntity }) => {
   
   const { session } = useContext(AppContext) as AppContextI
