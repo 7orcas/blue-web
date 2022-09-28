@@ -1,12 +1,11 @@
-import { useContext, FC } from 'react'
+import { useContext, useEffect, useMemo, FC } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
+import { loadConfiguration, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
 import { OrgEntI as EntityI } from './org'
 import { ConfigI, ConfigFieldI } from '../definition/interfaces';
 import LangLabel from '../lang/LangLabel';
 import { Checkbox, FormControl } from '@mui/material'
 import TextField from '../component/utils/TextField'
-import useLabel from '../lang/useLabel';
-
 
 /*
   Show organisational detail
@@ -18,15 +17,31 @@ import useLabel from '../lang/useLabel';
 
 interface Props {
   id : number
-  config : ConfigI | undefined
-  entity : EntityI | undefined
+  entity : EntityI 
   updateEntity : any
 }
   
-const OrgDetail : FC<Props> = ({ id, config, entity, updateEntity }) => {
+const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
   
-  const { session } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
   
+  const CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
+  const CONFIG_URL = 'org/config'
+
+  //Initial load 
+  useEffect(() => {
+
+    //Load entity configurations
+    loadConfiguration(
+      CONFIG_ENTITIES,
+      CONFIG_URL,
+      configs,
+      setConfigs,
+      setSession,
+      setMessage)
+  },[CONFIG_ENTITIES, configs, setConfigs, setMessage, setSession])
+
+
   const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (typeof entity !== 'undefined'){
       entity.active = event.target.checked;
@@ -48,10 +63,13 @@ const OrgDetail : FC<Props> = ({ id, config, entity, updateEntity }) => {
   };
 
   const maxLength = (field : string) => {
-    if (typeof config !== 'undefined') {
-      for (var i=0;i<config.fields.length;i++) {
-        if (config.fields[i].name === field){
-          return config.fields[i].max
+    if (configs.has('system.org.ent.EntOrg')) {
+      var c = configs.get('system.org.ent.EntOrg')
+      if (typeof c !== 'undefined') {
+        for (var i=0;i<c.fields.length;i++) {
+          if (c.fields[i].name === field){
+            return c.fields[i].max
+          }
         }
       }
     }
@@ -67,12 +85,11 @@ const OrgDetail : FC<Props> = ({ id, config, entity, updateEntity }) => {
 
   return (
     <div className='editor-detail'>
-      <>
-        <p>DETAIL for {title()}</p>
-        <p>active= {typeof entity !== 'undefined' ? entity.active ? 'true' : 'false' : 'n/a'}</p>
-      </>
       {typeof entity !== 'undefined' &&
-        <>
+      <>
+        <p>DETAIL for {title()} (id:{entity.id})</p>
+        <p>active= {entity.active ? 'true' : 'false'}</p>
+      
           <div> 
             <LangLabel langkey='active'/>
             <Checkbox

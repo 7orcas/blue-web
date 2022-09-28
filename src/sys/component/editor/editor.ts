@@ -2,7 +2,7 @@ import { SessionReducer } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import useLabelX from '../../lang/useLabel'
 import { EntityStatusType as Status } from '../../definition/types';
-import { BaseI, BaseListI, BaseEntI } from '../../definition/interfaces';
+import { BaseI, BaseListI, BaseEntI, initListBase, ConfigI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
 /*
@@ -14,19 +14,14 @@ import { GridSelectionModel } from '@mui/x-data-grid';
 */
 
 
-export const loadList = async <T extends BaseListI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
+//Load a list and populate the base fields
+export const loadListBase = async <T extends BaseListI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
   try {
     const data = await apiGet(url, setSession, setMessage)
     
     for (const l of data) {
       var base : T = {} as T  
-      base.id = l.id
-      base.orgNr = l.orgNr
-      base.code = l.code
-      base.descr = l.descr
-      base.active = l.active
-      base.changed = false
-      base.entityStatus = Status.valid
+      initListBase(l, base)
       list.push (base)
     }
     
@@ -35,12 +30,25 @@ export const loadList = async <T extends BaseListI>(url : string, list : Array<T
 }
 
 
-export const loadEnt = (data : any, ent : BaseEntI) => {
-  ent.id = data.id
-  ent.orgNr = data.orgNr
-  ent.code = data.code
-  ent.active = data.active
+//Load a new list entity
+export const loadNewBase = async <L extends BaseListI>(
+      url : string, 
+      list : L, 
+      setSession : any, 
+      setMessage : any) => {
+  try {
+    const data = await apiGet(url, setSession, setMessage)
+    
+    for (const l of data) {
+      initListBase(l, list)
+      list.entityStatus = Status.invalid
+    }
+    
+    return data
+  } catch (err : any) { } 
 }
+
+
 
 /**
  * When using JSON.stringify on entity, don't include the 'originalValue' field
@@ -78,6 +86,29 @@ export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => 
 }
 
 /**
+ * Load the entity's configuration
+ */
+export const loadConfiguration = async(
+    configEntities : string [], 
+    configUrl : string, 
+    configs: Map<string, ConfigI>,
+    setConfigs: any,
+    setSession: any,
+    setMessage: any
+    ) => {
+  for (var i=0;i<configEntities.length;i++) {
+    var ce = configEntities[i]
+    if (!configs.has(ce)) {
+      var data = await apiGet(configUrl + '?entity=' + ce, setSession, setMessage)
+      if (typeof data !== 'undefined') {
+        setConfigs(new Map(configs.set(ce, data))) 
+      }
+    }
+  }
+} 
+
+
+/**
  * Update the editor list
  * @param entity id 
  * @param updated entity 
@@ -89,7 +120,6 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
     id : number, 
     entity : E, 
     list : Array<T>, 
-    updateCallback : <L extends BaseListI, E extends BaseEntI>(list : L, entity : E) => void,
     setList : any,
     setSession : any) => {
 
@@ -114,8 +144,6 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
     else if (o.changed) {
       o.entityStatus = Status.changed
     }
-
-    updateCallback (o, entity)
 
     var newList : T[] = []
     for (var i=0;i<list.length;i++){
@@ -150,19 +178,21 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
  * @param entities 
  * @param loadEntity 
  */
-export const onListSelectionSetEditors = <T extends BaseEntI>(ids : GridSelectionModel, setEditors : any, entities : Map<number, T>, loadEntity : any) => {
-  let newEditors: Array<number> = []
+export const onListSelectionSetEditors = async <T extends BaseEntI>(ids : GridSelectionModel, setEditors : any, entities : Map<number, T>, setEntities : any, loadEntity : any) => {
+  var editors: Array<number> = []
 
   //Iterate selected list ids
   if (ids !== null && typeof ids !== 'undefined') {
-    ids.forEach((id) => newEditors.push(typeof id === 'number'? id : parseInt(id)))
+    ids.forEach((id) => editors.push(typeof id === 'number'? id : parseInt(id)))
   }
 
-  //Save selected ids for each editor in state
-  newEditors.map((id) => {
+  //Load missing entities
+  editors.forEach((id) => {
     if (!entities.has(id)) {
       loadEntity (id)
     }
   })
-  setEditors(newEditors);
+ 
+  setEditors(editors);
 }
+

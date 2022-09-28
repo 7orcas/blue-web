@@ -1,23 +1,19 @@
-import { useState, useContext, useEffect, useMemo } from 'react'
+import { useState, useContext, useMemo } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import EditorLM from '../component/editor/EditorLM'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadList, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
+import { loadListBase, loadNewBase, useLabel, updateList, getObjectById } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
-import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
-import usePrompt from "../component/editor/usePrompt";
+import { GridColDef } from '@mui/x-data-grid';
 import { EntityStatusType as Status } from '../definition/types';
-import { ConfigI } from '../definition/interfaces';
 import { MessageType, MessageReducer } from '../system/Message'
-import { ConfigReducer } from '../system/ConfigDEL'
-import apiGet from '../api/apiGet'
 import apiPost from '../api/apiPost'
-import { BaseEntI, BaseListI } from '../definition/interfaces'
+import { initEntBase } from '../definition/interfaces'
 
 /*
-  List, export and update organisations
+  CRUD Editor for organisations
 
   [Licence]
   Created 13.09.22
@@ -28,20 +24,22 @@ const OrgEditor = () => {
   
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
   
-  //Local State
-  const [newId, setNewId] = useState (0)
+  const CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
+  const CONFIG_URL = 'org/config'
+  const LIST_URL = 'org/list'
+  const NEW_URL = 'org/new'
+
+
+  //Need State for editors
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
-  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors
-  const [configX, setConfigX] = useState<ConfigI>()
+  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
 
-  //Warn the user of unsaved changes
-  usePrompt(session.changed, setMessage);
 
-  //Load records
-  const loadListX = async(setList : any) => {
+  //Load list records
+  const loadListOrg = async() => {
     let list : Array<OrgListI> = []
-    var data = await loadList('org/list', list, setSession, setMessage)
+    var data = await loadListBase(LIST_URL, list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var org = list[i]
@@ -51,48 +49,47 @@ const OrgEditor = () => {
     }
   }
 
-  //Initial load of base list
-  useEffect(() => {
-    const loadConfigX = async() => {
-      if (configs.has('system.org.ent.EntOrg')) {
-        setConfigX(configs.get('system.org.ent.EntOrg'))
-      }
-      else {
-        var data = await apiGet('org/config?entity=system.org.ent.EntOrg', setSession, setMessage)
-        if (typeof data !== 'undefined') {
-          setConfigX(data)
-          setConfigs(new Map(configs.set('system.org.ent.EntOrg', data))) //ToDo
-        }
-      }
-    } 
-    loadConfigX()
-    loadListX(setList)
-  },[])
-
-
   //Load entity
-  const loadOrgX = async(id : number) => {
+  const loadEntityOrg = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
     if (typeof entity !== 'undefined') {
-      updateEntity(id, entity)
+      setEntities(new Map(entities.set(id, entity)))
+      return entity
     }
   }
 
-  const updateCallback = <L extends BaseListI, E extends BaseEntI>(list : L, entity : E) => {
-console.log('updateCallback')
+  //Create new entity
+  const handleCreate = async () => {
+    var l : OrgListI = {} as OrgListI
+    var data = await loadNewBase(NEW_URL, l, setSession, setMessage)
+   
+    if (typeof data !== 'undefined') {
+      l.dvalue = data[0].dvalue
+      
+      var e : OrgEntI = {} as OrgEntI
+      initEntBase(l, e)
+      e.dvalue = l.dvalue
+      e.entityStatus = l.entityStatus
+      
+      setEntities(new Map(entities.set(e.id, e)))
+      setList([l, ...list])
+      return list
+    }
   }
 
-  //Update list and entities state
+  //Update list and entities
   const updateEntity = (id : number, entity : OrgEntI) => {
     setEntities(new Map(entities.set(id, entity)))
-    updateList (id, entity, list, updateCallback, setList, setSession)
-  }
 
-  //Set the list selections (to display editors)  
-  const handleSelection = (ids : GridSelectionModel) => {
-    onListSelectionSetEditors(ids, setEditors, entities, loadOrgX)
-  }
+    //Update the list object
+    var l = getObjectById(id, list)
+    if (l !== null) {
+      l.dvalue = entity.dvalue
+    }
 
+    updateList (id, entity, list, setList, setSession)
+  }
+ 
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
@@ -103,38 +100,7 @@ console.log('updateCallback')
     { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
 
-  //Generate temp new ids (negative)
-  const getNextNewId = () => {
-    var id = newId - 1
-    setNewId(id)
-    return id
-  }
-
-  //ToDo get from server
-  const handleCreate = () => {
-    var l : OrgListI = {} as OrgListI
-    l.id = getNextNewId() 
-    l.orgNr = 0
-    l.code = ''
-    l.descr = ''
-    l.active = true
-    l.changed = true
-    l.delete = false
-    l.entityStatus = Status.invalid
-    
-    var e : OrgEntI = {} as OrgEntI
-    e.id = l.id
-    e.code = ''
-    e.active = l.active
-    e.dvalue = false
-    e.delete = l.delete
-    e.entityStatus = l.entityStatus
-    setEntities(new Map(entities.set(e.id, e)))
-    
-    var newList = [l, ...list]
-    setList (newList)
-  }
-
+  
   const handleUpdate = async() => {
     try {
       if (entities === null) return
@@ -166,59 +132,41 @@ console.log('updateCallback')
 
   return (
     <div className='editor'>
-      <EditorLM 
-        configEntities={['system.org.ent.EntOrg']}
-        listColumns={columns}
-        loadList={loadListX}
-      >
-        {editors.map((id) => 
-          <div key={id} className='editor-right'>
-            <OrgDetail 
-              key={id} 
-              id={id}
-              config={configX}
-              entity={entities.get(id)}
-              updateEntity={updateEntity}
-            />
-          </div>
-        )}
-      </EditorLM>
       <div className='menu-header'>
         <TableMenu exportExcelUrl='org/excel'>
           <Button onClick={handleUpdate} langkey='save' className='table-menu-item' disabled={!session.changed}/>
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
         </TableMenu>
       </div>
-      <div className='editor-multi-select'>
-        <div className='editor-left table-grid'>
-          <div style={{ height: '80vh', minWidth : 500, maxWidth : 500 }}>
-            <DataGrid
-              // sx={{color: 'yellow'}} //text color
-              rows={list}
-              columns={columns}
-              pageSize={25}
-              rowsPerPageOptions={[25]}
-              checkboxSelection
-              onSelectionModelChange={handleSelection}
-              getRowClassName={(params) => `table-grid-status-${params.row.entityStatus}`}
-              getCellClassName={(params: GridCellParams<number>) => {
-                return 'table-cell';
-              }}
-            />
-          </div>
-        </div>
+      <EditorLM 
+        configEntities={CONFIG_ENTITIES}
+        configUrl={CONFIG_URL}
+        listColumns={columns}
+        loadList={loadListOrg}
+        loadEntity={loadEntityOrg}
+        list={list}
+        setList={setList}
+        entities={entities}
+        setEntities={setEntities}
+        editors={editors}
+        setEditors={setEditors}
+      >
         {editors.map((id) => 
+          {typeof entities.get(id) !== 'undefined' ?
           <div key={id} className='editor-right'>
             <OrgDetail 
               key={id} 
               id={id}
-              config={configX}
               entity={entities.get(id)}
               updateEntity={updateEntity}
             />
           </div>
+          : <div>problem</div>
+          }
         )}
-      </div>
+      </EditorLM>
+     
+      
     </div>
   )
 }

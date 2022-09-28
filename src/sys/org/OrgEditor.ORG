@@ -3,14 +3,13 @@ import AppContext, { AppContextI } from '../system/AppContext'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadList, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
+import { loadListBase as loadList, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
 import usePrompt from "../component/editor/usePrompt";
 import { EntityStatusType as Status } from '../definition/types';
 import { ConfigI } from '../definition/interfaces';
 import { MessageType, MessageReducer } from '../system/Message'
-import { ConfigReducer } from '../system/Config'
 import apiGet from '../api/apiGet'
 import apiPost from '../api/apiPost'
 import { BaseEntI, BaseListI } from '../definition/interfaces'
@@ -25,7 +24,7 @@ import { BaseEntI, BaseListI } from '../definition/interfaces'
 
 const OrgEditor = () => {
   
-  const { session, setSession, setMessage, config, setConfig } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
   
   //Local State
   const [newId, setNewId] = useState (0)
@@ -49,14 +48,14 @@ const OrgEditor = () => {
   //Initial load of base list
   useEffect(() => {
     const loadConfigX = async() => {
-      if (config.has('system.org.ent.EntOrg')) {
-        setConfigX(config.get('system.org.ent.EntOrg'))
+      if (configs.has('system.org.ent.EntOrg')) {
+        setConfigX(configs.get('system.org.ent.EntOrg'))
       }
       else {
         var data = await apiGet('org/config?entity=system.org.ent.EntOrg', setSession, setMessage)
         if (typeof data !== 'undefined') {
           setConfigX(data)
-          setConfig(new Map(config.set('system.org.ent.EntOrg', data))) //ToDo
+          setConfigs(new Map(configs.set('system.org.ent.EntOrg', data))) //ToDo
         }
       }
     } 
@@ -85,7 +84,7 @@ console.log('updateCallback')
 
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
-    onListSelectionSetEditors(ids, setEditors, entities, loadOrgX)
+    onListSelectionSetEditors(ids, setEditors, entities, setEntities, loadOrgX)
   }
 
   //List Columns
