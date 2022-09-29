@@ -17,7 +17,7 @@ import TextField from '../component/utils/TextField'
 
 interface Props {
   id : number
-  entity : EntityI 
+  entity : EntityI
   updateEntity : any
 }
   
@@ -43,10 +43,8 @@ const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
 
 
   const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (typeof entity !== 'undefined'){
-      entity.active = event.target.checked;
-      updateEntity(id, entity)
-    }
+    entity.active = event.target.checked;
+    updateEntity(id, entity)
   };
  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

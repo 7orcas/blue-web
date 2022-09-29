@@ -4,7 +4,7 @@ import EditorLM from '../component/editor/EditorLM'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadListBase, loadNewBase, useLabel, updateList, getObjectById } from '../component/editor/editor'
+import { loadListBase, loadNewBase, useLabel, updateList, getObjectById, handleCommit } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { EntityStatusType as Status } from '../definition/types';
@@ -28,6 +28,8 @@ const OrgEditor = () => {
   const CONFIG_URL = 'org/config'
   const LIST_URL = 'org/list'
   const NEW_URL = 'org/new'
+  const POST_URL = 'org/post'
+  const EXCEL_URL = 'org/excel'
 
 
   //Need State for editors
@@ -100,41 +102,17 @@ const OrgEditor = () => {
     { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
 
-  
-  const handleUpdate = async() => {
-    try {
-      if (entities === null) return
-
-      for (var i=0;i<list.length;i++){
-        if (list[i].entityStatus === Status.invalid) {
-          setMessage({ type: MessageReducer.type, payload: MessageType.error })
-          setMessage({ type: MessageReducer.message, payload: 'there are errors' }) //ToDo
-          setMessage({ type: MessageReducer.detail, payload: 'must be fixed before commit' }) //ToDo
-          return
-        }
-      }
-
-      var newList : OrgEntI[] = []
-      for (var i=0;i<list.length;i++){
-        if (list[i].changed === true) {
-          var e = entities.get(list[i].id)
-          if (e !== null && e !== undefined) {
-            newList.push(e)
-          }
-        }
-      }
-      
-      const d = await apiPost(`org/post`, newList, setSession, setMessage)
-      
-    } catch (err : any) { } 
+  //Commit CUD operations
+  const handleCommitX = async() => {
+    handleCommit(POST_URL, list, entities, setSession, setMessage)
   }
   
 
   return (
     <div className='editor'>
       <div className='menu-header'>
-        <TableMenu exportExcelUrl='org/excel'>
-          <Button onClick={handleUpdate} langkey='save' className='table-menu-item' disabled={!session.changed}/>
+        <TableMenu exportExcelUrl={EXCEL_URL}>
+          <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
         </TableMenu>
       </div>
@@ -151,18 +129,20 @@ const OrgEditor = () => {
         editors={editors}
         setEditors={setEditors}
       >
-        {editors.map((id) => 
-          {typeof entities.get(id) !== 'undefined' ?
-          <div key={id} className='editor-right'>
-            <OrgDetail 
-              key={id} 
-              id={id}
-              entity={entities.get(id)}
-              updateEntity={updateEntity}
-            />
-          </div>
-          : <div>problem</div>
-          }
+        {editors.map((id) => {
+          var e = entities.get(id)
+          return(
+          e !== undefined ?
+            <div key={id} className='editor-right'>
+              <OrgDetail 
+                key={id} 
+                id={id}
+                entity={e}
+                updateEntity={updateEntity}
+              />
+            </div>
+            : <div>problem</div>
+        )}
         )}
       </EditorLM>
      

@@ -1,6 +1,8 @@
 import { SessionReducer } from '../../system/Session'
 import apiGet from '../../api/apiGet'
+import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
+import { MessageType, MessageReducer } from '../../system/Message'
 import { EntityStatusType as Status } from '../../definition/types';
 import { BaseI, BaseListI, BaseEntI, initListBase, ConfigI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
@@ -178,7 +180,13 @@ export const updateList = <T extends BaseListI, E extends BaseEntI>(
  * @param entities 
  * @param loadEntity 
  */
-export const onListSelectionSetEditors = async <T extends BaseEntI>(ids : GridSelectionModel, setEditors : any, entities : Map<number, T>, setEntities : any, loadEntity : any) => {
+export const onListSelectionSetEditors = async <T extends BaseEntI>(
+      ids : GridSelectionModel, 
+      setEditors : any, 
+      entities : Map<number, T>, 
+      setEntities : any, 
+      loadEntity : any) => {
+
   var editors: Array<number> = []
 
   //Iterate selected list ids
@@ -196,3 +204,38 @@ export const onListSelectionSetEditors = async <T extends BaseEntI>(ids : GridSe
   setEditors(editors);
 }
 
+
+export const handleCommit = async <T extends BaseListI, E extends BaseEntI>(
+      url: string,
+      list : Array<T>, 
+      entities : Map<number, E>, 
+      setSession: any,
+      setMessage: any
+      ) => {
+  try {
+    if (entities === null) return
+
+    for (var i=0;i<list.length;i++){
+      if (list[i].entityStatus === Status.invalid) {
+        setMessage({ type: MessageReducer.type, payload: MessageType.error })
+        setMessage({ type: MessageReducer.message, payload: 'saveError1' }) 
+        setMessage({ type: MessageReducer.detail, payload: 'saveErrorFix' }) 
+        if (i===0) setMessage({ type: MessageReducer.context, payload: 'xxx' }) 
+        return
+      }
+    }
+
+    var newList : BaseEntI[] = []
+    for (i=0;i<list.length;i++){
+      if (list[i].changed === true) {
+        var e = entities.get(list[i].id)
+        if (e !== null && e !== undefined) {
+          newList.push(e)
+        }
+      }
+    }
+    
+    await apiPost(url, newList, setSession, setMessage)
+    
+  } catch (err : any) { } 
+}
