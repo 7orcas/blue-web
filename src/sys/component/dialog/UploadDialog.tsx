@@ -1,7 +1,7 @@
 import axios from '../../api/apiAxiosUpload'
 import { FC, useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { MessageType, MessageReducer } from '../../system/Message'
+import Message, { MessageType } from '../../system/Message'
 import LangLabel from '../../lang/LangLabel'
 
 interface Props {
@@ -21,7 +21,7 @@ const UploadDialog : FC<Props> = ({ title, rest, clazz, setMessage, openUpload, 
   
   const handleClose = () => {
     setOpenUpload (false)
-    setMessage({ type: MessageReducer.type, payload: MessageType.none })
+    // setMessage({ type: MessageReducer.type, payload: MessageType.none })
   }
 
   const handleSubmit = async (event : any) => {
@@ -30,44 +30,45 @@ const UploadDialog : FC<Props> = ({ title, rest, clazz, setMessage, openUpload, 
       const formData = new FormData();
       formData.append("selectedFile", selectedFile);
       const response = await axios.post(`${rest}`, formData)
-
+      var m = new Message()
+      
       switch (response.data.returnCode) {
         case 0: //no change
-          setMessage({ type: MessageReducer.type, payload: MessageType.message })
-          setMessage({ type: MessageReducer.message, payload: response.data.data })
+          m.message = response.data.data
           setOpenUpload (false)
-console.log('no change')          
+          console.log('no change')          
           break
-
-        case 1: //upload successful
-          setMessage({ type: MessageReducer.type, payload: MessageType.message })
-          setMessage({ type: MessageReducer.message, payload: response.data.data })
+          
+          case 1: //upload successful
+          m.message = response.data.data
           setOpenUpload (false)
-console.log('update ok')          
+          console.log('update ok')          
           break
-
-        case -1: //upload error
-          setMessage({ type: MessageReducer.type, payload: MessageType.error })
-          setMessage({ type: MessageReducer.message, payload: response.data.error })
-          setMessage({ type: MessageReducer.detail, payload: response.data.errorDetail })
-console.log('update error')                    
+          
+          case -1: //upload error
+          m.type = MessageType.error
+          m.message = response.data.error
+          m.detail = response.data.errorDetail
+          console.log('update error')                    
           break
 
         default: //unknown 
-          setMessage({ type: MessageReducer.type, payload: MessageType.error })
-          setMessage({ type: MessageReducer.message, payload: 'errunk' })
-          setMessage({ type: MessageReducer.detail, payload: 'Unknown return code' })
+          m.type = MessageType.error
+          m.message = 'errunk'
+          m.detail = 'Unknown return code' 
           break
       }
 
+      setMessage(m)
 
   } catch(err : any) {
       console.log(err)
-
-      setMessage({ type: MessageReducer.type, payload: MessageType.error })
-      setMessage({ type: MessageReducer.message, payload: 'errunk' })
-      setMessage({ type: MessageReducer.context, payload: 'fileup' })
-      setMessage({ type: MessageReducer.detail, payload: 'errstatus|: ' + err.response.status })
+      m = new Message()
+      m.type = MessageType.error
+      m.message = 'errunk'
+      m.detail = 'errstatus|: ' + err.response.status
+      m.context = 'fileup' 
+      setMessage(m)
     }
   }
 

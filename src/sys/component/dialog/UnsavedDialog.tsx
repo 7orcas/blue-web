@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import LangLabel from '../../lang/LangLabel'
 import useLabel from '../../lang/useLabel'
 import { SessionReducer } from '../../system/Session'
-import { MessageType, MessageReducer } from '../../system/Message'
+import { MessageType } from '../../system/Message'
 
 const UnsavedDialog = () => {
   
@@ -21,13 +21,13 @@ const UnsavedDialog = () => {
   const handleContinue = () => {
     setOpen (false)
     setSession ({type: SessionReducer.changed, payload : false})
-    setMessage({ type: MessageReducer.type, payload: MessageType.none })
+    // setMessage({ type: MessageReducer.type, payload: MessageType.none })
     message.transition.retry();
   }
 
   const handleCancel = () => {
     setOpen (false)
-    setMessage({ type: MessageReducer.type, payload: MessageType.none })
+    // setMessage({ type: MessageReducer.type, payload: MessageType.none })
   }
 
   return (

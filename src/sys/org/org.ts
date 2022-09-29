@@ -1,5 +1,5 @@
 import apiGet from '../api/apiGet'
-import { BaseListI, BaseEntI, initEntBase } from "../definition/interfaces"
+import { BaseListI, BaseEntI, initEntBase, initEntBaseOV } from "../definition/interfaces"
 
 /*
   Organisation's entities and load function
@@ -24,7 +24,8 @@ export const loadOrgEnt = async (id : number, setSession : any, setMessage : any
     initEntBase (d, org)
 
     org.dvalue = d.dvalue
-    org.originalValue = JSON.stringify(org)
+
+    initEntBaseOV (org)
     return org
   } catch (err : any) { } 
 }

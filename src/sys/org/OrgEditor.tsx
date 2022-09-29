@@ -1,15 +1,13 @@
 import { useState, useContext, useMemo } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
+import { SessionReducer } from '../system/Session'
 import EditorLM from '../component/editor/EditorLM'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadListBase, loadNewBase, useLabel, updateList, getObjectById, handleCommit } from '../component/editor/editor'
+import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editor'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
-import { EntityStatusType as Status } from '../definition/types';
-import { MessageType, MessageReducer } from '../system/Message'
-import apiPost from '../api/apiPost'
 import { initEntBase } from '../definition/interfaces'
 
 /*
@@ -31,11 +29,12 @@ const OrgEditor = () => {
   const POST_URL = 'org/post'
   const EXCEL_URL = 'org/excel'
 
-
-  //Need State for editors
+  //State for editors
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
-  const [editors, setEditors] = useState<Array<number>>([])  //detailed editors
+  const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
+  const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
+  const [selections, setSelections] = useState<Array<number> | undefined>()  //preselected rows (used after 'created')
 
 
   //Load list records
@@ -83,15 +82,53 @@ const OrgEditor = () => {
   const updateEntity = (id : number, entity : OrgEntI) => {
     setEntities(new Map(entities.set(id, entity)))
 
-    //Update the list object
+    //Update non base list fields first 
     var l = getObjectById(id, list)
     if (l !== null) {
       l.dvalue = entity.dvalue
     }
 
-    updateList (id, entity, list, setList, setSession)
+    updateBaseList (id, entity, list, setList, setSession)
   }
- 
+  
+  //Commit CUD operations
+  const handleCommitX = async() => {
+    try {
+      var data = await handleCommit(POST_URL, list, setList, entities, setSession, setMessage)
+      if (typeof data !== 'undefined') {
+        setLoad(true)
+        setSession ({type: SessionReducer.changed, payload : false})
+
+        //DELETE?
+        setTimeout(() =>  {
+console.log('xx ' + data.data.length)                    
+        var ids : number [] = [] 
+        setSelections(undefined)
+        for (var i=0;i<data.data.length;i++) {
+          var id0 = data.data[i][0]
+          var id1 = data.data[i][1]
+
+console.log('i=' + i + '  id0=' + id0 + ' id1=' + id1)          
+          for (var j=0;j<list.length;j++) {
+console.log('list[j].id=' + list[j].id)   
+            if (list[j].id === id0) {
+              ids.push(j)
+              setEditors([...editors, j])
+console.log('found')              
+              break
+            }
+          }  
+        }
+        if (ids.length>0){
+          // setSelections(ids)
+        }
+      }, 500)
+      }
+    } catch (err : any) { 
+
+    } 
+  }
+
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
@@ -101,12 +138,6 @@ const OrgEditor = () => {
     { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
     { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
   ];
-
-  //Commit CUD operations
-  const handleCommitX = async() => {
-    handleCommit(POST_URL, list, entities, setSession, setMessage)
-  }
-  
 
   return (
     <div className='editor'>
@@ -120,6 +151,8 @@ const OrgEditor = () => {
         configEntities={CONFIG_ENTITIES}
         configUrl={CONFIG_URL}
         listColumns={columns}
+        load={load}
+        setLoad={setLoad}
         loadList={loadListOrg}
         loadEntity={loadEntityOrg}
         list={list}
@@ -127,6 +160,7 @@ const OrgEditor = () => {
         entities={entities}
         setEntities={setEntities}
         editors={editors}
+        selectionModel={selections}
         setEditors={setEditors}
       >
         {editors.map((id) => {

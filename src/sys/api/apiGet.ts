@@ -1,6 +1,6 @@
 import axios from './apiAxios'
 import { SessionReducer } from '../system/Session'
-import { MessageType, MessageReducer } from '../system/Message'
+import Message, { MessageType } from '../system/Message'
 
 /*
   Generic GET method to contact the server
@@ -34,10 +34,14 @@ const apiGet = async (url : string, setSession : any, setMessage : any) => {
   
     message = err.message
   } 
-  setMessage({ type: MessageReducer.type, payload: MessageType.error })
-  setMessage({ type: MessageReducer.context, payload: url })
-  setMessage({ type: MessageReducer.message, payload: message })
-  setMessage({ type: MessageReducer.detail, payload: detail })
+
+  var m = new Message()
+  m.type = MessageType.error
+  m.context = url
+  m.message = message
+  m.detail = detail
+  setMessage(m)
+  
   throw message
 }
 

@@ -1,19 +1,12 @@
-import { useState, useContext, useEffect, FC } from 'react'
+import { useContext, useEffect, FC } from 'react'
 import AppContext, { AppContextI } from '../../system/AppContext'
-import TableMenu from '../../component/table/TableMenu'
-import Button from '../../component/utils/Button'
-import { loadConfiguration, useLabel, updateList, onListSelectionSetEditors, getObjectById } from './editor'
-import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridRowClassNameParams } from '@mui/x-data-grid';
+import { loadConfiguration, onListSelectionSetEditors } from './editor'
+import { DataGrid, GridColDef, GridSelectionModel, GridCellParams } from '@mui/x-data-grid';
 import usePrompt from './usePrompt';
-import { BaseEntI, BaseListI, ConfigI } from '../../definition/interfaces'
-import { EntityStatusType as Status } from '../../definition/types';
-import { MessageType, MessageReducer } from '../../system/Message'
-import { ConfigReducer } from '../../system/ConfigDEL'
-import apiGet from '../../api/apiGet'
-import apiPost from '../../api/apiPost'
+import { BaseEntI, BaseListI } from '../../definition/interfaces'
 
 /*
-  Standard List-Multi Entity Editor
+  Standard List - Multi Entity - Editor
 
   [Licence]
   Created 27.09.22
@@ -24,6 +17,8 @@ interface Props {
   configEntities: string[]
   configUrl: string
   listColumns: GridColDef[] 
+  load: boolean
+  setLoad: (t: boolean) => void
   loadList: any
   loadEntity: any 
   list: BaseListI[]
@@ -32,13 +27,16 @@ interface Props {
   setEntities: any
   editors: Array<number>
   setEditors: any
+  selectionModel: Array<number> | undefined
   children: any
 }
   
 const EditorLM : FC<Props> = ({ 
       configEntities, 
       configUrl,
-      listColumns, 
+      listColumns,
+      load, 
+      setLoad,
       loadList, 
       loadEntity, 
       list,
@@ -47,12 +45,17 @@ const EditorLM : FC<Props> = ({
       setEntities, 
       editors, 
       setEditors, 
+      selectionModel,
       children }) => {
   
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
   
   //Initial load 
   useEffect(() => {
+
+    if (!load) {
+      return
+    }
 
     //Load entity configurations
     loadConfiguration(
@@ -65,7 +68,9 @@ const EditorLM : FC<Props> = ({
     
     //Load in list
     loadList()
-  },[])
+
+    setLoad(false)
+  },[load])
 
   //Warn the user of unsaved changes
   usePrompt(session.changed, setMessage);
@@ -86,6 +91,7 @@ const EditorLM : FC<Props> = ({
               pageSize={25}
               rowsPerPageOptions={[25]}
               checkboxSelection
+              selectionModel={selectionModel}
               onSelectionModelChange={handleSelection}
               getRowClassName={(params) => `table-grid-status-${params.row.entityStatus}`}
               getCellClassName={(params: GridCellParams<number>) => {

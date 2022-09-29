@@ -2,7 +2,7 @@ import { History, Transition } from 'history';
 import { useCallback, useContext, useEffect } from "react";
 import { Navigator } from 'react-router';
 import { UNSAFE_NavigationContext as NavigationContext } from "react-router-dom";
-import { MessageType, MessageReducer } from '../../system/Message'
+import Message, { MessageType } from '../../system/Message'
 
 /*
   Block router transitions
@@ -39,13 +39,10 @@ export function useBlocker(blocker: (tx: Transition) => void, when = true) {
 
 export default function usePrompt(when = true, setMessage : any) {
     const blocker = useCallback((tx: Transition) => {
-        setMessage({ type: MessageReducer.type, payload: MessageType.unsaved })
-        setMessage({ type: MessageReducer.transition, payload: tx })
-        //DELETE 
-        // if (window.confirm(message)) {
-        //   setSession ({type: SessionReducer.changed, payload : false})
-        //   tx.retry();
-        // }
+      var m = new Message()
+      m.type = MessageType.unsaved
+      m.transition = tx
+      setMessage(m)
     }, []);
 
     useBlocker(blocker, when);

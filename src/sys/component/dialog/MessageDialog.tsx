@@ -3,7 +3,7 @@ import AppContext, { AppContextI } from '../../system/AppContext'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import LangLabel from '../../lang/LangLabel'
 import useLabel from '../../lang/useLabel'
-import { MessageType, MessageReducer } from '../../system/Message'
+import { MessageType } from '../../system/Message'
 
 const MessageDialog = () => {
   
@@ -43,7 +43,7 @@ const MessageDialog = () => {
 
   const handleClose = () => {
     setOpen (false)
-    setMessage({ type: MessageReducer.type, payload: MessageType.none })
+    // setMessage({ type: MessageReducer.type, payload: MessageType.none })
   }
 
   return (
@@ -64,11 +64,13 @@ const MessageDialog = () => {
                     <span className='dialog-text'>: {useLabel(message.message)}</span>
                 </DialogContentText>
                 {message.type === MessageType.error &&
+                  context.length > 0 &&
                   <DialogContentText style={{display : 'flex'}}>
                     <LangLabel langkey='context'/>: {context}
                   </DialogContentText>
                 }
                 {message.type === MessageType.error &&
+                  detail.length > 0 &&
                   <DialogContentText style={{display : 'flex'}}>
                     <LangLabel langkey='detail'/>: {detail}
                   </DialogContentText>

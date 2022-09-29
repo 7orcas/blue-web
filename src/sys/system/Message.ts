@@ -1,7 +1,9 @@
 
 /*
- Convience class to store messages to users (via dialogs)
+ Store messages to users (via dialogs)
+ When changed useEffect hook will display in dialog
  
+ Created Aug '22
  [Licence]
  @author John Stewart
  */
@@ -15,20 +17,12 @@ export enum MessageType {
   unsaved
 }
 
-export enum MessageReducer {
-  type,
-  message,
-  context,
-  detail,
-  transition
-}
-
 class Message {
   type : MessageType = MessageType.message
   message : string = ''
   context : string = ''
   detail : string = ''
-  transition : any = undefined
+  transition : any = undefined  //used in unsaved dialog (usePrompt hook)
 }
 
 export default Message

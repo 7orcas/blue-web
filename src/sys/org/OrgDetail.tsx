@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, FC } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, useLabel, updateList, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
+import { loadConfiguration, useLabel, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
 import { OrgEntI as EntityI } from './org'
 import { ConfigI, ConfigFieldI } from '../definition/interfaces';
 import LangLabel from '../lang/LangLabel';

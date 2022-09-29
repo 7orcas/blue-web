@@ -29,26 +29,44 @@ export interface BaseEntI extends BaseI {
 
 //Populate base list fields
 export const initListBase = (data : any, list : BaseListI) => {
-  list.id = data.id
-  list.orgNr = data.orgNr
-  list.code = typeof data.code !== 'undefined'? data.code : '?'
-  list.descr = typeof data.descr !== 'undefined'? data.descr : '?'
-  list.active = typeof data.active !== 'undefined'? data.active : '?'
-  list.delete = false
+  initBase (data, list)
   list.changed = false
-  list.entityStatus = EntityStatusType.valid
 }
 
 
 //Populate base entity fields
 export const initEntBase = (data : any, ent : BaseEntI) => {
-  ent.id = data.id
-  ent.orgNr = data.orgNr
-  ent.code = typeof data.code !== 'undefined'? data.code : '?'
-  ent.descr = typeof data.descr !== 'undefined'? data.descr : '?'
-  ent.active = typeof data.active !== 'undefined'? data.active : '?'
-  ent.delete = false
-  ent.entityStatus = EntityStatusType.valid
+  initBase (data, ent)
+}
+
+//Populate base fields
+const initBase = (data : any, base : BaseI) => {
+  base.id = data.id
+  base.orgNr = data.orgNr
+  base.code = typeof data.code !== 'undefined'? data.code : '?'
+  base.descr = typeof data.descr !== 'undefined'? data.descr : ''
+  base.active = typeof data.active !== 'undefined'? data.active : true
+  base.delete = false
+  base.entityStatus = EntityStatusType.valid
+}
+
+export const initEntBaseOV = (ent : BaseEntI) => {
+  ent.originalValue = JSON.stringify(ent, jsonReplacer)
+}
+
+export const entBaseOV = (ent : BaseEntI) => {
+  return JSON.stringify(ent, jsonReplacer)
+}
+
+/**
+ * When using JSON.stringify on entity, don't include the 'originalValue' field
+ * @param key 
+ * @param value 
+ * @returns 
+ */
+ export const jsonReplacer = (key : string, value : any) => {
+  if (key === 'originalValue') return undefined;
+  else return value;
 }
 
 

@@ -2,9 +2,9 @@ import { SessionReducer } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
-import { MessageType, MessageReducer } from '../../system/Message'
+import Message, { MessageType } from '../../system/Message'
 import { EntityStatusType as Status } from '../../definition/types';
-import { BaseI, BaseListI, BaseEntI, initListBase, ConfigI } from '../../definition/interfaces';
+import { BaseI, BaseListI, BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
 /*
@@ -14,7 +14,6 @@ import { GridSelectionModel } from '@mui/x-data-grid';
   Created 15.09.22
   @author John Stewart
 */
-
 
 //Load a list and populate the base fields
 export const loadListBase = async <T extends BaseListI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
@@ -48,19 +47,6 @@ export const loadNewBase = async <L extends BaseListI>(
     
     return data
   } catch (err : any) { } 
-}
-
-
-
-/**
- * When using JSON.stringify on entity, don't include the 'originalValue' field
- * @param key 
- * @param value 
- * @returns 
- */
-export const jsonReplacer = (key : string, value : any) => {
-  if (key === 'originalValue') return undefined;
-  else return value;
 }
 
 /**
@@ -118,14 +104,14 @@ export const loadConfiguration = async(
  * @param setList 
  * @param setSession
  */
-export const updateList = <T extends BaseListI, E extends BaseEntI>(
+export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
     id : number, 
     entity : E, 
     list : Array<T>, 
     setList : any,
     setSession : any) => {
 
-  var x = JSON.stringify(entity, jsonReplacer)
+  var x = entBaseOV(entity)
   var o = getObjectById(id, list)
 
   if (o !== null) {
@@ -208,34 +194,44 @@ export const onListSelectionSetEditors = async <T extends BaseEntI>(
 export const handleCommit = async <T extends BaseListI, E extends BaseEntI>(
       url: string,
       list : Array<T>, 
+      setList : any,
       entities : Map<number, E>, 
       setSession: any,
-      setMessage: any
+      setMessage: (m : Message) => void
       ) => {
-  try {
-    if (entities === null) return
 
-    for (var i=0;i<list.length;i++){
-      if (list[i].entityStatus === Status.invalid) {
-        setMessage({ type: MessageReducer.type, payload: MessageType.error })
-        setMessage({ type: MessageReducer.message, payload: 'saveError1' }) 
-        setMessage({ type: MessageReducer.detail, payload: 'saveErrorFix' }) 
-        if (i===0) setMessage({ type: MessageReducer.context, payload: 'xxx' }) 
-        return
+
+  if (entities === null) return
+
+  //Validate changes
+  for (var i=0;i<list.length;i++){
+    if (list[i].entityStatus === Status.invalid) {
+      var m = new Message()
+      m.type = MessageType.error
+      m.message = 'saveError1'
+      m.detail = 'saveErrorFix'
+      if (i===0) m.context = 'xxx' 
+      setMessage(m)
+      return
+    }
+  }
+
+  //Only send updates
+  var entList : E[] = []
+  for (i=0;i<list.length;i++){
+    if (list[i].changed === true) {
+      var e = entities.get(list[i].id)
+      if (e !== null && e !== undefined) {
+        entList.push(e)
       }
     }
+  }
+  
+  var data = await apiPost(url, entList, setSession, setMessage)
 
-    var newList : BaseEntI[] = []
-    for (i=0;i<list.length;i++){
-      if (list[i].changed === true) {
-        var e = entities.get(list[i].id)
-        if (e !== null && e !== undefined) {
-          newList.push(e)
-        }
-      }
-    }
-    
-    await apiPost(url, newList, setSession, setMessage)
-    
-  } catch (err : any) { } 
+  //Reset changes?
+  if (data !== undefined){
+    return data
+  }
+  
 }

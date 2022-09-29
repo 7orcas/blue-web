@@ -6,7 +6,6 @@ import Session, { SessionReducer } from './Session'
 import Message from './Message'
 import { ConfigI } from '../definition/interfaces';
 import reducerSession from './SessionReducer'
-import reducerMessage from './MessageReducer'
 
 /*
   Application state object
@@ -34,7 +33,7 @@ const AppContext = createContext<AppContextI | null>(null)
 export const AppContextProvider: FC<Props> = ({ children }) => {
 
   const [session, setSession] = useReducer(reducerSession, new Session ());
-  const [message, setMessage] = useReducer(reducerMessage, new Message ());
+  const [message, setMessage] = useState(new Message());
   const [configs, setConfigs] = useState(new Map());
 
   // Load app defaults
