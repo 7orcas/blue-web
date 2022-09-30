@@ -2,7 +2,7 @@ import UrlSearchParams from '../api/urlSearchParams'
 import { LabelI } from '../lang/loadLabels'
 
 /*
- Convience class to store session variables
+ Class to store session variables
  
  [Licence]
  @author John Stewart

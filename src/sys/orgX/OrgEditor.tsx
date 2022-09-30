@@ -23,12 +23,6 @@ const OrgEditor = () => {
   
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
   
-  const CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
-  const CONFIG_URL = 'org/config'
-  const LIST_URL = 'org/list'
-  const NEW_URL = 'org/new'
-  const POST_URL = 'org/post'
-  const EXCEL_URL = 'org/excel'
 
   //State for editors
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
@@ -52,7 +46,7 @@ const OrgEditor = () => {
   //Load list records
   const loadListOrg = async() => {
     let list : Array<OrgListI> = []
-    var data = await loadListBase(LIST_URL, list, setSession, setMessage)
+    var data = await loadListBase(editorConfig.LIST_URL, list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var org = list[i]
@@ -74,7 +68,7 @@ const OrgEditor = () => {
   //Create new entity
   const handleCreate = async () => {
     var l : OrgListI = {} as OrgListI
-    var data = await loadNewBase(NEW_URL, l, setSession, setMessage)
+    var data = await loadNewBase(editorConfig.NEW_URL, l, setSession, setMessage)
    
     if (typeof data !== 'undefined') {
       l.dvalue = data[0].dvalue
@@ -118,7 +112,7 @@ const OrgEditor = () => {
         }
       }
 
-      var data = await handleCommit(POST_URL, list, setList, entities, setSession, setMessage)
+      var data = await handleCommit(editorConfig.POST_URL, list, setList, entities, setSession, setMessage)
       if (typeof data !== 'undefined') {
         setLoad(true)
         setSession ({type: SessionReducer.changed, payload : false})
@@ -177,13 +171,13 @@ const OrgEditor = () => {
   return (
     <div className='editor'>
       <div className='menu-header'>
-        <TableMenu exportExcelUrl={EXCEL_URL}>
+        <TableMenu exportExcelUrl={editorConfig.EXCEL_URL}>
           <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
         </TableMenu>
       </div>
       <EditorLM 
-        configEntities={CONFIG_ENTITIES}
+        configEntities={editorConfig.CONFIG_ENTITIES}
         configUrl={CONFIG_URL}
         listColumns={columns}
         load={load}

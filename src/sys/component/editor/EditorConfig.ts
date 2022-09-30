@@ -1,4 +1,4 @@
-import { BaseListI, BaseEntI } from '../../definition/interfaces'
+import { BaseI, BaseListI, BaseEntI } from '../../definition/interfaces'
 
 /*
  Class to store editor variables
@@ -35,6 +35,19 @@ export class EditorConfig <L extends BaseListI, E extends BaseEntI> {
   editors : Array<number> = []  //detailed editors (contains entity id)
   entities : E[] = []  //loaded full entities
   load : boolean = true  //flag to load editor (always initialise true)
+
+
+  //Return object from list by it's id
+  getObjectById (id : number, list : BaseI[]) {
+    for (var i=0;i<list.length;i++){
+      if (list[i].id === id) {
+        return list[i]
+      }
+    }
+    return null;
+  }
+
+
 }
 
 //EditorConfig state object reducer
