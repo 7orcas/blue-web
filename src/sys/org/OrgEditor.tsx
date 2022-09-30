@@ -1,12 +1,11 @@
 import { useState, useContext, useMemo } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionReducer } from '../system/Session'
-import EditorLM from '../component/editor/EditorLM'
+import EditorLM from '../component/editor/EditorLM_ORG'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editor'
-import { EditorConfig, EditorConfigReducer } from '../component/editor/EditorConfig'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { initEntBase } from '../definition/interfaces'
@@ -35,18 +34,6 @@ const OrgEditor = () => {
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
-
-  //Editor Config Holds State
-  var ed = new EditorConfig<OrgListI, OrgEntI>()
-  ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
-  ed.CONFIG_URL = 'org/config'
-  ed.LIST_URL = 'org/list'
-  ed.NEW_URL = 'org/new'
-  ed.POST_URL = 'org/post'
-  ed.EXCEL_URL = 'org/excel'
-
-  const [editorConfig, setEditorConfig] = useState(ed) 
-  
 
 
   //Load list records
@@ -207,8 +194,6 @@ const OrgEditor = () => {
                 key={id} 
                 id={id}
                 entity={e}
-                editorConfig={editorConfig} 
-                setEditorConfig={setEditorConfig}
                 updateEntity={updateEntity}
                 editors={editors}
                 setEditors={setEditors}

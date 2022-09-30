@@ -2,8 +2,6 @@ import { useContext, useEffect, useMemo, FC } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { loadConfiguration, useLabel, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
 import { OrgListI, OrgEntI } from './org'
-import { EditorConfig, EditorConfigReducer } from '../component/editor/EditorConfig'
-import { ConfigI, ConfigFieldI } from '../definition/interfaces';
 import LangLabel from '../lang/LangLabel';
 import { Checkbox, FormControl } from '@mui/material'
 import TextField from '../component/utils/TextField'
@@ -19,8 +17,6 @@ import TextField from '../component/utils/TextField'
 interface Props {
   id : number
   entity : OrgEntI
-  editorConfig : EditorConfig <OrgListI, OrgEntI>
-  setEditorConfig : any
   updateEntity : any
   editors: Array<number>
   setEditors: (t : Array<number>) => void

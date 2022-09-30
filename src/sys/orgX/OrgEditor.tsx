@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionReducer } from '../system/Session'
 import EditorLM from '../component/editor/EditorLM'
@@ -6,7 +6,7 @@ import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editor'
-import { EditorConfig, EditorConfigReducer } from '../component/editor/EditorConfig'
+import { EditorConfig, editorConfigReducer, EditorConfigType } from '../component/editor/EditorConfig'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { initEntBase } from '../definition/interfaces'
@@ -21,17 +21,17 @@ import { initEntBase } from '../definition/interfaces'
 
 const OrgEditor = () => {
   
-  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
 
   //State for editors
   const [list, setList] = useState<OrgListI[]>([])  //left list of all records
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
-  const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
+  //const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
 
   //Editor Config Holds State
-  var ed = new EditorConfig<OrgListI, OrgEntI>()
+  var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
   ed.CONFIG_URL = 'org/config'
   ed.LIST_URL = 'org/list'
@@ -39,7 +39,7 @@ const OrgEditor = () => {
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
 
-  const [editorConfig, setEditorConfig] = useState(ed) 
+  const [editorConfig, setEditorConfig] = useReducer(editorConfigReducer, ed) 
   
 
 
@@ -114,7 +114,7 @@ const OrgEditor = () => {
 
       var data = await handleCommit(editorConfig.POST_URL, list, setList, entities, setSession, setMessage)
       if (typeof data !== 'undefined') {
-        setLoad(true)
+        setEditorConfig ({type: EditorConfigType.load, payload : true})
         setSession ({type: SessionReducer.changed, payload : false})
 
         //Reselect newly created records (if present) and remove deleted ones
@@ -177,11 +177,9 @@ const OrgEditor = () => {
         </TableMenu>
       </div>
       <EditorLM 
-        configEntities={editorConfig.CONFIG_ENTITIES}
-        configUrl={CONFIG_URL}
+        editorConfig={editorConfig}
+        setEditorConfig={setEditorConfig}
         listColumns={columns}
-        load={load}
-        setLoad={setLoad}
         loadList={loadListOrg}
         loadEntity={loadEntityOrg}
         list={list}
@@ -198,11 +196,11 @@ const OrgEditor = () => {
           e !== undefined ?
             <div key={id} className='editor-right'>
               <OrgDetail 
+                editorConfig={editorConfig} 
+                setEditorConfig={setEditorConfig}
                 key={id} 
                 id={id}
                 entity={e}
-                editorConfig={editorConfig} 
-                setEditorConfig={setEditorConfig}
                 updateEntity={updateEntity}
                 editors={editors}
                 setEditors={setEditors}
