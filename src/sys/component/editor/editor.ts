@@ -183,6 +183,7 @@ export const onListSelectionSetEditors = async <T extends BaseEntI>(
   //Load missing entities
   editors.forEach((id) => {
     if (!entities.has(id)) {
+console.log('editors load' + id)                    
       loadEntity (id)
     }
   })

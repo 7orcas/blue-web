@@ -19,9 +19,16 @@ interface Props {
   id : number
   entity : EntityI
   updateEntity : any
+  editors: Array<number>
+  setEditors: (t : Array<number>) => void
 }
   
-const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
+const OrgDetail : FC<Props> = ({ 
+      id, 
+      entity, 
+      updateEntity,
+      editors, 
+      setEditors }) => {
   
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
   
@@ -74,6 +81,18 @@ const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
     return 30
   }
 
+  //Close this editor
+  const close = () => {
+    var ids : Array<number> = editors.slice()
+    for (var j=0;j<ids.length;j++) {
+      const index = ids.indexOf(id);
+      if (index > -1) { 
+        ids.splice(index, 1); 
+      }
+    }  
+    setEditors(ids)
+  }
+
   const title = () => {
     if (typeof entity !== 'undefined') {
       return entity.code
@@ -87,6 +106,7 @@ const OrgDetail : FC<Props> = ({ id, entity, updateEntity }) => {
       <>
         <p>DETAIL for {title()} (id:{entity.id})</p>
         <p>active= {entity.active ? 'true' : 'false'}</p>
+        <div onClick={close}>X</div>
       
           <div> 
             <LangLabel langkey='active'/>

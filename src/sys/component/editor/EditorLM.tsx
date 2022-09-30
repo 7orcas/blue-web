@@ -26,7 +26,7 @@ interface Props {
   entities: Map<number, BaseEntI>
   setEntities: any
   editors: Array<number>
-  setEditors: any
+  setEditors: (t : Array<number>) => void
   selectionModel: Array<number> | undefined
   children: any
 }
@@ -77,6 +77,7 @@ const EditorLM : FC<Props> = ({
 
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
+
     onListSelectionSetEditors(ids, setEditors, entities, setEntities, loadEntity)
   }
 

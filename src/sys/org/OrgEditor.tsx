@@ -6,6 +6,7 @@ import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editor'
+import { EditorConfig, EditorConfigReducer } from '../component/editor/EditorConfig'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { initEntBase } from '../definition/interfaces'
@@ -34,7 +35,18 @@ const OrgEditor = () => {
   const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
   const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
-  const [selections, setSelections] = useState<Array<number> | undefined>()  //preselected rows (used after 'created')
+
+  //Editor Config Holds State
+  var ed = new EditorConfig()
+  ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
+  ed.CONFIG_URL = 'org/config'
+  ed.LIST_URL = 'org/list'
+  ed.NEW_URL = 'org/new'
+  ed.POST_URL = 'org/post'
+  ed.EXCEL_URL = 'org/excel'
+
+  const [editorConfig, setEditorConfig] = useState(ed) 
+  
 
 
   //Load list records
@@ -94,35 +106,58 @@ const OrgEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
+
+      //Remember deleted records
+      var dIds : Array<number> = []
+      for (var j=0;j<list.length;j++) {
+        if (list[j].changed) {
+          var e = entities.get(list[j].id)
+          if (e !== null && e !== undefined && e.delete) {
+            dIds.push(list[j].id)
+          }
+        }
+      }
+
       var data = await handleCommit(POST_URL, list, setList, entities, setSession, setMessage)
       if (typeof data !== 'undefined') {
         setLoad(true)
         setSession ({type: SessionReducer.changed, payload : false})
 
-        //DELETE?
+        //Reselect newly created records (if present) and remove deleted ones
         setTimeout(() =>  {
-console.log('xx ' + data.data.length)                    
-        var ids : number [] = [] 
-        setSelections(undefined)
-        for (var i=0;i<data.data.length;i++) {
-          var id0 = data.data[i][0]
-          var id1 = data.data[i][1]
+          var ids : Array<number> = editors.slice()
 
-console.log('i=' + i + '  id0=' + id0 + ' id1=' + id1)          
-          for (var j=0;j<list.length;j++) {
-console.log('list[j].id=' + list[j].id)   
-            if (list[j].id === id0) {
-              ids.push(j)
-              setEditors([...editors, j])
-console.log('found')              
-              break
+          //deletes
+          for (var j=0;j<dIds.length;j++) {
+            const index = ids.indexOf(dIds[j]);
+            if (index > -1) { 
+              ids.splice(index, 1); 
             }
           }  
-        }
-        if (ids.length>0){
-          // setSelections(ids)
-        }
-      }, 500)
+
+          //new
+          for (var i=0;i<data.data.length;i++) {
+            var id0 = data.data[i][0]
+            var id1 = data.data[i][1]
+
+            for (j=0;j<list.length;j++) {
+
+              //remove temp id and add new id
+              if (list[j].id === id0) {
+                const index = ids.indexOf(id0);
+                if (index > -1) { 
+                  ids.splice(index, 1); 
+                }
+                ids.push(id1)
+                loadEntityOrg(id1)
+                break
+              }
+            }  
+          }
+          if (ids.length>0){
+            setEditors(ids)
+          }
+        }, 500)
       }
     } catch (err : any) { 
 
@@ -160,8 +195,8 @@ console.log('found')
         entities={entities}
         setEntities={setEntities}
         editors={editors}
-        selectionModel={selections}
         setEditors={setEditors}
+        selectionModel={editors}
       >
         {editors.map((id) => {
           var e = entities.get(id)
@@ -173,6 +208,8 @@ console.log('found')
                 id={id}
                 entity={e}
                 updateEntity={updateEntity}
+                editors={editors}
+                setEditors={setEditors}
               />
             </div>
             : <div>problem</div>
