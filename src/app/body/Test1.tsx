@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
-import { SessionReducer } from '../../sys/system/Session'
+import { SessionField } from '../../sys/system/Session'
 import loadLabels from '../../sys/lang/loadLabels'
 import useLabel from '../../sys/lang/useLabel'
 
@@ -11,7 +11,7 @@ const Test1 = () => {
   const loadLabelsX = async() => {
     var l = await loadLabels('', setSession, setMessage)
     if (l !== null) {
-      setSession ({type: SessionReducer.labels, payload: l})
+      setSession ({type: SessionField.labels, payload: l})
     }
   }
 

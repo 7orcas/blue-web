@@ -2,7 +2,7 @@ import { FC, createContext, useEffect, useState, useReducer } from 'react'
 import axios from '../api/apiAxios'
 import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
-import Session, { SessionReducer } from './Session'
+import Session, { SessionField } from './Session'
 import Message from './Message'
 import { ConfigI } from '../definition/interfaces';
 import reducerSession from './SessionReducer'
@@ -40,22 +40,22 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   useEffect(() => {
 
     const params = new UrlSearchParams()
-    setSession ({ type: SessionReducer.params, payload: params })
+    setSession ({ type: SessionField.params, payload: params })
 
     const initialise = async () => {
       try {
 
         const response = await axios.get(params.init + '?SessionID=' + params.sid)
 
-        setSession ({ type: SessionReducer.userid, payload: response.data.data.userid })
-        setSession ({ type: SessionReducer.lang, payload: response.data.data.lang })
-        setSession ({ type: SessionReducer.orgNr, payload: response.data.data.orgNr })
+        setSession ({ type: SessionField.userid, payload: response.data.data.userid })
+        setSession ({ type: SessionField.lang, payload: response.data.data.lang })
+        setSession ({ type: SessionField.orgNr, payload: response.data.data.orgNr })
 
         var roles = response.data.data.roles.split(',')
-        setSession ({ type: SessionReducer.roles, payload: roles })
+        setSession ({ type: SessionField.roles, payload: roles })
 
         const l = await loadLabels('', setSession, setMessage)
-        setSession ({ type: SessionReducer.labels, payload: l })
+        setSession ({ type: SessionField.labels, payload: l })
         
       } catch (err : any) {
         console.log(err.message)

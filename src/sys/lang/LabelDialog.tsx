@@ -1,6 +1,6 @@
 import { FC, useState, useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { SessionReducer } from '../system/Session'
+import { SessionField } from '../system/Session'
 import { LabelI } from './loadLabels'
 import get from '../api/apiGet'
 import post from '../api/apiPost'
@@ -73,7 +73,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
           array.push(session.labels[i])
         }
       }
-      setSession ({type: SessionReducer.labels, payload: array})
+      setSession ({type: SessionField.labels, payload: array})
 
       setOpen(false);
     }

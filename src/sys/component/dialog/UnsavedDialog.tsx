@@ -3,7 +3,7 @@ import AppContext, { AppContextI } from '../../system/AppContext'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import LangLabel from '../../lang/LangLabel'
 import useLabel from '../../lang/useLabel'
-import { SessionReducer } from '../../system/Session'
+import { SessionField } from '../../system/Session'
 import { MessageType } from '../../system/Message'
 
 const UnsavedDialog = () => {
@@ -20,7 +20,7 @@ const UnsavedDialog = () => {
 
   const handleContinue = () => {
     setOpen (false)
-    setSession ({type: SessionReducer.changed, payload : false})
+    setSession ({type: SessionField.changed, payload : false})
     // setMessage({ type: MessageReducer.type, payload: MessageType.none })
     message.transition.retry();
   }

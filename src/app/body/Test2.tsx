@@ -1,6 +1,6 @@
 import React, { useState, useContext, useCallback } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
-import { SessionReducer } from '../../sys/system/Session'
+import { SessionField } from '../../sys/system/Session'
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import List from '@mui/material/List';
@@ -72,7 +72,7 @@ const Test2 = () => {
   };
 
   const handleClickLogin = () => {
-    setSession ({ type: SessionReducer.loggedIn, payload: false })
+    setSession ({ type: SessionField.loggedIn, payload: false })
   };
 
   const handleClose = (value: string) => {

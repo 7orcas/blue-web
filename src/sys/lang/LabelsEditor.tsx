@@ -1,6 +1,6 @@
 import { useState, useContext, useCallback, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { SessionReducer } from '../system/Session'
+import { SessionField } from '../system/Session'
 import loadLabels, { LabelI } from './loadLabels'
 import TableMenu from '../component/table/TableMenu'
 import ReactDataGrid from '@inovua/reactdatagrid-community'
@@ -59,7 +59,7 @@ const LabelsEditor = () => {
   }, [dataSource])
 
   const showInClient = () => {
-    setSession ({type: SessionReducer.labels, payload: dataSource})
+    setSession ({type: SessionField.labels, payload: dataSource})
   }
 
   return (

@@ -9,7 +9,7 @@ import { BaseListI, BaseEntI } from '../../definition/interfaces'
  */
 
 //Used in the setEditorConfig and reducer functions
-export enum EditorConfigType {
+export enum EditorConfigField {
   configEntities,
   configUrl,
   listUrl,
@@ -41,34 +41,34 @@ export class EditorConfig <L extends BaseListI, E extends BaseEntI> {
 export const editorConfigReducer = <L extends BaseListI, E extends BaseEntI>(editor : EditorConfig<L,E>, action : any) => {
   switch (action.type) {
 
-    case EditorConfigType.configEntities:
+    case EditorConfigField.configEntities:
       return {...editor, CONFIG_ENTITIES: action.payload}
 
-    case EditorConfigType.configUrl:
+    case EditorConfigField.configUrl:
       return {...editor, CONFIG_URL: action.payload}
 
-    case EditorConfigType.listUrl:
+    case EditorConfigField.listUrl:
       return {...editor, LIST_URL: action.payload}
   
-    case EditorConfigType.newUrl:
+    case EditorConfigField.newUrl:
       return {...editor, NEW_URL: action.payload}
 
-    case EditorConfigType.postUrl:
+    case EditorConfigField.postUrl:
       return {...editor, POST_URL: action.payload}
  
-    case EditorConfigType.excelUrl:
+    case EditorConfigField.excelUrl:
       return {...editor, EXCEL_URL: action.payload}
 
-    case EditorConfigType.list:
+    case EditorConfigField.list:
       return {...editor, list: action.payload}
       
-    case EditorConfigType.editors:
+    case EditorConfigField.editors:
       return {...editor, editors: action.payload}
 
-    case EditorConfigType.entities:
+    case EditorConfigField.entities:
       return {...editor, entities: action.payload}
   
-    case EditorConfigType.load:
+    case EditorConfigField.load:
       return {...editor, load: action.payload}      
 
     default:

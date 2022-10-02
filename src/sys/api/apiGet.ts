@@ -1,5 +1,5 @@
 import axios from './apiAxios'
-import { SessionReducer } from '../system/Session'
+import { SessionField } from '../system/Session'
 import Message, { MessageType } from '../system/Message'
 
 /*
@@ -28,7 +28,7 @@ const apiGet = async (url : string, setSession : any, setMessage : any) => {
     
     //UNAUTHORIZED, ie logged out
     if (err.response.status === 401){
-      setSession ({ type: SessionReducer.loggedIn, payload: false })
+      setSession ({ type: SessionField.loggedIn, payload: false })
       return;
     }
   

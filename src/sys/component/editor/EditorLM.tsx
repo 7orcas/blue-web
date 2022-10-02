@@ -3,7 +3,7 @@ import AppContext, { AppContextI } from '../../system/AppContext'
 import { loadConfiguration, onListSelectionSetEditors } from './editorUtil'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams } from '@mui/x-data-grid';
 import usePrompt from './usePrompt';
-import { EditorConfig, EditorConfigType } from './EditorConfig';
+import { EditorConfig, EditorConfigField } from './EditorConfig';
 import { BaseEntI, BaseListI } from '../../definition/interfaces'
 
 /*
@@ -51,7 +51,7 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
     //Load in list
     loadList()
 
-    setEditorConfig ({type: EditorConfigType.load, payload : false})
+    setEditorConfig ({type: EditorConfigField.load, payload : false})
   },[editorConfig.load])
 
   //Warn the user of unsaved changes

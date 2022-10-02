@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
-import { SessionReducer, ThemeType } from '../../sys/system/Session'
+import { SessionField, ThemeType } from '../../sys/system/Session'
 import MenuItemFactory, { MenuItem, MenuItemType } from '../../sys/menu/MenuItemFactory'
 import Menu from "../../sys/menu/Menu"
 import { 
@@ -37,7 +37,7 @@ const Navbar = () => {
   f.main('planmat', '/')
   
   f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', 
-    () => {setSession ({type: SessionReducer.editLabels})},
+    () => {setSession ({type: SessionField.editLabels})},
     true
   )
 
@@ -72,13 +72,13 @@ const Navbar = () => {
 
   //Separate theme icon  
   var themeX = f.button('', 
-    () => {setSession ({type: SessionReducer.tgTheme})},
+    () => {setSession ({type: SessionField.tgTheme})},
     false)
 
 
   if (containsRole('LangEdit')) {
     var editLabel = f.checkbox('editLabels', 
-      () => {setSession ({type: SessionReducer.editLabels})},
+      () => {setSession ({type: SessionField.editLabels})},
       session.editLabels
     )
     admin.menu.push(editLabel)
@@ -95,7 +95,7 @@ const Navbar = () => {
       || item.type === MenuItemType.button) {
       item.action()
     }
-    setSession ({type: SessionReducer.debugMessage, payload: item.label})
+    setSession ({type: SessionField.debugMessage, payload: item.label})
   }
 
   return (

@@ -1,4 +1,4 @@
-import Session, { SessionReducer, ThemeType } from './Session'
+import Session, { SessionField, ThemeType } from './Session'
 
 /*
   Session state object reducer
@@ -11,40 +11,40 @@ import Session, { SessionReducer, ThemeType } from './Session'
 const reducer = (session : Session, action : any) => {
   switch (action.type) {
 
-    case SessionReducer.loggedIn:
+    case SessionField.loggedIn:
       return {...session, loggedIn: action.payload}
 
-    case SessionReducer.userid:
+    case SessionField.userid:
       return {...session, userid: action.payload}
 
-    case SessionReducer.params:
+    case SessionField.params:
       return {...session, params: action.payload}
   
-    case SessionReducer.lang:
+    case SessionField.lang:
       return {...session, lang: action.payload}
 
-    case SessionReducer.orgNr:
+    case SessionField.orgNr:
       return {...session, orgNr: action.payload}
 
-    case SessionReducer.tgTheme:
+    case SessionField.tgTheme:
       return {...session, theme: session.theme === ThemeType.light ? ThemeType.dark : ThemeType.light}
     
-    case SessionReducer.roles:
+    case SessionField.roles:
       return {...session, roles: action.payload}
 
-    case SessionReducer.debugMessage:
+    case SessionField.debugMessage:
       return {...session, debugMessage: action.payload}
     
-    case SessionReducer.labels:
+    case SessionField.labels:
       return {...session, labels: action.payload}
 
-    case SessionReducer.editLabels:
+    case SessionField.editLabels:
       return {...session, editLabels: session.editLabels? false : true}
       
-    case SessionReducer.messageDialog:
+    case SessionField.messageDialog:
       return {...session, messageDialog: action.payload}
 
-    case SessionReducer.changed:
+    case SessionField.changed:
       return {...session, changed: action.payload}
   
 

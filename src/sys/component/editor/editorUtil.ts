@@ -1,9 +1,9 @@
-import { SessionReducer } from '../../system/Session'
+import { SessionField } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
 import Message, { MessageType } from '../../system/Message'
-import { EditorConfig, EditorConfigType as ECT } from './EditorConfig'
+import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types';
 import { BaseI, BaseListI, BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
@@ -78,16 +78,16 @@ export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => 
  * Load the entity's configuration
  */
 export const loadConfiguration = async(
-    editorConfig : EditorConfig<BaseListI, BaseEntI>,
+    edConf : EditorConfig<BaseListI, BaseEntI>,
     configs: Map<string, ConfigI>,
     setConfigs: any,
     setSession: any,
     setMessage: any
     ) => {
-  for (var i=0;i<editorConfig.CONFIG_ENTITIES.length;i++) {
-    var ce = editorConfig.CONFIG_ENTITIES[i]
+  for (var i=0;i<edConf.CONFIG_ENTITIES.length;i++) {
+    var ce = edConf.CONFIG_ENTITIES[i]
     if (!configs.has(ce)) {
-      var data = await apiGet(editorConfig.CONFIG_URL + '?entity=' + ce, setSession, setMessage)
+      var data = await apiGet(edConf.CONFIG_URL + '?entity=' + ce, setSession, setMessage)
       if (typeof data !== 'undefined') {
         setConfigs(new Map(configs.set(ce, data))) 
       }
@@ -96,23 +96,16 @@ export const loadConfiguration = async(
 } 
 
 
-/**
- * Update the editor list
- * @param entity id 
- * @param updated entity 
- * @param list 
- * @param setList 
- * @param setSession
- */
-export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
+//Update the editor list
+export const updateBaseList = <L extends BaseListI, E extends BaseEntI>(
+    edConf : EditorConfig<L, E>,
+    setEdConf : any,    
     id : number, 
     entity : E, 
-    list : Array<T>, 
-    setList : any,
     setSession : any) => {
 
   var x = entBaseOV(entity)
-  var o = getObjectById(id, list)
+  var o = getObjectById(id, edConf.list)
 
   if (o !== null) {
 
@@ -133,16 +126,16 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
       o.entityStatus = Status.changed
     }
 
-    var newList : T[] = []
-    for (var i=0;i<list.length;i++){
-      if (list[i].id === id) {
+    var newList : L[] = []
+    for (var i=0;i<edConf.list.length;i++){
+      if (edConf.list[i].id === id) {
         newList.push(o)
       } else {
-        newList.push(list[i])
+        newList.push(edConf.list[i])
       }
     }
-    setList(newList);
-
+    setEdConf ({type: ECF.list, payload : newList})
+    
     //Set changed (eg to activate the Commit button)
     var changed = false
     for (i=0;i<newList.length;i++){
@@ -151,7 +144,7 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
         break
       } 
     }
-    setSession ({type: SessionReducer.changed, payload : changed})
+    setSession ({type: SessionField.changed, payload : changed})
     
     return newList
   }
@@ -163,8 +156,8 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
  * - store selected editors in state
  */
  export const onListSelectionSetEditors = async <L extends BaseListI, E extends BaseEntI>(
-    ec : EditorConfig<L, E>,
-    setEc : any,    
+    edConf : EditorConfig<L, E>,
+    setEdConf : any,    
     ids : GridSelectionModel, 
     loadEntity : any) => {
 
@@ -177,30 +170,29 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
 
   //Load missing entities
   editors.forEach((id) => {
-    if (!ec.entities.has(id)) {
+    if (!edConf.entities.has(id)) {
       loadEntity (id)
     }
   })
 
-  setEc ({type: ECT.editors, payload : editors})
+  setEdConf ({type: ECF.editors, payload : editors})
 }
 
 
-export const handleCommit = async <T extends BaseListI, E extends BaseEntI>(
+export const handleCommit = async <L extends BaseListI, E extends BaseEntI>(
+      edConf : EditorConfig<L, E>,
+      setEdConf : any,        
       url: string,
-      list : Array<T>, 
-      setList : any,
-      entities : Map<number, E>, 
       setSession: any,
       setMessage: (m : Message) => void
       ) => {
 
 
-  if (entities === null) return
+  if (edConf.entities === null) return
 
   //Validate changes
-  for (var i=0;i<list.length;i++){
-    if (list[i].entityStatus === Status.invalid) {
+  for (var i=0;i<edConf.list.length;i++){
+    if (edConf.list[i].entityStatus === Status.invalid) {
       var m = new Message()
       m.type = MessageType.error
       m.message = 'saveError1'
@@ -213,9 +205,9 @@ export const handleCommit = async <T extends BaseListI, E extends BaseEntI>(
 
   //Only send updates
   var entList : E[] = []
-  for (i=0;i<list.length;i++){
-    if (list[i].changed === true) {
-      var e = entities.get(list[i].id)
+  for (i=0;i<edConf.list.length;i++){
+    if (edConf.list[i].changed === true) {
+      var e = edConf.entities.get(edConf.list[i].id)
       if (e !== null && e !== undefined) {
         entList.push(e)
       }

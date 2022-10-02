@@ -1,11 +1,12 @@
-import { useState, useContext, useMemo } from 'react'
+import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { SessionReducer } from '../system/Session'
-import EditorLM from '../component/editor/EditorLM_ORG'
+import { SessionField } from '../system/Session'
+import EditorLM from '../component/editor/EditorLM'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editor'
+import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
+import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { initEntBase } from '../definition/interfaces'
@@ -20,32 +21,30 @@ import { initEntBase } from '../definition/interfaces'
 
 const OrgEditor = () => {
   
-  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
-  
-  const CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
-  const CONFIG_URL = 'org/config'
-  const LIST_URL = 'org/list'
-  const NEW_URL = 'org/new'
-  const POST_URL = 'org/post'
-  const EXCEL_URL = 'org/excel'
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+ 
+  //State 
+  var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
+  ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
+  ed.CONFIG_URL = 'org/config'
+  ed.LIST_URL = 'org/list'
+  ed.NEW_URL = 'org/new'
+  ed.POST_URL = 'org/post'
+  ed.EXCEL_URL = 'org/excel'
 
-  //State for editors
-  const [list, setList] = useState<OrgListI[]>([])  //left list of all records
-  const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
-  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
-  const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
-
+  const [edConf, setEdConf] = useReducer(edConfRed, ed) 
 
   //Load list records
   const loadListOrg = async() => {
     let list : Array<OrgListI> = []
-    var data = await loadListBase(LIST_URL, list, setSession, setMessage)
+    var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var org = list[i]
         org.dvalue = data[i].dvalue
       }
-      setList(list)
+      setEdConf ({type: ECF.list, payload : list})
+      // setList(list)
     }
   }
 
@@ -53,7 +52,7 @@ const OrgEditor = () => {
   const loadEntityOrg = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
     if (typeof entity !== 'undefined') {
-      setEntities(new Map(entities.set(id, entity)))
+      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
       return entity
     }
   }
@@ -61,7 +60,7 @@ const OrgEditor = () => {
   //Create new entity
   const handleCreate = async () => {
     var l : OrgListI = {} as OrgListI
-    var data = await loadNewBase(NEW_URL, l, setSession, setMessage)
+    var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
    
     if (typeof data !== 'undefined') {
       l.dvalue = data[0].dvalue
@@ -71,23 +70,22 @@ const OrgEditor = () => {
       e.dvalue = l.dvalue
       e.entityStatus = l.entityStatus
       
-      setEntities(new Map(entities.set(e.id, e)))
-      setList([l, ...list])
-      return list
+      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(e.id, e))})
+      setEdConf ({type: ECF.list, payload : [l, ...edConf.list]})
     }
   }
 
   //Update list and entities
   const updateEntity = (id : number, entity : OrgEntI) => {
-    setEntities(new Map(entities.set(id, entity)))
+    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
 
     //Update non base list fields first 
-    var l = getObjectById(id, list)
+    var l : OrgListI | null = getObjectById(id, edConf.list)
     if (l !== null) {
       l.dvalue = entity.dvalue
     }
 
-    //updateBaseList (id, entity, list, setList, setSession)
+    updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
   
   //Commit CUD operations
@@ -96,59 +94,57 @@ const OrgEditor = () => {
 
       //Remember deleted records
       var dIds : Array<number> = []
-      for (var j=0;j<list.length;j++) {
-        if (list[j].changed) {
-          var e = entities.get(list[j].id)
+      for (var j=0;j<edConf.list.length;j++) {
+        if (edConf.list[j].changed) {
+          var e = edConf.entities.get(edConf.list[j].id)
           if (e !== null && e !== undefined && e.delete) {
-            dIds.push(list[j].id)
+            dIds.push(edConf.list[j].id)
           }
         }
       }
 
-      // var data = await handleCommit(POST_URL, list, setList, entities, setSession, setMessage)
-      // if (typeof data !== 'undefined') {
-      //   setLoad(true)
-      //   setSession ({type: SessionReducer.changed, payload : false})
+      var data = await handleCommit(edConf, setEdConf, edConf.POST_URL, setSession, setMessage)
+      if (typeof data !== 'undefined') {
+        setEdConf ({type: ECF.load, payload : true})
+        setSession ({type: SessionField.changed, payload : false})
 
-      //   //Reselect newly created records (if present) and remove deleted ones
-      //   setTimeout(() =>  {
-      //     var ids : Array<number> = editors.slice()
+        //Reselect newly created records (if present) and remove deleted ones
+        setTimeout(() =>  {
+          var ids : Array<number> = edConf.editors.slice()
 
-      //     //deletes
-      //     for (var j=0;j<dIds.length;j++) {
-      //       const index = ids.indexOf(dIds[j]);
-      //       if (index > -1) { 
-      //         ids.splice(index, 1); 
-      //       }
-      //     }  
+          //deletes
+          for (var j=0;j<dIds.length;j++) {
+            const index = ids.indexOf(dIds[j]);
+            if (index > -1) { 
+              ids.splice(index, 1); 
+            }
+          }  
 
-      //     //new
-      //     for (var i=0;i<data.data.length;i++) {
-      //       var id0 = data.data[i][0]
-      //       var id1 = data.data[i][1]
+          //new
+          for (var i=0;i<data.data.length;i++) {
+            var id0 = data.data[i][0]
+            var id1 = data.data[i][1]
 
-      //       for (j=0;j<list.length;j++) {
+            for (j=0;j<edConf.list.length;j++) {
 
-      //         //remove temp id and add new id
-      //         if (list[j].id === id0) {
-      //           const index = ids.indexOf(id0);
-      //           if (index > -1) { 
-      //             ids.splice(index, 1); 
-      //           }
-      //           ids.push(id1)
-      //           loadEntityOrg(id1)
-      //           break
-      //         }
-      //       }  
-      //     }
-      //     if (ids.length>0){
-      //       setEditors(ids)
-      //     }
-      //   }, 500)
-      // }
-    } catch (err : any) { 
-
-    } 
+              //remove temp id and add new id
+              if (edConf.list[j].id === id0) {
+                const index = ids.indexOf(id0);
+                if (index > -1) { 
+                  ids.splice(index, 1); 
+                }
+                ids.push(id1)
+                loadEntityOrg(id1)
+                break
+              }
+            }  
+          }
+          if (ids.length>0){
+            setEdConf ({type: ECF.editors, payload : ids})
+          }
+        }, 500)
+      }
+    } catch (err : any) { } 
   }
 
   //List Columns
@@ -164,47 +160,36 @@ const OrgEditor = () => {
   return (
     <div className='editor'>
       <div className='menu-header'>
-        <TableMenu exportExcelUrl={EXCEL_URL}>
+        <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
           <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
         </TableMenu>
       </div>
       <EditorLM 
-        configEntities={CONFIG_ENTITIES}
-        configUrl={CONFIG_URL}
+        editorConfig={edConf}
+        setEditorConfig={setEdConf}
         listColumns={columns}
-        load={load}
-        setLoad={setLoad}
         loadList={loadListOrg}
         loadEntity={loadEntityOrg}
-        list={list}
-        setList={setList}
-        entities={entities}
-        setEntities={setEntities}
-        editors={editors}
-        setEditors={setEditors}
-        selectionModel={editors}
       >
-        {editors.map((id) => {
-          var e = entities.get(id)
+        {edConf.editors.map((id : number) => {
+          var e = edConf.entities.get(id)
           return(
           e !== undefined ?
             <div key={id} className='editor-right'>
               <OrgDetail 
+                editorConfig={edConf}
+                setEditorConfig={setEdConf}
                 key={id} 
                 id={id}
                 entity={e}
                 updateEntity={updateEntity}
-                editors={editors}
-                setEditors={setEditors}
               />
             </div>
             : <div>problem</div>
         )}
         )}
       </EditorLM>
-     
-      
     </div>
   )
 }

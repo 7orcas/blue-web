@@ -1,9 +1,11 @@
-import { useContext, useEffect, useMemo, FC } from 'react'
+import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, useLabel, onListSelectionSetEditors, getObjectById } from '../component/editor/editor'
-import { OrgListI, OrgEntI } from './org'
+import { loadConfiguration } from '../component/editor/editorUtil'
+import { OrgEntI } from './org'
+import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
+import { BaseListI, BaseEntI } from '../definition/interfaces'
 import LangLabel from '../lang/LangLabel';
-import { Checkbox, FormControl } from '@mui/material'
+import { Checkbox } from '@mui/material'
 import TextField from '../component/utils/TextField'
 
 /*
@@ -15,37 +17,38 @@ import TextField from '../component/utils/TextField'
 */
 
 interface Props {
+  editorConfig : EditorConfig<BaseListI, BaseEntI>
+  setEditorConfig : any
   id : number
   entity : OrgEntI
   updateEntity : any
-  editors: Array<number>
-  setEditors: (t : Array<number>) => void
 }
   
 const OrgDetail : FC<Props> = ({ 
+      editorConfig,
+      setEditorConfig,
       id, 
       entity, 
-      updateEntity,
-      editors, 
-      setEditors }) => {
-  
+      updateEntity}) => {
+        
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
-  
-  const CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
-  const CONFIG_URL = 'org/config'
-
-  //Initial load 
-  useEffect(() => {
-
-    //Load entity configurations
-    loadConfiguration(
-      CONFIG_ENTITIES,
-      CONFIG_URL,
+        
+  //Load entity configurations
+  const loadConfigurationX = useCallback(() => {
+    return loadConfiguration(
+      editorConfig,
       configs,
       setConfigs,
       setSession,
       setMessage)
-  },[CONFIG_ENTITIES, configs, setConfigs, setMessage, setSession])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []
+  )
+
+  //Initial load 
+  useEffect(() => {
+    loadConfigurationX()
+  },[loadConfigurationX])
 
 
   const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,14 +85,14 @@ const OrgDetail : FC<Props> = ({
 
   //Close this editor
   const close = () => {
-    var ids : Array<number> = editors.slice()
+    var ids : Array<number> = editorConfig.editors.slice()
     for (var j=0;j<ids.length;j++) {
       const index = ids.indexOf(id);
       if (index > -1) { 
         ids.splice(index, 1); 
       }
     }  
-    setEditors(ids)
+    setEditorConfig ({type: ECF.editors, payload : ids})
   }
 
   const title = () => {

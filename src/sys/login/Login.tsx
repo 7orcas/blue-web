@@ -2,7 +2,7 @@ import './login.css'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AppContext, { AppContextI } from '../system/AppContext'
-import { SessionReducer } from '../system/Session'
+import { SessionField } from '../system/Session'
 import LangLabel from '../lang/LangLabel'
 import useLabel from '../lang/useLabel'
 import login from './login'
@@ -33,7 +33,7 @@ const Login = () => {
     const attempt = { u: session.userid, p : pw, o : session.orgNr, l : session.lang };
     var r = await login (attempt, setErr)
     if (r) {
-      setSession ({ type: SessionReducer.loggedIn, payload: true })
+      setSession ({ type: SessionField.loggedIn, payload: true })
       navigate("reloginok");
     }
 
