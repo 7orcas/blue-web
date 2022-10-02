@@ -20,7 +20,6 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
     listColumns: GridColDef[] 
     loadList: any
     loadEntity: any 
-    selectionModel: Array<number> | undefined
     children: any
   }
     
@@ -30,7 +29,6 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
         listColumns,
         loadList, 
         loadEntity, 
-        selectionModel,
         children }) => {
   
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
@@ -75,7 +73,7 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
               pageSize={25}
               rowsPerPageOptions={[25]}
               checkboxSelection
-              selectionModel={selectionModel}
+              selectionModel={editorConfig.editors}
               onSelectionModelChange={handleSelection}
               getRowClassName={(params) => `table-grid-status-${params.row.entityStatus}`}
               getCellClassName={(params: GridCellParams<number>) => {

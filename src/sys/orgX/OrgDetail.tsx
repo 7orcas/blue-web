@@ -1,12 +1,11 @@
-import { useContext, useEffect, useMemo, FC, useCallback } from 'react'
+import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, useLabel, onListSelectionSetEditors, getObjectById } from '../component/editor/editorUtil'
+import { loadConfiguration } from '../component/editor/editorUtil'
 import { OrgListI, OrgEntI } from './org'
-import { EditorConfig, EditorConfigType } from '../component/editor/EditorConfig'
-import { ConfigI, ConfigFieldI } from '../definition/interfaces';
+import { EditorConfig, EditorConfigType as ECT } from '../component/editor/EditorConfig'
 import { BaseListI, BaseEntI } from '../definition/interfaces'
 import LangLabel from '../lang/LangLabel';
-import { Checkbox, FormControl } from '@mui/material'
+import { Checkbox } from '@mui/material'
 import TextField from '../component/utils/TextField'
 
 /*
@@ -17,7 +16,7 @@ import TextField from '../component/utils/TextField'
   @author John Stewart
 */
 
-interface Props <L extends BaseListI, E extends BaseEntI> {
+interface Props {
   editorConfig : EditorConfig<BaseListI, BaseEntI>
   setEditorConfig : any
   id : number
@@ -25,7 +24,7 @@ interface Props <L extends BaseListI, E extends BaseEntI> {
   updateEntity : any
 }
   
-const OrgDetail : FC<Props<OrgListI, OrgEntI>> = ({ 
+const OrgDetail : FC<Props> = ({ 
       editorConfig,
       setEditorConfig,
       id, 
@@ -93,7 +92,7 @@ const OrgDetail : FC<Props<OrgListI, OrgEntI>> = ({
         ids.splice(index, 1); 
       }
     }  
-    setEditorConfig ({type: EditorConfigType.editors, payload : ids})
+    setEditorConfig ({type: ECT.editors, payload : ids})
   }
 
   const title = () => {

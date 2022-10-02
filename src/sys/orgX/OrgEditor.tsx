@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo, useReducer } from 'react'
+import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionReducer } from '../system/Session'
 import EditorLM from '../component/editor/EditorLM'
@@ -6,7 +6,7 @@ import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editor'
-import { EditorConfig, editorConfigReducer, EditorConfigType } from '../component/editor/EditorConfig'
+import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigType as ECT } from '../component/editor/EditorConfig'
 import { OrgListI, OrgEntI, loadOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { initEntBase } from '../definition/interfaces'
@@ -22,15 +22,8 @@ import { initEntBase } from '../definition/interfaces'
 const OrgEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
-  
-
-  //State for editors
-  // const [list, setList] = useState<OrgListI[]>([])  //left list of all records
-  // const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
-  // const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
-  //const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
-
-  //Editor Config Holds State
+ 
+  //State 
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
   ed.CONFIG_URL = 'org/config'
@@ -39,9 +32,7 @@ const OrgEditor = () => {
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
 
-  const [edConf, setEdConf] = useReducer(editorConfigReducer, ed) 
-  
-
+  const [edConf, setEdConf] = useReducer(edConfRed, ed) 
 
   //Load list records
   const loadListOrg = async() => {
@@ -52,7 +43,7 @@ const OrgEditor = () => {
         var org = list[i]
         org.dvalue = data[i].dvalue
       }
-      setEdConf ({type: EditorConfigType.list, payload : list})
+      setEdConf ({type: ECT.list, payload : list})
       // setList(list)
     }
   }
@@ -61,7 +52,7 @@ const OrgEditor = () => {
   const loadEntityOrg = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
     if (typeof entity !== 'undefined') {
-      setEdConf ({type: EditorConfigType.entities, payload : new Map(edConf.entities.set(id, entity))})
+      setEdConf ({type: ECT.entities, payload : new Map(edConf.entities.set(id, entity))})
       return entity
     }
   }
@@ -79,14 +70,14 @@ const OrgEditor = () => {
       e.dvalue = l.dvalue
       e.entityStatus = l.entityStatus
       
-      setEdConf ({type: EditorConfigType.entities, payload : new Map(edConf.entities.set(e.id, e))})
-      setEdConf ({type: EditorConfigType.list, payload : [l, ...edConf.list]})
+      setEdConf ({type: ECT.entities, payload : new Map(edConf.entities.set(e.id, e))})
+      setEdConf ({type: ECT.list, payload : [l, ...edConf.list]})
     }
   }
 
   //Update list and entities
   const updateEntity = (id : number, entity : OrgEntI) => {
-    setEdConf ({type: EditorConfigType.entities, payload : new Map(edConf.entities.set(id, entity))})
+    setEdConf ({type: ECT.entities, payload : new Map(edConf.entities.set(id, entity))})
 
     //Update non base list fields first 
     var l : OrgListI | null = getObjectById(id, edConf.list)
@@ -114,7 +105,7 @@ const OrgEditor = () => {
 
       var data = await handleCommit(edConf, setEdConf, edConf.POST_URL, setSession, setMessage)
       if (typeof data !== 'undefined') {
-        setEdConf ({type: EditorConfigType.load, payload : true})
+        setEdConf ({type: ECT.load, payload : true})
         setSession ({type: SessionReducer.changed, payload : false})
 
         //Reselect newly created records (if present) and remove deleted ones
@@ -182,7 +173,6 @@ const OrgEditor = () => {
         listColumns={columns}
         loadList={loadListOrg}
         loadEntity={loadEntityOrg}
-        selectionModel={edConf.editors}
       >
         {edConf.editors.map((id : number) => {
           var e = edConf.entities.get(id)
@@ -190,7 +180,7 @@ const OrgEditor = () => {
           e !== undefined ?
             <div key={id} className='editor-right'>
               <OrgDetail 
-                editorConfig={edConf} 
+                editorConfig={edConf}
                 setEditorConfig={setEdConf}
                 key={id} 
                 id={id}
@@ -202,8 +192,6 @@ const OrgEditor = () => {
         )}
         )}
       </EditorLM>
-     
-      
     </div>
   )
 }

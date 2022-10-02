@@ -22,7 +22,7 @@ export enum EditorConfigType {
   load,
 }
 
-
+//Class to store editor variables
 export class EditorConfig <L extends BaseListI, E extends BaseEntI> {
   CONFIG_ENTITIES : string[] = ['']
   CONFIG_URL : string = ''
