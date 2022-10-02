@@ -1,6 +1,5 @@
 import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { SessionField } from '../system/Session'
 import EditorLM from '../component/editor/EditorLM'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
@@ -91,59 +90,7 @@ const OrgEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-
-      //Remember deleted records
-      var dIds : Array<number> = []
-      for (var j=0;j<edConf.list.length;j++) {
-        if (edConf.list[j].changed) {
-          var e = edConf.entities.get(edConf.list[j].id)
-          if (e !== null && e !== undefined && e.delete) {
-            dIds.push(edConf.list[j].id)
-          }
-        }
-      }
-
-      var data = await handleCommit(edConf, setEdConf, edConf.POST_URL, setSession, setMessage)
-      if (typeof data !== 'undefined') {
-        setEdConf ({type: ECF.load, payload : true})
-        setSession ({type: SessionField.changed, payload : false})
-
-        //Reselect newly created records (if present) and remove deleted ones
-        setTimeout(() =>  {
-          var ids : Array<number> = edConf.editors.slice()
-
-          //deletes
-          for (var j=0;j<dIds.length;j++) {
-            const index = ids.indexOf(dIds[j]);
-            if (index > -1) { 
-              ids.splice(index, 1); 
-            }
-          }  
-
-          //new
-          for (var i=0;i<data.data.length;i++) {
-            var id0 = data.data[i][0]
-            var id1 = data.data[i][1]
-
-            for (j=0;j<edConf.list.length;j++) {
-
-              //remove temp id and add new id
-              if (edConf.list[j].id === id0) {
-                const index = ids.indexOf(id0);
-                if (index > -1) { 
-                  ids.splice(index, 1); 
-                }
-                ids.push(id1)
-                loadEntityOrg(id1)
-                break
-              }
-            }  
-          }
-          if (ids.length>0){
-            setEdConf ({type: ECF.editors, payload : ids})
-          }
-        }, 500)
-      }
+      handleCommit(edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setSession, setMessage)
     } catch (err : any) { } 
   }
 

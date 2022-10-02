@@ -1,6 +1,7 @@
 import axios from '../../api/apiAxiosUpload'
 import { FC, useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { JsonResponseI } from '../../definition/types';
 import Message, { MessageType } from '../../system/Message'
 import LangLabel from '../../lang/LangLabel'
 
@@ -33,19 +34,19 @@ const UploadDialog : FC<Props> = ({ title, rest, clazz, setMessage, openUpload, 
       var m = new Message()
       
       switch (response.data.returnCode) {
-        case 0: //no change
+        case JsonResponseI.noChange: 
           m.message = response.data.data
           setOpenUpload (false)
           console.log('no change')          
           break
           
-          case 1: //upload successful
+          case JsonResponseI.uploaded: //upload successful
           m.message = response.data.data
           setOpenUpload (false)
           console.log('update ok')          
           break
           
-          case -1: //upload error
+          case JsonResponseI.invalid: //upload error
           m.type = MessageType.error
           m.message = response.data.error
           m.detail = response.data.errorDetail

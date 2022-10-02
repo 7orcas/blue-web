@@ -1,6 +1,7 @@
 import axios from './apiAxios'
 import { SessionField } from '../system/Session'
 import Message, { MessageType } from '../system/Message'
+import { JsonResponseI } from '../definition/types';
 
 /*
   Generic POST method to contact the server
@@ -12,14 +13,22 @@ import Message, { MessageType } from '../system/Message'
 const apiPost = async (url : string, data : any, setSession : any, setMessage : any) => {
   var message = ''
   var detail = ''
+  
+  var m = new Message()
+  m.type = MessageType.error
 
   try {
     const response = await axios.post(`${ url }`, data)
     
     //Valid return object
-    if (response.data.valid){
+    if (response.data.returnCode === JsonResponseI.ok) {
       return response.data
     }
+
+    if (response.data.returnCode === JsonResponseI.updateConflict) {
+
+    }
+
     message = response.data.error
     detail = response.data.errorDetail
     
@@ -33,8 +42,7 @@ const apiPost = async (url : string, data : any, setSession : any, setMessage : 
   
     message = err.message
   } 
-  var m = new Message()
-  m.type = MessageType.error
+
   m.context = url
   m.message = message
   m.detail = detail

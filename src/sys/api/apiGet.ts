@@ -1,6 +1,7 @@
 import axios from './apiAxios'
 import { SessionField } from '../system/Session'
 import Message, { MessageType } from '../system/Message'
+import { JsonResponseI } from '../definition/types';
 
 /*
   Generic GET method to contact the server
@@ -17,7 +18,7 @@ const apiGet = async (url : string, setSession : any, setMessage : any) => {
     const response = await axios.get(`${ url }`)
     
     //Valid return object
-    if (response.data.valid){
+    if (response.data.returnCode === JsonResponseI.ok) {
       return response.data.data
     }
 

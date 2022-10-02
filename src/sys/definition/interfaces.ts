@@ -15,6 +15,8 @@ export interface BaseI {
   code: string
   descr: string
   active: boolean
+  created: string
+  updated: string
   delete: boolean //Client attribute
   entityStatus: EntityStatusType //Client attribute
 }
@@ -46,6 +48,8 @@ const initBase = (data : any, base : BaseI) => {
   base.code = typeof data.code !== 'undefined'? data.code : '?'
   base.descr = typeof data.descr !== 'undefined'? data.descr : ''
   base.active = typeof data.active !== 'undefined'? data.active : true
+  base.created = typeof data.created !== 'undefined'? data.created : null
+  base.updated = typeof data.updated !== 'undefined'? data.updated : null
   base.delete = false
   base.entityStatus = EntityStatusType.valid
 }

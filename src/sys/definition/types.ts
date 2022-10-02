@@ -8,6 +8,16 @@
 */
 
 
+//Defined in Java. Keep in-sync!
+export enum JsonResponseI {
+  ok = 0,
+  error = -1,
+  invalid = -2,
+  updateConflict = -3,
+  noChange = 1,
+  uploaded = 3,
+}
+
 export enum EntityStatusType {
   valid = 0,
   changed = 1,

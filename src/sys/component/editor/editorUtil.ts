@@ -50,21 +50,12 @@ export const loadNewBase = async <L extends BaseListI>(
   } catch (err : any) { } 
 }
 
-/**
- * Return a label
- * @param key 
- * @returns 
- */
+//Return a label
 export const useLabel = (key : string) => {
   return useLabelX(key)
 }
 
-/**
- * Return object by it's id
- * @param id 
- * @param list 
- * @returns 
- */
+//Return object by it's id
 export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => {
   for (var i=0;i<list.length;i++){
     if (list[i].id === id) {
@@ -74,9 +65,7 @@ export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => 
   return null;
 }
 
-/**
- * Load the entity's configuration
- */
+//Load the entity's configuration
 export const loadConfiguration = async(
     edConf : EditorConfig<BaseListI, BaseEntI>,
     configs: Map<string, ConfigI>,
@@ -178,11 +167,12 @@ export const updateBaseList = <L extends BaseListI, E extends BaseEntI>(
   setEdConf ({type: ECF.editors, payload : editors})
 }
 
-
+//Commit updates, reload entity list, reselect list and reload entities
 export const handleCommit = async <L extends BaseListI, E extends BaseEntI>(
       edConf : EditorConfig<L, E>,
       setEdConf : any,        
       url: string,
+      loadEntityOrg : any,
       setSession: any,
       setMessage: (m : Message) => void
       ) => {
@@ -203,11 +193,22 @@ export const handleCommit = async <L extends BaseListI, E extends BaseEntI>(
     }
   }
 
+  //Remember deleted records
+  var dIds : Array<number> = []
+  for (var j=0;j<edConf.list.length;j++) {
+    if (edConf.list[j].changed) {
+      var e = edConf.entities.get(edConf.list[j].id)
+      if (e !== null && e !== undefined && e.delete) {
+        dIds.push(edConf.list[j].id)
+      }
+    }
+  }
+
   //Only send updates
   var entList : E[] = []
   for (i=0;i<edConf.list.length;i++){
     if (edConf.list[i].changed === true) {
-      var e = edConf.entities.get(edConf.list[i].id)
+      e = edConf.entities.get(edConf.list[i].id)
       if (e !== null && e !== undefined) {
         entList.push(e)
       }
@@ -218,6 +219,44 @@ export const handleCommit = async <L extends BaseListI, E extends BaseEntI>(
 
   //Reset changes?
   if (data !== undefined){
+    setEdConf ({type: ECF.load, payload : true})
+    setSession ({type: SessionField.changed, payload : false})
+
+    //Reselect newly created records (if present) and remove deleted ones
+    setTimeout(() =>  {
+      var ids : Array<number> = edConf.editors.slice()
+
+      //deletes
+      for (var j=0;j<dIds.length;j++) {
+        const index = ids.indexOf(dIds[j]);
+        if (index > -1) { 
+          ids.splice(index, 1); 
+        }
+      }  
+
+      //new
+      for (var i=0;i<data.data.length;i++) {
+        var id0 = data.data[i][0]
+        var id1 = data.data[i][1]
+
+        for (j=0;j<edConf.list.length;j++) {
+
+          //remove temp id and add new id
+          if (edConf.list[j].id === id0) {
+            const index = ids.indexOf(id0);
+            if (index > -1) { 
+              ids.splice(index, 1); 
+            }
+            ids.push(id1)
+            loadEntityOrg(id1)
+            break
+          }
+        }  
+      }
+      if (ids.length>0){
+        setEdConf ({type: ECF.editors, payload : ids})
+      }
+    }, 500)
     return data
   }
   

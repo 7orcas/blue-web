@@ -7,6 +7,7 @@ import LangLabel from '../lang/LangLabel'
 import useLabel from '../lang/useLabel'
 import login from './login'
 import Button from '../component/utils/Button';
+import { JsonResponseI } from '../definition/types';
 
 const Login = () => {
 
@@ -31,8 +32,8 @@ const Login = () => {
     }
 
     const attempt = { u: session.userid, p : pw, o : session.orgNr, l : session.lang };
-    var r = await login (attempt, setErr)
-    if (r) {
+    var rc = await login (attempt, setErr)
+    if (rc === JsonResponseI.ok) {
       setSession ({ type: SessionField.loggedIn, payload: true })
       navigate("reloginok");
     }

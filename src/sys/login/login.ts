@@ -11,7 +11,7 @@ const login = async (attempt : any, setErr : any) => {
       return false
     }
 
-    return response.data.valid
+    return response.data.returnCode
 
   } catch (err : any) {
     setErr(err)
