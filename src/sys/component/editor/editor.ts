@@ -2,6 +2,7 @@ import { SessionReducer } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
+import { EditorConfig, EditorConfigType as ect } from './EditorConfig'
 import Message, { MessageType } from '../../system/Message'
 import { EntityStatusType as Status } from '../../definition/types';
 import { BaseI, BaseListI, BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
@@ -105,14 +106,14 @@ export const loadConfiguration = async(
  * @param setSession
  */
 export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
+    ec : EditorConfig<T, E>,
+    setEc : any,
     id : number, 
     entity : E, 
-    list : Array<T>, 
-    setList : any,
     setSession : any) => {
 
   var x = entBaseOV(entity)
-  var o = getObjectById(id, list)
+  var o = getObjectById(id, ec.list)
 
   if (o !== null) {
 
@@ -134,15 +135,15 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
     }
 
     var newList : T[] = []
-    for (var i=0;i<list.length;i++){
-      if (list[i].id === id) {
+    for (var i=0;i<ec.list.length;i++){
+      if (ec.list[i].id === id) {
         newList.push(o)
       } else {
-        newList.push(list[i])
+        newList.push(ec.list[i])
       }
     }
-    setList(newList);
-
+    setEc ({type: ect.list, payload : newList})
+    
     //Set changed (eg to activate the Commit button)
     var changed = false
     for (i=0;i<newList.length;i++){
@@ -166,11 +167,10 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
  * @param entities 
  * @param loadEntity 
  */
-export const onListSelectionSetEditors = async <T extends BaseEntI>(
+export const onListSelectionSetEditors = async <L extends BaseListI, E extends BaseEntI>(
+      ec : EditorConfig<L, E>,
+      setEc : any,    
       ids : GridSelectionModel, 
-      setEditors : any, 
-      entities : Map<number, T>, 
-      setEntities : any, 
       loadEntity : any) => {
 
   var editors: Array<number> = []
@@ -182,31 +182,29 @@ export const onListSelectionSetEditors = async <T extends BaseEntI>(
 
   //Load missing entities
   editors.forEach((id) => {
-    if (!entities.has(id)) {
-console.log('editors load' + id)                    
+    if (!ec.entities.has(id)) {
       loadEntity (id)
     }
   })
  
-  setEditors(editors);
+  setEc ({type: ect.editors, payload : editors})
 }
 
 
-export const handleCommit = async <T extends BaseListI, E extends BaseEntI>(
+export const handleCommit = async <L extends BaseListI, E extends BaseEntI>(
+      ec : EditorConfig<L, E>,
+      setEc : any,
       url: string,
-      list : Array<T>, 
-      setList : any,
-      entities : Map<number, E>, 
       setSession: any,
       setMessage: (m : Message) => void
       ) => {
 
 
-  if (entities === null) return
+  if (ec.entities === null) return
 
   //Validate changes
-  for (var i=0;i<list.length;i++){
-    if (list[i].entityStatus === Status.invalid) {
+  for (var i=0;i<ec.list.length;i++){
+    if (ec.list[i].entityStatus === Status.invalid) {
       var m = new Message()
       m.type = MessageType.error
       m.message = 'saveError1'
@@ -219,9 +217,9 @@ export const handleCommit = async <T extends BaseListI, E extends BaseEntI>(
 
   //Only send updates
   var entList : E[] = []
-  for (i=0;i<list.length;i++){
-    if (list[i].changed === true) {
-      var e = entities.get(list[i].id)
+  for (i=0;i<ec.list.length;i++){
+    if (ec.list[i].changed === true) {
+      var e = ec.entities.get(ec.list[i].id)
       if (e !== null && e !== undefined) {
         entList.push(e)
       }

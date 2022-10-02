@@ -87,7 +87,7 @@ const OrgEditor = () => {
       l.dvalue = entity.dvalue
     }
 
-    updateBaseList (id, entity, list, setList, setSession)
+    //updateBaseList (id, entity, list, setList, setSession)
   }
   
   //Commit CUD operations
@@ -105,47 +105,47 @@ const OrgEditor = () => {
         }
       }
 
-      var data = await handleCommit(POST_URL, list, setList, entities, setSession, setMessage)
-      if (typeof data !== 'undefined') {
-        setLoad(true)
-        setSession ({type: SessionReducer.changed, payload : false})
+      // var data = await handleCommit(POST_URL, list, setList, entities, setSession, setMessage)
+      // if (typeof data !== 'undefined') {
+      //   setLoad(true)
+      //   setSession ({type: SessionReducer.changed, payload : false})
 
-        //Reselect newly created records (if present) and remove deleted ones
-        setTimeout(() =>  {
-          var ids : Array<number> = editors.slice()
+      //   //Reselect newly created records (if present) and remove deleted ones
+      //   setTimeout(() =>  {
+      //     var ids : Array<number> = editors.slice()
 
-          //deletes
-          for (var j=0;j<dIds.length;j++) {
-            const index = ids.indexOf(dIds[j]);
-            if (index > -1) { 
-              ids.splice(index, 1); 
-            }
-          }  
+      //     //deletes
+      //     for (var j=0;j<dIds.length;j++) {
+      //       const index = ids.indexOf(dIds[j]);
+      //       if (index > -1) { 
+      //         ids.splice(index, 1); 
+      //       }
+      //     }  
 
-          //new
-          for (var i=0;i<data.data.length;i++) {
-            var id0 = data.data[i][0]
-            var id1 = data.data[i][1]
+      //     //new
+      //     for (var i=0;i<data.data.length;i++) {
+      //       var id0 = data.data[i][0]
+      //       var id1 = data.data[i][1]
 
-            for (j=0;j<list.length;j++) {
+      //       for (j=0;j<list.length;j++) {
 
-              //remove temp id and add new id
-              if (list[j].id === id0) {
-                const index = ids.indexOf(id0);
-                if (index > -1) { 
-                  ids.splice(index, 1); 
-                }
-                ids.push(id1)
-                loadEntityOrg(id1)
-                break
-              }
-            }  
-          }
-          if (ids.length>0){
-            setEditors(ids)
-          }
-        }, 500)
-      }
+      //         //remove temp id and add new id
+      //         if (list[j].id === id0) {
+      //           const index = ids.indexOf(id0);
+      //           if (index > -1) { 
+      //             ids.splice(index, 1); 
+      //           }
+      //           ids.push(id1)
+      //           loadEntityOrg(id1)
+      //           break
+      //         }
+      //       }  
+      //     }
+      //     if (ids.length>0){
+      //       setEditors(ids)
+      //     }
+      //   }, 500)
+      // }
     } catch (err : any) { 
 
     } 

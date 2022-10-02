@@ -2,9 +2,9 @@ import { useContext, useEffect, useMemo, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { loadConfiguration, useLabel, onListSelectionSetEditors, getObjectById } from '../component/editor/editorUtil'
 import { OrgListI, OrgEntI } from './org'
-import { EditorConfig } from '../component/editor/EditorConfig'
+import { EditorConfig, EditorConfigType } from '../component/editor/EditorConfig'
 import { ConfigI, ConfigFieldI } from '../definition/interfaces';
-import { BaseEntI, BaseListI } from '../definition/interfaces'
+import { BaseListI, BaseEntI } from '../definition/interfaces'
 import LangLabel from '../lang/LangLabel';
 import { Checkbox, FormControl } from '@mui/material'
 import TextField from '../component/utils/TextField'
@@ -17,24 +17,20 @@ import TextField from '../component/utils/TextField'
   @author John Stewart
 */
 
-interface Props {
+interface Props <L extends BaseListI, E extends BaseEntI> {
   editorConfig : EditorConfig<BaseListI, BaseEntI>
   setEditorConfig : any
   id : number
   entity : OrgEntI
   updateEntity : any
-  editors: Array<number>
-  setEditors: (t : Array<number>) => void
 }
   
-const OrgDetail : FC<Props> = ({ 
+const OrgDetail : FC<Props<OrgListI, OrgEntI>> = ({ 
       editorConfig,
       setEditorConfig,
       id, 
       entity, 
-      updateEntity,
-      editors, 
-      setEditors }) => {
+      updateEntity}) => {
         
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
         
@@ -90,14 +86,14 @@ const OrgDetail : FC<Props> = ({
 
   //Close this editor
   const close = () => {
-    var ids : Array<number> = editors.slice()
+    var ids : Array<number> = editorConfig.editors.slice()
     for (var j=0;j<ids.length;j++) {
       const index = ids.indexOf(id);
       if (index > -1) { 
         ids.splice(index, 1); 
       }
     }  
-    setEditors(ids)
+    setEditorConfig ({type: EditorConfigType.editors, payload : ids})
   }
 
   const title = () => {

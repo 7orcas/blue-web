@@ -3,7 +3,7 @@ import apiGet from '../../api/apiGet'
 import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
 import Message, { MessageType } from '../../system/Message'
-import { EditorConfig } from './EditorConfig';
+import { EditorConfig, EditorConfigType as ECT } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types';
 import { BaseI, BaseListI, BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
@@ -161,17 +161,12 @@ export const updateBaseList = <T extends BaseListI, E extends BaseEntI>(
  * Action a list multi-selection
  * - load entity if required
  * - store selected editors in state
- * @param ids 
- * @param setEditors 
- * @param entities 
- * @param loadEntity 
  */
-export const onListSelectionSetEditors = async <T extends BaseEntI>(
-      ids : GridSelectionModel, 
-      setEditors : any, 
-      entities : Map<number, T>, 
-      setEntities : any, 
-      loadEntity : any) => {
+ export const onListSelectionSetEditors = async <L extends BaseListI, E extends BaseEntI>(
+    ec : EditorConfig<L, E>,
+    setEc : any,    
+    ids : GridSelectionModel, 
+    loadEntity : any) => {
 
   var editors: Array<number> = []
 
@@ -182,13 +177,12 @@ export const onListSelectionSetEditors = async <T extends BaseEntI>(
 
   //Load missing entities
   editors.forEach((id) => {
-    if (!entities.has(id)) {
-console.log('editors load' + id)                    
+    if (!ec.entities.has(id)) {
       loadEntity (id)
     }
   })
- 
-  setEditors(editors);
+
+  setEc ({type: ECT.editors, payload : editors})
 }
 
 

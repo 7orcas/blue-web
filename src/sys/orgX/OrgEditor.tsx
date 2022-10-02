@@ -25,9 +25,9 @@ const OrgEditor = () => {
   
 
   //State for editors
-  const [list, setList] = useState<OrgListI[]>([])  //left list of all records
-  const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
-  const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
+  // const [list, setList] = useState<OrgListI[]>([])  //left list of all records
+  // const [editors, setEditors] = useState<Array<number>>([])  //detailed editors (contains entity id)
+  // const [entities, setEntities] = useState<Map<number,OrgEntI>>(new Map()) //loaded full entities
   //const [load, setLoad] = useState(true) //flag to load editor (always initialise true)
 
   //Editor Config Holds State
@@ -39,20 +39,21 @@ const OrgEditor = () => {
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
 
-  const [editorConfig, setEditorConfig] = useReducer(editorConfigReducer, ed) 
+  const [edConf, setEdConf] = useReducer(editorConfigReducer, ed) 
   
 
 
   //Load list records
   const loadListOrg = async() => {
     let list : Array<OrgListI> = []
-    var data = await loadListBase(editorConfig.LIST_URL, list, setSession, setMessage)
+    var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var org = list[i]
         org.dvalue = data[i].dvalue
       }
-      setList(list)
+      setEdConf ({type: EditorConfigType.list, payload : list})
+      // setList(list)
     }
   }
 
@@ -60,7 +61,7 @@ const OrgEditor = () => {
   const loadEntityOrg = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
     if (typeof entity !== 'undefined') {
-      setEntities(new Map(entities.set(id, entity)))
+      setEdConf ({type: EditorConfigType.entities, payload : new Map(edConf.entities.set(id, entity))})
       return entity
     }
   }
@@ -68,7 +69,7 @@ const OrgEditor = () => {
   //Create new entity
   const handleCreate = async () => {
     var l : OrgListI = {} as OrgListI
-    var data = await loadNewBase(editorConfig.NEW_URL, l, setSession, setMessage)
+    var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
    
     if (typeof data !== 'undefined') {
       l.dvalue = data[0].dvalue
@@ -78,23 +79,22 @@ const OrgEditor = () => {
       e.dvalue = l.dvalue
       e.entityStatus = l.entityStatus
       
-      setEntities(new Map(entities.set(e.id, e)))
-      setList([l, ...list])
-      return list
+      setEdConf ({type: EditorConfigType.entities, payload : new Map(edConf.entities.set(e.id, e))})
+      setEdConf ({type: EditorConfigType.list, payload : [l, ...edConf.list]})
     }
   }
 
   //Update list and entities
   const updateEntity = (id : number, entity : OrgEntI) => {
-    setEntities(new Map(entities.set(id, entity)))
+    setEdConf ({type: EditorConfigType.entities, payload : new Map(edConf.entities.set(id, entity))})
 
     //Update non base list fields first 
-    var l = getObjectById(id, list)
+    var l : OrgListI | null = getObjectById(id, edConf.list)
     if (l !== null) {
       l.dvalue = entity.dvalue
     }
 
-    updateBaseList (id, entity, list, setList, setSession)
+    updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
   
   //Commit CUD operations
@@ -103,23 +103,23 @@ const OrgEditor = () => {
 
       //Remember deleted records
       var dIds : Array<number> = []
-      for (var j=0;j<list.length;j++) {
-        if (list[j].changed) {
-          var e = entities.get(list[j].id)
+      for (var j=0;j<edConf.list.length;j++) {
+        if (edConf.list[j].changed) {
+          var e = edConf.entities.get(edConf.list[j].id)
           if (e !== null && e !== undefined && e.delete) {
-            dIds.push(list[j].id)
+            dIds.push(edConf.list[j].id)
           }
         }
       }
 
-      var data = await handleCommit(editorConfig.POST_URL, list, setList, entities, setSession, setMessage)
+      var data = await handleCommit(edConf, setEdConf, edConf.POST_URL, setSession, setMessage)
       if (typeof data !== 'undefined') {
-        setEditorConfig ({type: EditorConfigType.load, payload : true})
+        setEdConf ({type: EditorConfigType.load, payload : true})
         setSession ({type: SessionReducer.changed, payload : false})
 
         //Reselect newly created records (if present) and remove deleted ones
         setTimeout(() =>  {
-          var ids : Array<number> = editors.slice()
+          var ids : Array<number> = edConf.editors.slice()
 
           //deletes
           for (var j=0;j<dIds.length;j++) {
@@ -134,10 +134,10 @@ const OrgEditor = () => {
             var id0 = data.data[i][0]
             var id1 = data.data[i][1]
 
-            for (j=0;j<list.length;j++) {
+            for (j=0;j<edConf.list.length;j++) {
 
               //remove temp id and add new id
-              if (list[j].id === id0) {
+              if (edConf.list[j].id === id0) {
                 const index = ids.indexOf(id0);
                 if (index > -1) { 
                   ids.splice(index, 1); 
@@ -149,7 +149,7 @@ const OrgEditor = () => {
             }  
           }
           if (ids.length>0){
-            setEditors(ids)
+            edConf.editors(ids)
           }
         }, 500)
       }
@@ -171,39 +171,31 @@ const OrgEditor = () => {
   return (
     <div className='editor'>
       <div className='menu-header'>
-        <TableMenu exportExcelUrl={editorConfig.EXCEL_URL}>
+        <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
           <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
         </TableMenu>
       </div>
       <EditorLM 
-        editorConfig={editorConfig}
-        setEditorConfig={setEditorConfig}
+        editorConfig={edConf}
+        setEditorConfig={setEdConf}
         listColumns={columns}
         loadList={loadListOrg}
         loadEntity={loadEntityOrg}
-        list={list}
-        setList={setList}
-        entities={entities}
-        setEntities={setEntities}
-        editors={editors}
-        setEditors={setEditors}
-        selectionModel={editors}
+        selectionModel={edConf.editors}
       >
-        {editors.map((id) => {
-          var e = entities.get(id)
+        {edConf.editors.map((id : number) => {
+          var e = edConf.entities.get(id)
           return(
           e !== undefined ?
             <div key={id} className='editor-right'>
               <OrgDetail 
-                editorConfig={editorConfig} 
-                setEditorConfig={setEditorConfig}
+                editorConfig={edConf} 
+                setEditorConfig={setEdConf}
                 key={id} 
                 id={id}
                 entity={e}
                 updateEntity={updateEntity}
-                editors={editors}
-                setEditors={setEditors}
               />
             </div>
             : <div>problem</div>

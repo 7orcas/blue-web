@@ -78,7 +78,7 @@ const EditorLM : FC<Props> = ({
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
 
-    onListSelectionSetEditors(ids, setEditors, entities, setEntities, loadEntity)
+    // onListSelectionSetEditors(ids, setEditors, entities, setEntities, loadEntity)
   }
 
   return (

@@ -33,7 +33,7 @@ export class EditorConfig <L extends BaseListI, E extends BaseEntI> {
 
   list : L[] = []  //left list of all records
   editors : Array<number> = []  //detailed editors (contains entity id)
-  entities : E[] = []  //loaded full entities
+  entities : Map<number,E> = new Map()  //loaded full entities
   load : boolean = true  //flag to load editor (always initialise true)
 }
 

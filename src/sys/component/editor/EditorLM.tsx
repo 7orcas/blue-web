@@ -20,12 +20,6 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
     listColumns: GridColDef[] 
     loadList: any
     loadEntity: any 
-    list: BaseListI[]
-    setList: any
-    entities: Map<number, BaseEntI>
-    setEntities: any
-    editors: Array<number>
-    setEditors: (t : Array<number>) => void
     selectionModel: Array<number> | undefined
     children: any
   }
@@ -36,12 +30,6 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
         listColumns,
         loadList, 
         loadEntity, 
-        list,
-        setList,
-        entities, 
-        setEntities, 
-        editors, 
-        setEditors, 
         selectionModel,
         children }) => {
   
@@ -73,7 +61,7 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
 
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
-    onListSelectionSetEditors(ids, setEditors, entities, setEntities, loadEntity)
+    onListSelectionSetEditors(editorConfig, setEditorConfig, ids, loadEntity)
   }
 
   return (
@@ -82,7 +70,7 @@ import { BaseEntI, BaseListI } from '../../definition/interfaces'
           <div style={{ height: '80vh', minWidth : 500, maxWidth : 500 }}>
             <DataGrid
               // sx={{color: 'yellow'}} //text color
-              rows={list}
+              rows={editorConfig.list}
               columns={listColumns}
               pageSize={25}
               rowsPerPageOptions={[25]}
