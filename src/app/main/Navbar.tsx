@@ -32,6 +32,7 @@ const Navbar = () => {
   }
 
   //Top Level
+  f.main('permadmin', '/permadmin')
   f.main('orgadmin', '/orgadmin')
   f.main('labeladmin', '/labels')
   f.main('planmat', '/')

@@ -1,4 +1,4 @@
-import { BaseListI, BaseEntI } from '../../definition/interfaces'
+import { BaseEntI } from '../../definition/interfaces'
 
 /*
  Class to store editor variables
@@ -24,7 +24,7 @@ export enum EditorConfigField {
 }
 
 //Class to store editor variables
-export class EditorConfig <L extends BaseListI, E extends BaseEntI> {
+export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
   CONFIG_ENTITIES : string[] = ['']
   CONFIG_URL : string = ''
   LIST_URL : string = ''
@@ -39,7 +39,7 @@ export class EditorConfig <L extends BaseListI, E extends BaseEntI> {
 }
 
 //EditorConfig state object reducer
-export const editorConfigReducer = <L extends BaseListI, E extends BaseEntI>(editor : EditorConfig<L,E>, action : any) => {
+export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(editor : EditorConfig<L,E>, action : any) => {
   switch (action.type) {
 
     case EditorConfigField.configEntities:

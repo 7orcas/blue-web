@@ -1,5 +1,5 @@
 import apiGet from '../api/apiGet'
-import { BaseListI, BaseEntI, initEntBase, initEntBaseOV } from "../definition/interfaces"
+import { BaseEntI, initEntBase, initEntBaseOV } from "../definition/interfaces"
 
 /*
   Organisation's entities and load function
@@ -9,7 +9,7 @@ import { BaseListI, BaseEntI, initEntBase, initEntBaseOV } from "../definition/i
   @author John Stewart
  */
 
-export interface OrgListI extends BaseListI {
+export interface OrgListI extends BaseEntI {
   dvalue: boolean
 }
 

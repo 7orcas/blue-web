@@ -5,7 +5,7 @@ import useLabelX from '../../lang/useLabel'
 import Message, { MessageType } from '../../system/Message'
 import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types';
-import { BaseI, BaseListI, BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
+import { BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
 /*
@@ -17,7 +17,7 @@ import { GridSelectionModel } from '@mui/x-data-grid';
 */
 
 //Load a list and populate the base fields
-export const loadListBase = async <T extends BaseListI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
+export const loadListBase = async <T extends BaseEntI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
   try {
     const data = await apiGet(url, setSession, setMessage)
     
@@ -33,7 +33,7 @@ export const loadListBase = async <T extends BaseListI>(url : string, list : Arr
 
 
 //Load a new list entity
-export const loadNewBase = async <L extends BaseListI>(
+export const loadNewBase = async <L extends BaseEntI>(
       url : string, 
       list : L, 
       setSession : any, 
@@ -56,7 +56,7 @@ export const useLabel = (key : string) => {
 }
 
 //Return object by it's id
-export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => {
+export const getObjectById = <T extends BaseEntI>(id : number, list : Array<T>) => {
   for (var i=0;i<list.length;i++){
     if (list[i].id === id) {
       return list[i]
@@ -67,7 +67,7 @@ export const getObjectById = <T extends BaseI>(id : number, list : Array<T>) => 
 
 //Load the entity's configuration
 export const loadConfiguration = async(
-    edConf : EditorConfig<BaseListI, BaseEntI>,
+    edConf : EditorConfig<BaseEntI, BaseEntI>,
     configs: Map<string, ConfigI>,
     setConfigs: any,
     setSession: any,
@@ -86,7 +86,7 @@ export const loadConfiguration = async(
 
 
 //Update the editor list
-export const updateBaseList = <L extends BaseListI, E extends BaseEntI>(
+export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     edConf : EditorConfig<L, E>,
     setEdConf : any,    
     id : number, 
@@ -144,7 +144,7 @@ export const updateBaseList = <L extends BaseListI, E extends BaseEntI>(
  * - load entity if required
  * - store selected editors in state
  */
- export const onListSelectionSetEditors = async <L extends BaseListI, E extends BaseEntI>(
+ export const onListSelectionSetEditors = async <L extends BaseEntI, E extends BaseEntI>(
     edConf : EditorConfig<L, E>,
     setEdConf : any,    
     ids : GridSelectionModel, 
@@ -157,18 +157,20 @@ export const updateBaseList = <L extends BaseListI, E extends BaseEntI>(
     ids.forEach((id) => editors.push(typeof id === 'number'? id : parseInt(id)))
   }
 
-  //Load missing entities
-  editors.forEach((id) => {
-    if (!edConf.entities.has(id)) {
-      loadEntity (id)
-    }
-  })
+  //Load missing entities (if required)
+  if (loadEntity !== null) {
+    editors.forEach((id) => {
+      if (!edConf.entities.has(id)) {
+        loadEntity (id)
+      }
+    })
+  }
 
   setEdConf ({type: ECF.editors, payload : editors})
 }
 
 //Commit updates, reload entity list, reselect list and reload entities
-export const handleCommit = async <L extends BaseListI, E extends BaseEntI>(
+export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       edConf : EditorConfig<L, E>,
       setEdConf : any,        
       url: string,

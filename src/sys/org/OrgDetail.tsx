@@ -3,7 +3,7 @@ import AppContext, { AppContextI } from '../system/AppContext'
 import { loadConfiguration } from '../component/editor/editorUtil'
 import { OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { BaseListI, BaseEntI } from '../definition/interfaces'
+import { BaseEntI } from '../definition/interfaces'
 import LangLabel from '../lang/LangLabel';
 import { Checkbox } from '@mui/material'
 import TextField from '../component/utils/TextField'
@@ -17,7 +17,7 @@ import TextField from '../component/utils/TextField'
 */
 
 interface Props {
-  editorConfig : EditorConfig<BaseListI, BaseEntI>
+  editorConfig : EditorConfig<BaseEntI, BaseEntI>
   setEditorConfig : any
   id : number
   entity : OrgEntI

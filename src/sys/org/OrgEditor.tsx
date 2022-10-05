@@ -1,6 +1,6 @@
 import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import EditorLM from '../component/editor/EditorLM'
+import EditorLM from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
@@ -113,6 +113,7 @@ const OrgEditor = () => {
         </TableMenu>
       </div>
       <EditorLM 
+        style={{ height: '80vh', minWidth : 500, maxWidth : 500 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
         listColumns={columns}

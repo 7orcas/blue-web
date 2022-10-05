@@ -9,7 +9,7 @@ import { EntityStatusType } from "./types"
 */
 
 
-export interface BaseI {
+export interface BaseEntI {
   id: number //Immutatble
   orgNr: number //Immutatble
   code: string
@@ -17,21 +17,18 @@ export interface BaseI {
   active: boolean
   updated: string
   delete: boolean //Client attribute
+  changed: boolean  //Client attribute
+  originalValue: string | undefined  //Client attribute
   entityStatus: EntityStatusType //Client attribute
 }
 
-export interface BaseListI extends BaseI {
-  changed: boolean  //Client attribute
-}
-
-export interface BaseEntI extends BaseI {
-  originalValue: string | undefined  //Client attribute
-}
+//Flag entities that are not used
+export interface UsedI extends BaseEntI {}
 
 //Populate base list fields
-export const initListBase = (data : any, list : BaseListI) => {
-  initBase (data, list)
-  list.changed = false
+export const initListBase = (data : any, ent : BaseEntI) => {
+  initBase (data, ent)
+  ent.changed = false
 }
 
 
@@ -41,7 +38,7 @@ export const initEntBase = (data : any, ent : BaseEntI) => {
 }
 
 //Populate base fields
-const initBase = (data : any, base : BaseI) => {
+const initBase = (data : any, base : BaseEntI) => {
   base.id = data.id
   base.orgNr = data.orgNr
   base.code = typeof data.code !== 'undefined'? data.code : '?'
