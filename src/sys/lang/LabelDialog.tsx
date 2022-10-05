@@ -18,7 +18,7 @@ interface LangLabelI {
   langKey : string
   idLangKey : number
   code : string
-  org : number
+  orgNr : number
   active : boolean
 }
 
@@ -36,7 +36,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
         
         let labels : Array<LangLabelI> = []
         for (const l of data) {
-            labels.push ({id : l.id, langKey : l.langKey, idLangKey : l.idLangKey, code : l.code, org : l.org, active : l.active})
+            labels.push ({id : l.id, langKey : l.langKey, idLangKey : l.idLangKey, code : l.code, orgNr : l.orgNr, active : l.active})
         }
         setlabels(labels)
         setOpen(true);
@@ -57,8 +57,8 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
       let l = {} as LabelI;
       for (var i=0; i<labels.length; i++) {
         const x = labels[i]
-        if (x.org === session.orgNr) {
-          l = {id: x.id, org: x.org, key: x.langKey, label : x.code}
+        if (x.orgNr === session.orgNr) {
+          l = {id: x.id, orgNr: x.orgNr, key: x.langKey, label : x.code}
           break
         }
       }
@@ -147,7 +147,7 @@ const LabelDialogX : FC<LabelDialogXProps> = ({ onClose, onCommit, selectedValue
               autoFocus={i === 0}
               margin='dense'
               id='name'
-              label={'Org: ' + l.org}
+              label={'Org: ' + l.orgNr}
               type='text'
               fullWidth
               value={l.code}

@@ -12,7 +12,7 @@ import apiGet from '../api/apiGet'
 
 export interface LabelI {
   id: number
-  org: number
+  orgNr: number
   key: string
   label: string
 }
@@ -26,7 +26,7 @@ const loadLabels = async (loadFlag : string, setSession : any, setMessage : any)
     let labels : Array<LabelI> = []
     
     for (const l of data) {
-        labels.push ({id : l.id, org : l.org, key : l.code, label : l.label})
+        labels.push ({id : l.id, orgNr : l.orgNr, key : l.code, label : l.label})
     }
     
     return labels

@@ -15,7 +15,6 @@ export interface BaseI {
   code: string
   descr: string
   active: boolean
-  created: string
   updated: string
   delete: boolean //Client attribute
   entityStatus: EntityStatusType //Client attribute
@@ -48,7 +47,6 @@ const initBase = (data : any, base : BaseI) => {
   base.code = typeof data.code !== 'undefined'? data.code : '?'
   base.descr = typeof data.descr !== 'undefined'? data.descr : ''
   base.active = typeof data.active !== 'undefined'? data.active : true
-  base.created = typeof data.created !== 'undefined'? data.created : null
   base.updated = typeof data.updated !== 'undefined'? data.updated : null
   base.delete = false
   base.entityStatus = EntityStatusType.valid
@@ -62,12 +60,7 @@ export const entBaseOV = (ent : BaseEntI) => {
   return JSON.stringify(ent, jsonReplacer)
 }
 
-/**
- * When using JSON.stringify on entity, don't include the 'originalValue' field
- * @param key 
- * @param value 
- * @returns 
- */
+//When using JSON.stringify on entity, don't include the 'originalValue' field
  export const jsonReplacer = (key : string, value : any) => {
   if (key === 'originalValue') return undefined;
   else return value;

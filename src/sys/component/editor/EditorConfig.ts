@@ -2,6 +2,7 @@ import { BaseListI, BaseEntI } from '../../definition/interfaces'
 
 /*
  Class to store editor variables
+ Based on list and entity objects
  
  Created 30.09.22
  [Licence]
