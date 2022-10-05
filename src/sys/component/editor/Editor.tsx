@@ -68,12 +68,15 @@ import { BaseEntI } from '../../definition/interfaces'
     onListSelectionSetEditors(editorConfig, setEditorConfig, ids, loadEntity)
   }
 
-  const handleRowEditCommit = useCallback((params : GridCellEditCommitParams) => {
+  //Process cell editing (if used)
+  const handleRowEditCommit = (params : GridCellEditCommitParams) => {
     if (updateList !== null) {
       var ent : BaseEntI | null = getObjectById(Number(params.id), editorConfig.list)
-      updateList (ent, params.field, params.value)
+      if (ent !== null) {
+        updateList (ent, params.field, params.value)
+      }
     }
-  }, [])
+  }
     
 
 

@@ -174,7 +174,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       edConf : EditorConfig<L, E>,
       setEdConf : any,        
       url: string,
-      loadEntityOrg : any,
+      loadEntity : any,
       setSession: any,
       setMessage: (m : Message) => void
       ) => {
@@ -189,7 +189,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       m.type = MessageType.error
       m.message = 'saveError1'
       m.detail = 'saveErrorFix'
-      if (i===0) m.context = 'xxx' 
+if (i===0) m.context = 'xxx' 
       setMessage(m)
       return
     }
@@ -211,6 +211,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   for (i=0;i<edConf.list.length;i++){
     if (edConf.list[i].changed === true) {
       e = edConf.entities.get(edConf.list[i].id)
+console.log('e=' + e)      
       if (e !== null && e !== undefined) {
         entList.push(e)
       }
@@ -250,7 +251,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
               ids.splice(index, 1); 
             }
             ids.push(id1)
-            loadEntityOrg(id1)
+            loadEntity(id1)
             break
           }
         }  

@@ -7,7 +7,7 @@ import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, han
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { PermissionListI } from './permission'
 import { GridColDef } from '@mui/x-data-grid';
-import { UsedI, initEntBase } from '../definition/interfaces'
+import { UsedI, entBaseOV } from '../definition/interfaces'
 
 /*
   CRUD Editor for permissions
@@ -22,7 +22,7 @@ const PermissionEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
  
   //State 
-  var ed : EditorConfig<PermissionListI, UsedI> = new EditorConfig()
+  var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntPermission'], [])
   ed.CONFIG_URL = 'permission/config'
   ed.LIST_URL = 'permission/list'
@@ -64,18 +64,22 @@ const PermissionEditor = () => {
     } catch (err : any) { } 
   }
 
+  //Set Changes
   const updateList = (entity : PermissionListI, field : string, value : any) => {
     switch (field) {
-      case 'code': entity.code = event.target.value; break
-      case 'dvalue': entity.dvalue = event.target.checked; break
+      case 'code': entity.code = value; break
+      case 'crud': entity.crud = value; break
     }
-
+    //Load entity (required to facilitate processing)
+    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(entity.id, entity))})
+    
+    updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
   }
 
 
   //List Columns
   const columns: GridColDef[] = [
-    { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
+    { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, }, // hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
     { field: 'code', headerName: useLabel('url'), width: 300, type: 'string', editable: true, },
     { field: 'crud', headerName: useLabel('crud'), width: 60, type: 'string', editable: true,},
