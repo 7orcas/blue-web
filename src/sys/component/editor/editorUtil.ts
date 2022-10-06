@@ -84,6 +84,16 @@ export const loadConfiguration = async(
   }
 } 
 
+//Set Base Field
+export const updateBaseEntity = (entity : BaseEntI, field : string, value : any) => {
+  switch (field) {
+    case 'code': entity.code = value; break
+    case 'descr': entity.descr = value; break
+    case 'active': entity.active = value; break
+    case 'delete': entity.delete = value; break
+  }
+}
+
 
 //Update the editor list
 export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
@@ -102,6 +112,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     o.active = entity.active
     o.orgNr = entity.orgNr
     o.code = entity.code
+    o.descr = entity.descr
 
     //Set status
     o.entityStatus = Status.valid
@@ -189,7 +200,6 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       m.type = MessageType.error
       m.message = 'saveError1'
       m.detail = 'saveErrorFix'
-if (i===0) m.context = 'xxx' 
       setMessage(m)
       return
     }
@@ -211,7 +221,6 @@ if (i===0) m.context = 'xxx'
   for (i=0;i<edConf.list.length;i++){
     if (edConf.list[i].changed === true) {
       e = edConf.entities.get(edConf.list[i].id)
-console.log('e=' + e)      
       if (e !== null && e !== undefined) {
         entList.push(e)
       }

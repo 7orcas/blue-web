@@ -1,6 +1,6 @@
 import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import EditorLM from '../component/editor/Editor'
+import Editor from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
@@ -20,8 +20,9 @@ import { initEntBase } from '../definition/interfaces'
 
 const OrgEditor = () => {
   
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
- 
+  const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
+  setTitle('orgadmin')
+
   //State 
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
@@ -112,7 +113,7 @@ const OrgEditor = () => {
           <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
         </TableMenu>
       </div>
-      <EditorLM 
+      <Editor 
         style={{ height: '80vh', minWidth : 500, maxWidth : 500 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
@@ -137,7 +138,7 @@ const OrgEditor = () => {
             : <div>problem</div>
         )}
         )}
-      </EditorLM>
+      </Editor>
     </div>
   )
 }

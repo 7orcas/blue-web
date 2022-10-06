@@ -5,13 +5,17 @@ import Navbar from './Navbar'
 
 const Header = () => {
 
-  const { session } = useContext(AppContext) as AppContextI
+  const { session, title } = useContext(AppContext) as AppContextI
+
+  const lable = () => {
+    
+  }
 
   return (
     <div className='main-header'>
       {session.loggedIn && <Navbar />}
-      <div className='main-title'>
-        <LangLabel langkey='appname' />
+      <div className='main-subheader'>
+        <LangLabel langkey={title} className='main-title'/>
       </div>
     </div>
   )

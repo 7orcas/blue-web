@@ -27,8 +27,10 @@ const apiGet = async (url : string, setSession : any, setMessage : any) => {
 
   } catch (err : any) {
     
-    //UNAUTHORIZED, ie logged out
-    if (err.response.status === 401){
+    //UNAUTHORIZED / NO CONTENT, eg timed out
+    if (err.response.status === 401 
+      || err.response.status === 204){
+console.log('SHOULD RELOGIN ' + err.response.status)        
       setSession ({ type: SessionField.loggedIn, payload: false })
       return;
     }

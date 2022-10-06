@@ -21,6 +21,8 @@ interface Props {
 export interface AppContextI {
   session: Session
   setSession: any
+  title: string
+  setTitle: (x: string) => void
   message: Message
   setMessage: any
   configs: Map<string, ConfigI>
@@ -34,6 +36,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const [session, setSession] = useReducer(sessionReducer, new Session ());
   const [message, setMessage] = useState(new Message());
   const [configs, setConfigs] = useState(new Map());
+  const [title, setTitle] = useState('appname');
 
   // Load app defaults
   useEffect(() => {
@@ -67,6 +70,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const appValue: AppContextI = {
     session: session,
     setSession: setSession,
+    title: title,
+    setTitle: setTitle,
     message: message,
     setMessage: setMessage,
     configs: configs,

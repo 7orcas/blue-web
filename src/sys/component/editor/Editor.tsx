@@ -26,7 +26,7 @@ import { BaseEntI } from '../../definition/interfaces'
     children: any
   }
     
-  const EditorLM : FC<Props> = ({ 
+  const Editor : FC<Props> = ({ 
         style,
         editorConfig, 
         setEditorConfig,
@@ -77,8 +77,6 @@ import { BaseEntI } from '../../definition/interfaces'
       }
     }
   }
-    
-
 
   return (
     <div className='editor-multi-select'>
@@ -110,4 +108,4 @@ import { BaseEntI } from '../../definition/interfaces'
   )
 }
 
-export default EditorLM 
+export default Editor 

@@ -57,10 +57,14 @@ export const entBaseOV = (ent : BaseEntI) => {
   return JSON.stringify(ent, jsonReplacer)
 }
 
-//When using JSON.stringify on entity, don't include the 'originalValue' field
+//When using JSON.stringify on entity, don't include the control fields
  export const jsonReplacer = (key : string, value : any) => {
-  if (key === 'originalValue') return undefined;
-  else return value;
+  if (key === 'originalValue' 
+    || key === 'entityStatus'
+    || key === 'changed') {
+    return undefined;
+  } 
+  return value;
 }
 
 

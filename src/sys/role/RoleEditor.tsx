@@ -5,43 +5,42 @@ import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { PermissionListI } from './permission'
+import { RoleListI } from './role'
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { UsedI, initEntBaseOV } from '../definition/interfaces'
+import { initEntBaseOV } from '../definition/interfaces'
 
 /*
-  CRUD Editor for permissions
+  CRUD Editor for roles
 
   [Licence]
   Created 05.10.22
   @author John Stewart
  */
 
-const PermissionEditor = () => {
+const RoleEditor = () => {
   
   const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
-  setTitle('permadmin')
+  setTitle('roleadmin')
   
   //State 
-  var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
-  ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntPermission'], [])
-  ed.CONFIG_URL = 'permission/config'
-  ed.LIST_URL = 'permission/list'
-  ed.NEW_URL = 'permission/new'
-  ed.POST_URL = 'permission/post'
-  ed.EXCEL_URL = 'permission/excel'
+  var ed : EditorConfig<RoleListI, RoleListI> = new EditorConfig()
+  ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntRole'], [])
+  ed.CONFIG_URL = 'role/config'
+  ed.LIST_URL = 'role/list'
+  ed.NEW_URL = 'role/new'
+  ed.POST_URL = 'role/post'
+  ed.EXCEL_URL = 'role/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
 
   //Load list records
-  const loadListPermission = async() => {
-    let list : Array<PermissionListI> = []
+  const loadListRole = async() => {
+    let list : Array<RoleListI> = []
     var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var ent = list[i]
-        ent.crud = data[i].crud
         initEntBaseOV(ent)
       }
       setEdConf ({type: ECF.list, payload : list})
@@ -50,11 +49,10 @@ const PermissionEditor = () => {
 
   //Create new entity
   const handleCreate = async () => {
-    var l : PermissionListI = {} as PermissionListI
+    var l : RoleListI = {} as RoleListI
     var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
    
     if (typeof data !== 'undefined') {
-      l.crud = data[0].crud
       setEdConf ({type: ECF.list, payload : [l, ...edConf.list]})
     }
   }
@@ -67,10 +65,7 @@ const PermissionEditor = () => {
   }
 
   //Set Changes
-  const updateList = (entity : PermissionListI, field : string, value : any) => {
-    switch (field) {
-      case 'crud': entity.crud = value; break
-    }
+  const updateList = (entity : RoleListI, field : string, value : any) => {
     updateBaseEntity(entity, field, value)
 
     //Load entity (required to facilitate processing)
@@ -82,22 +77,22 @@ const PermissionEditor = () => {
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
     if (id !== undefined) {
-      var ent : PermissionListI | null = getObjectById(Number(id), edConf.list)
+      var ent : RoleListI | null = getObjectById(Number(id), edConf.list)
       if (ent !== null) {
-        type ObjectKey = keyof PermissionListI;
+        type ObjectKey = keyof RoleListI;
         const fieldX = field as ObjectKey
         updateList (ent, field, !ent[fieldX])
       }
     }
   }
 
+
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 80, editable: true, },
-    { field: 'descr', headerName: useLabel('desc'), width: 300, type: 'string', editable: true, },
-    { field: 'code', headerName: useLabel('url'), width: 300, type: 'string', editable: true, },
-    { field: 'crud', headerName: useLabel('crud'), width: 80, type: 'string', editable: true,},
+    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 80 },
+    { field: 'code', headerName: useLabel('code'), width: 150, type: 'string', editable: true, },
+    { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: true, },
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
       renderCell: (params) => (
         <Checkbox
@@ -125,11 +120,11 @@ const PermissionEditor = () => {
         </TableMenu>
       </div>
       <Editor 
-        style={{ height: '80vh', minWidth : 1000, maxWidth : 1000 }}
+        style={{ height: '80vh', minWidth : 700, maxWidth : 700 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
         listColumns={columns}
-        loadList={loadListPermission}
+        loadList={loadListRole}
         updateList={updateList}
         disableSelectionOnClick={true}
       >
@@ -138,4 +133,4 @@ const PermissionEditor = () => {
   )
 }
 
-export default PermissionEditor
+export default RoleEditor

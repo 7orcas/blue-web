@@ -32,6 +32,7 @@ const Navbar = () => {
   }
 
   //Top Level
+  f.main('roleadmin', '/roleadmin')
   f.main('permadmin', '/permadmin')
   f.main('orgadmin', '/orgadmin')
   f.main('labeladmin', '/labels')
@@ -69,7 +70,18 @@ const Navbar = () => {
   admin.menu.push(f.item('chgpw', '/Test3'))
   admin.menu.push(f.div())
   admin.menu.push(f.item('labeladmin', '/labels'))
+  if (containsRole('LangEdit')) {
+    var editLabel = f.checkbox('editLabels', 
+    () => {setSession ({type: SessionField.editLabels})},
+    session.editLabels
+    )
+    admin.menu.push(editLabel)
+    admin.menu.push(f.div())
+  }
   admin.menu.push(f.item('orgadmin', '/orgadmin'))
+  admin.menu.push(f.item('roleadmin', '/roleadmin'))
+  admin.menu.push(f.item('permadmin', '/permadmin'))
+
 
   //Separate theme icon  
   var themeX = f.button('', 
@@ -77,13 +89,6 @@ const Navbar = () => {
     false)
 
 
-  if (containsRole('LangEdit')) {
-    var editLabel = f.checkbox('editLabels', 
-      () => {setSession ({type: SessionField.editLabels})},
-      session.editLabels
-    )
-    admin.menu.push(editLabel)
-  }
 
   const setSelection = (item : MenuItem) => {
 
