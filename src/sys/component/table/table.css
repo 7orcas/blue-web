@@ -10,7 +10,7 @@
   @author John Stewart
 */
 .menu-header {
-  margin: 0px 20px 0px 0px;
+  margin: 0px 0px 0px 20px;
 }
 .menu-header .table-grid-header {
   font-size: 1.2em;

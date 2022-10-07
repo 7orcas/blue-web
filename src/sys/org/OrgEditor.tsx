@@ -44,7 +44,6 @@ const OrgEditor = () => {
         org.dvalue = data[i].dvalue
       }
       setEdConf ({type: ECF.list, payload : list})
-      // setList(list)
     }
   }
 
@@ -106,7 +105,7 @@ const OrgEditor = () => {
   ];
 
   return (
-    <div className='editor'>
+    <div>
       <div className='menu-header'>
         <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
           <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>

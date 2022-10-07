@@ -8,14 +8,15 @@ import { BaseEntI } from "../definition/interfaces"
   @author John Stewart
  */
 
-export interface RoleListI extends BaseEntI {
-}
+//DELETE
+// export interface RoleListI extends BaseEntI {
+// }
 
-
-export interface RoleEntI extends BaseEntI {
-}
 
 export interface RolePermissionEntI extends BaseEntI {
   permission_id: number //Immutatble
   crud: string
+}
+export interface RoleEntI extends BaseEntI {
+  permissions : RolePermissionEntI[]
 }

@@ -95,8 +95,8 @@ const PermissionEditor = () => {
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 80, editable: true, },
+    { field: 'code', headerName: useLabel('url-c'), width: 150, type: 'string', editable: true, },
     { field: 'descr', headerName: useLabel('desc'), width: 300, type: 'string', editable: true, },
-    { field: 'code', headerName: useLabel('url'), width: 300, type: 'string', editable: true, },
     { field: 'crud', headerName: useLabel('crud'), width: 80, type: 'string', editable: true,},
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
       renderCell: (params) => (
@@ -117,7 +117,7 @@ const PermissionEditor = () => {
   ];
 
   return (
-    <div className='editor'>
+    <div>
       <div className='menu-header'>
         <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
           <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
@@ -125,13 +125,14 @@ const PermissionEditor = () => {
         </TableMenu>
       </div>
       <Editor 
-        style={{ height: '80vh', minWidth : 1000, maxWidth : 1000 }}
+        style={{ height: '80vh', minWidth : 840, maxWidth : 840 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
         listColumns={columns}
         loadList={loadListPermission}
         updateList={updateList}
         disableSelectionOnClick={true}
+        checkboxSelection={false}
       >
       </Editor>
     </div>

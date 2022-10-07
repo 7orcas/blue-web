@@ -7,139 +7,140 @@
   Created 13.09.22
   @author John Stewart
 */
-#light .editor .MuiSvgIcon-root {
+#light .MuiSvgIcon-root {
   color: rgb(29, 28, 28) !important;
 }
-#light .editor .table-menu button {
+#light .table-menu button {
   color: #f1f1f1;
   background: #3a8fe4;
   border: 1px solid #3a8fe4;
 }
-#light .editor .table-menu button:hover {
+#light .table-menu button:hover {
   color: #f1f1f1;
   background: #1568BD;
   border: 1px solid #1568BD;
 }
-#light .editor .table-menu button:disabled {
+#light .table-menu button:disabled {
   color: #3a8fe4;
   background: white;
   border: 1px solid #f1f1f1;
 }
-#light .editor .table-grid .MuiDataGrid-columnHeader {
+#light .table-grid .MuiDataGrid-columnHeader {
   color: rgb(29, 28, 28) !important;
 }
-#light .editor .table-grid .MuiSvgIcon-root {
+#light .table-grid .MuiSvgIcon-root {
   color: rgb(29, 28, 28) !important;
 }
-#light .editor .table-grid .MuiDataGrid-footerContainer {
+#light .table-grid .MuiDataGrid-footerContainer {
   color: rgb(29, 28, 28) !important;
 }
-#light .editor .table-grid .MuiTablePagination-displayedRows {
+#light .table-grid .MuiTablePagination-displayedRows {
   color: rgb(29, 28, 28) !important;
 }
-#light .editor .table-grid .table-grid-valid-true {
+#light .table-grid .table-grid-valid-true {
   color: rgb(29, 28, 28) !important;
 }
-#light .editor .table-grid-status-1 {
+#light .table-grid-status-1 {
   background-color: rgb(93, 117, 94) !important;
   color: white !important;
   font-weight: bold;
 }
-#light .editor .table-grid-status-1 .MuiSvgIcon-root {
+#light .table-grid-status-1 .MuiSvgIcon-root {
   color: white !important;
 }
-#light .editor .table-grid-status-2 {
+#light .table-grid-status-2 {
   background-color: rgb(145, 136, 11) !important;
   color: white !important;
   font-weight: bold;
 }
-#light .editor .table-grid-status-2 .MuiSvgIcon-root {
+#light .table-grid-status-2 .MuiSvgIcon-root {
   color: white !important;
 }
-#light .editor .table-grid-status-9 {
+#light .table-grid-status-9 {
   background-color: rgb(192, 44, 44) !important;
   color: white !important;
   font-weight: bold;
 }
-#light .editor .table-grid-status-9 .MuiSvgIcon-root {
+#light .table-grid-status-9 .MuiSvgIcon-root {
   color: white !important;
 }
-#light .editor-detail {
+
+.editor-detail {
   border: 1px solid #a6a8b3;
 }
-#light .editor-detail input {
+.editor-detail input {
   color: rgb(29, 28, 28);
   border: 1px solid #a6a8b3;
 }
 
-#dark .editor .MuiSvgIcon-root {
+#dark .MuiSvgIcon-root {
   color: #cfcbcb !important;
 }
-#dark .editor .editor-detail {
+#dark .editor-detail {
   border: 1px solid #cfcbcb;
 }
-#dark .editor .editor-detail input {
+#dark .editor-detail input {
   color: #cfcbcb;
   border: 1px solid #cfcbcb;
 }
-#dark .editor .editor-detail legend span {
+#dark .editor-detail legend span {
   color: #cfcbcb;
 }
-#dark .editor .table-menu button {
+#dark .table-menu button {
   color: #cccccc;
   background: #3a8fe4;
   border: 1px solid #3a8fe4;
 }
-#dark .editor .table-menu button:hover {
+#dark .table-menu button:hover {
   color: #cccccc;
   background: #1568BD;
   border: 1px solid #1568BD;
 }
-#dark .editor .table-menu button:disabled {
+#dark .table-menu button:disabled {
   color: #3a8fe4;
   background: #1e1e1e;
   border: 1px solid #cccccc;
 }
-#dark .editor .table-grid .MuiDataGrid-columnHeader {
+#dark .table-grid .MuiDataGrid-columnHeader {
   color: #cfcbcb !important;
 }
-#dark .editor .table-grid .MuiSvgIcon-root {
+#dark .table-grid .MuiSvgIcon-root {
   color: #cfcbcb !important;
 }
-#dark .editor .table-grid .MuiDataGrid-footerContainer {
+#dark .table-grid .MuiDataGrid-footerContainer {
   color: #cfcbcb !important;
 }
-#dark .editor .table-grid .MuiTablePagination-displayedRows {
+#dark .table-grid .MuiTablePagination-displayedRows {
   color: #cfcbcb !important;
 }
-#dark .editor .table-grid .table-grid-valid-true {
+#dark .table-grid .table-grid-valid-true {
   color: #cfcbcb !important;
 }
-#dark .editor .table-grid .table-grid-status-1 {
+#dark .table-grid .table-grid-status-1 {
   background-color: rgb(93, 117, 94) !important;
   color: white !important;
   font-weight: bold;
 }
-#dark .editor .table-grid .table-grid-status-1 .MuiSvgIcon-root {
+#dark .table-grid .table-grid-status-1 .MuiSvgIcon-root {
   color: white !important;
 }
-#dark .editor .table-grid .table-grid-status-2 {
+#dark .table-grid .table-grid-status-2 {
   background-color: rgb(145, 136, 11) !important;
   color: white !important;
   font-weight: bold;
 }
-#dark .editor .table-grid .table-grid-status-2 .MuiSvgIcon-root {
+#dark .table-grid .table-grid-status-2 .MuiSvgIcon-root {
   color: white !important;
 }
-#dark .editor .table-grid .table-grid-status-9 {
+#dark .table-grid .table-grid-status-9 {
   background-color: rgb(192, 44, 44) !important;
   color: white !important;
   font-weight: bold;
 }
-#dark .editor .table-grid .table-grid-status-9 .MuiSvgIcon-root {
+#dark .table-grid .table-grid-status-9 .MuiSvgIcon-root {
   color: white !important;
 }
-#dark .editor .table-grid .table-grid-status-0 {
+#dark .table-grid .table-grid-status-0 {
   color: #cfcbcb !important;
 }
 

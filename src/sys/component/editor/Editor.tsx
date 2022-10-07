@@ -23,6 +23,7 @@ import { BaseEntI } from '../../definition/interfaces'
     loadEntity?: any 
     updateList?: any
     disableSelectionOnClick? : boolean
+    checkboxSelection? : boolean
     children: any
   }
     
@@ -35,6 +36,7 @@ import { BaseEntI } from '../../definition/interfaces'
         loadEntity=null, 
         updateList=null,
         disableSelectionOnClick=false,
+        checkboxSelection=true,
         children }) => {
   
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
@@ -79,7 +81,7 @@ import { BaseEntI } from '../../definition/interfaces'
   }
 
   return (
-    <div className='editor-multi-select'>
+    <div className='editor editor-multi-select'>
       <div className='editor-left table-grid'>
         <div style={style}>
           <DataGrid
@@ -91,7 +93,7 @@ import { BaseEntI } from '../../definition/interfaces'
             columns={listColumns}
             pageSize={25}
             rowsPerPageOptions={[25]}
-            checkboxSelection
+            checkboxSelection={checkboxSelection}
             selectionModel={editorConfig.editors}
             onSelectionModelChange={handleSelection}
             disableSelectionOnClick={disableSelectionOnClick}

@@ -1,14 +1,16 @@
 import { useContext, useMemo, useReducer, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
+import RoleDetail from './RoleDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { RoleListI } from './role'
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import { RoleEntI } from './role'
+import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 import { initEntBaseOV } from '../definition/interfaces'
+import { EntityStatusType } from '../definition/types'
 
 /*
   CRUD Editor for roles
@@ -24,8 +26,8 @@ const RoleEditor = () => {
   setTitle('roleadmin')
   
   //State 
-  var ed : EditorConfig<RoleListI, RoleListI> = new EditorConfig()
-  ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntRole'], [])
+  var ed : EditorConfig<RoleEntI, RoleEntI> = new EditorConfig()
+  ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntRole','system.role.ent.EntRolePermission'], [])
   ed.CONFIG_URL = 'role/config'
   ed.LIST_URL = 'role/list'
   ed.NEW_URL = 'role/new'
@@ -36,11 +38,13 @@ const RoleEditor = () => {
 
   //Load list records
   const loadListRole = async() => {
-    let list : Array<RoleListI> = []
+    let list : Array<RoleEntI> = []
     var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var ent = list[i]
+        ent.permissions = data[i].permissions !== 'undefined'? data[i].permissions : []
+        ent.permissions.map((p) => p.entityStatus = EntityStatusType.valid)
         initEntBaseOV(ent)
       }
       setEdConf ({type: ECF.list, payload : list})
@@ -49,18 +53,29 @@ const RoleEditor = () => {
 
   //Load entity
   const loadEntityRole = async(id : number) => {
-    // var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
-    // if (typeof entity !== 'undefined') {
-    //   setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
-    //   return entity
-    // }
-    console.log('xxx')
+    var l : RoleEntI | null = getObjectById(id, edConf.list)
+    if (l !== null) {
+      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, l))})  
+      return l
+    }
   }
 
+  //Update list and entities
+  const updateEntity = (id : number, entity : RoleEntI) => {
+    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
+
+    //Update non base list fields first 
+    // var l : OrgListI | null = getObjectById(id, edConf.list)
+    // if (l !== null) {
+    //   l.dvalue = entity.dvalue
+    // }
+
+    updateBaseList (edConf, setEdConf, id, entity, setSession)
+  }
 
   //Create new entity
   const handleCreate = async () => {
-    var l : RoleListI = {} as RoleListI
+    var l : RoleEntI = {} as RoleEntI
     var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
    
     if (typeof data !== 'undefined') {
@@ -76,7 +91,7 @@ const RoleEditor = () => {
   }
 
   //Set Changes
-  const updateList = (entity : RoleListI, field : string, value : any) => {
+  const updateList = (entity : RoleEntI, field : string, value : any) => {
     updateBaseEntity(entity, field, value)
 
     //Load entity (required to facilitate processing)
@@ -88,9 +103,9 @@ const RoleEditor = () => {
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
     if (id !== undefined) {
-      var ent : RoleListI | null = getObjectById(Number(id), edConf.list)
+      var ent : RoleEntI | null = getObjectById(Number(id), edConf.list)
       if (ent !== null) {
-        type ObjectKey = keyof RoleListI;
+        type ObjectKey = keyof RoleEntI;
         const fieldX = field as ObjectKey
         updateList (ent, field, !ent[fieldX])
       }
@@ -102,7 +117,7 @@ const RoleEditor = () => {
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 50 },
-    { field: 'code', headerName: useLabel('code'), width: 100, type: 'string', editable: true, },
+    { field: 'code', headerName: useLabel('role'), width: 100, type: 'string', editable: true, },
     { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: true, },
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
       renderCell: (params) => (
@@ -123,13 +138,7 @@ const RoleEditor = () => {
   ];
 
   return (
-    <div className='editor'>
-      <div className='menu-header'>
-        <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-          <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-          <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
-        </TableMenu>
-      </div>
+    <div>
       <Editor 
         style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
         editorConfig={edConf}
@@ -140,12 +149,25 @@ const RoleEditor = () => {
         updateList={updateList}
         disableSelectionOnClick={true}
       >
+      <div className='menu-header'>
+        <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
+          <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
+          <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+        </TableMenu>
+      </div>
         {edConf.editors.map((id : number) => {
           var e = edConf.entities.get(id)
           return(
           e !== undefined ?
-            <div key={id} className='editor-right'>
-              xx
+          <div key={id}>
+              <RoleDetail 
+                editorConfig={edConf}
+                setEditorConfig={setEdConf}
+                key={id} 
+                id={id}
+                entity={e}
+                updateEntity={updateEntity}
+              />
             </div>
             : <div>problem</div>
         )}

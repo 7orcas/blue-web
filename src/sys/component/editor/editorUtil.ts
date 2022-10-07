@@ -17,7 +17,11 @@ import { GridSelectionModel } from '@mui/x-data-grid';
 */
 
 //Load a list and populate the base fields
-export const loadListBase = async <T extends BaseEntI>(url : string, list : Array<T>, setSession : any, setMessage : any) => {
+export const loadListBase = async <T extends BaseEntI>(
+      url : string, 
+      list : Array<T>, 
+      setSession : any, 
+      setMessage : any) => {
   try {
     const data = await apiGet(url, setSession, setMessage)
     
@@ -73,6 +77,10 @@ export const loadConfiguration = async(
     setSession: any,
     setMessage: any
     ) => {
+  if (edConf.CONFIG_URL.length === 0) {
+    return
+  }
+
   for (var i=0;i<edConf.CONFIG_ENTITIES.length;i++) {
     var ce = edConf.CONFIG_ENTITIES[i]
     if (!configs.has(ce)) {

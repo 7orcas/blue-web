@@ -45,66 +45,65 @@
 
 #light {
 
-  .editor {
+  .MuiSvgIcon-root {
+    color: $light-color !important;
+  }
+
+  .table-menu {
+    button {
+      color : $light-button-color;
+      background: $light-button-bg;
+      border: 1px solid $light-button-bg;
+    }
+
+    button:hover {
+      color : $light-button-color;
+      background: $light-button-bg-hover;
+      border: 1px solid $light-button-bg-hover;
+    }
+
+    button:disabled {
+      color : $light-button-bg;
+      background: $light-bg;
+      border: 1px solid $light-button-color;
+    }
+  }
+
+  .table-grid {
+
+    .MuiDataGrid-columnHeader {
+      color: $light-color !important;  
+    // font-weight: bold; doesn't work
+    }
     .MuiSvgIcon-root {
       color: $light-color !important;
     }
-
-    .table-menu {
-      button {
-        color : $light-button-color;
-        background: $light-button-bg;
-        border: 1px solid $light-button-bg;
-      }
-
-      button:hover {
-        color : $light-button-color;
-        background: $light-button-bg-hover;
-        border: 1px solid $light-button-bg-hover;
-      }
-
-      button:disabled {
-        color : $light-button-bg;
-        background: $light-bg;
-        border: 1px solid $light-button-color;
-      }
+    .MuiDataGrid-footerContainer {
+      color: $light-color !important;
     }
-
-    .table-grid {
-
-      .MuiDataGrid-columnHeader {
-        color: $light-color !important;  
-      // font-weight: bold; doesn't work
-      }
-      .MuiSvgIcon-root {
-        color: $light-color !important;
-      }
-      .MuiDataGrid-footerContainer {
-        color: $light-color !important;
-      }
-      .MuiTablePagination-displayedRows {
-        color: $light-color !important;
-      }
-      .table-grid-valid-true {
-        color: $light-color !important;
-      }
+    .MuiTablePagination-displayedRows {
+      color: $light-color !important;
     }
-
-    @include status;
-
+    .table-grid-valid-true {
+      color: $light-color !important;
+    }
   }
+
+  @include status;
+
+}
+
+.editor-detail {
+  border: 1px solid $light-border-color;
   
-  .editor-detail {
+  input {
+    color: $light-color;
     border: 1px solid $light-border-color;
-    
-    input {
-      color: $light-color;
-      border: 1px solid $light-border-color;
-    }
   }
 }
 
-#dark .editor {
+
+#dark {
   
   .MuiSvgIcon-root {
     color: $dark-color !important;
@@ -137,7 +136,7 @@
     }
 
     button:disabled {
-      color : $dark-button-bg;
+      color :$dark-button-bg;
       background: $dark-bg;
       border: 1px solid $dark-button-color;
     }
