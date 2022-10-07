@@ -44,7 +44,7 @@
       text-align: center;
       font-size: 1.5em;
       font-family: "Sarabun", sans-serif;
-      padding: 0px 10px 5px 10px;
+      padding: 0px 100px 5px 100px;
       margin-top: 5px;
       border-radius: 5px;
     }
@@ -52,13 +52,11 @@
 }
 
 #dark .main-title {
-  background-color: $dark-title-bg;
   color: $dark-title-color;  
   border: 1px solid $dark-title-color;
 }
 
 #light .main-title {
-  background-color: $light-title-bg;
   color: $light-title-color;  
   border: 1px solid $light-title-color;
 }

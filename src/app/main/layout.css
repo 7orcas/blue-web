@@ -33,21 +33,19 @@
   text-align: center;
   font-size: 1.5em;
   font-family: "Sarabun", sans-serif;
-  padding: 0px 10px 5px 10px;
+  padding: 0px 100px 5px 100px;
   margin-top: 5px;
   border-radius: 5px;
 }
 
 #dark .main-title {
-  background-color: #c1bebe;
-  color: #4b4a4a;
-  border: 1px solid #4b4a4a;
+  color: #c1bebe;
+  border: 1px solid #c1bebe;
 }
 
 #light .main-title {
-  background-color: #3d3f4d;
-  color: #f1f1f1;
-  border: 1px solid #f1f1f1;
+  color: rgb(29, 28, 28);
+  border: 1px solid rgb(29, 28, 28);
 }
 
 .main-body {

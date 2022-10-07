@@ -47,6 +47,17 @@ const RoleEditor = () => {
     }
   }
 
+  //Load entity
+  const loadEntityRole = async(id : number) => {
+    // var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
+    // if (typeof entity !== 'undefined') {
+    //   setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
+    //   return entity
+    // }
+    console.log('xxx')
+  }
+
+
   //Create new entity
   const handleCreate = async () => {
     var l : RoleListI = {} as RoleListI
@@ -90,8 +101,8 @@ const RoleEditor = () => {
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 80 },
-    { field: 'code', headerName: useLabel('code'), width: 150, type: 'string', editable: true, },
+    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 50 },
+    { field: 'code', headerName: useLabel('code'), width: 100, type: 'string', editable: true, },
     { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: true, },
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
       renderCell: (params) => (
@@ -120,14 +131,25 @@ const RoleEditor = () => {
         </TableMenu>
       </div>
       <Editor 
-        style={{ height: '80vh', minWidth : 700, maxWidth : 700 }}
+        style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
         listColumns={columns}
         loadList={loadListRole}
+        loadEntity={loadEntityRole}
         updateList={updateList}
         disableSelectionOnClick={true}
       >
+        {edConf.editors.map((id : number) => {
+          var e = edConf.entities.get(id)
+          return(
+          e !== undefined ?
+            <div key={id} className='editor-right'>
+              xx
+            </div>
+            : <div>problem</div>
+        )}
+        )}
       </Editor>
     </div>
   )

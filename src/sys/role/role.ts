@@ -13,6 +13,9 @@ export interface RoleListI extends BaseEntI {
 
 
 export interface RoleEntI extends BaseEntI {
-  
+}
 
+export interface RolePermissionEntI extends BaseEntI {
+  permission_id: number //Immutatble
+  crud: string
 }
