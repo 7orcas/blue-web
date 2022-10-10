@@ -24,6 +24,10 @@
 }
 .menu-header .table-menu .table-menu-item {
   margin-right: 20px;
+  min-height: 30px;
+}
+.menu-header .table-menu .table-menu-label {
+  margin-top: 8px;
 }
 .menu-header .table-menu-item-dropdown {
   margin-left: auto;

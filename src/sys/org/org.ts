@@ -1,4 +1,5 @@
 import apiGet from '../api/apiGet'
+import Message from '../system/Message'
 import { BaseEntI, initEntBase, initEntBaseOV } from "../definition/interfaces"
 
 /*
@@ -17,9 +18,14 @@ export interface OrgEntI extends BaseEntI {
   dvalue: boolean
 }
 
-export const loadOrgEnt = async (id : number, setSession : any, setMessage : any) => {
+export const loadOrgEnt = async (
+      id : number, 
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession : ({}) => void) => {
+
   try {
-    const d = await apiGet(`org/get?id=${id}`, setSession, setMessage)
+    const d = await apiGet(`org/get?id=${id}`, setMessage, setSession)
     var org : OrgEntI = {} as OrgEntI
     initEntBase (d, org)
 

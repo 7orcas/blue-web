@@ -1,4 +1,4 @@
-import { useContext, useMemo, useReducer, useCallback } from 'react'
+import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
@@ -6,9 +6,9 @@ import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { PermissionListI } from './permission'
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { UsedI, initEntBaseOV } from '../definition/interfaces'
+import { initEntBaseOV } from '../definition/interfaces'
 
 /*
   CRUD Editor for permissions
@@ -37,7 +37,7 @@ const PermissionEditor = () => {
   //Load list records
   const loadListPermission = async() => {
     let list : Array<PermissionListI> = []
-    var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
+    var data = await loadListBase(edConf.LIST_URL, list, setMessage, setSession)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var ent = list[i]
@@ -51,7 +51,7 @@ const PermissionEditor = () => {
   //Create new entity
   const handleCreate = async () => {
     var l : PermissionListI = {} as PermissionListI
-    var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
+    var data = await loadNewBase(edConf.NEW_URL, l, setMessage, setSession)
    
     if (typeof data !== 'undefined') {
       l.crud = data[0].crud
@@ -62,7 +62,7 @@ const PermissionEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-      handleCommit(edConf, setEdConf, edConf.POST_URL, null, setSession, setMessage)
+      handleCommit(edConf, setEdConf, edConf.POST_URL, null, setMessage, setSession)
     } catch (err : any) { } 
   }
 

@@ -56,7 +56,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         var roles = response.data.data.roles.split(',')
         setSession ({ type: SessionField.roles, payload: roles })
 
-        const l = await loadLabels('', setSession, setMessage)
+        const l = await loadLabels('', setMessage, setSession)
         setSession ({ type: SessionField.labels, payload: l })
         
       } catch (err : any) {

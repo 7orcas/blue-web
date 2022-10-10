@@ -21,7 +21,8 @@
 
 .main-header {
   flex-basis: 20%;
-  max-height: 70px;
+  max-height: 80px;
+  margin-bottom: 10px;
 }
 .main-header .main-subheader {
   display: inline-flex;

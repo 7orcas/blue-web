@@ -10,7 +10,13 @@ import { JsonResponseI } from '../definition/types';
   Created 1/9/22
   @author John Stewart
  */
-const apiPost = async (url : string, data : any, setSession : any, setMessage : any) => {
+const apiPost = async (
+      url : string, 
+      data : any, 
+      setMessage : (m : Message) => void,
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
   var message = ''
   var detail = ''
   
@@ -35,8 +41,10 @@ const apiPost = async (url : string, data : any, setSession : any, setMessage : 
   } catch (err : any) {
     
     //UNAUTHORIZED, ie logged out
-    if (err.response.status === 401){
-      setSession ({ type: SessionField.loggedIn, payload: false })
+    if (err.response.status === 401) {
+      if (typeof setSession !== 'undefined') {
+        setSession ({ type: SessionField.loggedIn, payload: false })
+      }
       return;
     }
   

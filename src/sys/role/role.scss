@@ -1,0 +1,41 @@
+@import '../css/variables.scss';
+
+/*
+  Role CSS
+
+  [Licence]
+  Created 10.10.22
+  @author John Stewart
+*/
+
+.permission-dialog {
+  min-height: 800px;
+  
+  .dialog-color {
+    background-color: $selection-dialog-title-bg;
+    color: $selection-dialog-title-color;
+  }
+
+  .dialog-content {
+    margin-bottom: 20px;
+  }
+
+  .dialog-text {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .dialog-button {
+    margin-right: 30px;
+  }
+  
+  button {
+    border: 1px solid $selection-dialog-title-bg;
+  }
+
+  button:hover {
+    background-color: $selection-dialog-title-color;
+    color: $selection-dialog-title-bg;
+    border: 1px solid $selection-dialog-title-bg;
+  }
+}

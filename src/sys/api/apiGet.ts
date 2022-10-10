@@ -10,7 +10,12 @@ import { JsonResponseI } from '../definition/types';
   Created 1/9/22
   @author John Stewart
  */
-const apiGet = async (url : string, setSession : any, setMessage : any) => {
+const apiGet = async (
+      url : string, 
+      setMessage : (m : Message) => void,
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
   var message = ''
   var detail = ''
 
@@ -29,9 +34,12 @@ const apiGet = async (url : string, setSession : any, setMessage : any) => {
     
     //UNAUTHORIZED / NO CONTENT, eg timed out
     if (err.response.status === 401 
-      || err.response.status === 204){
+      || err.response.status === 204) { 
+      
 console.log('SHOULD RELOGIN ' + err.response.status)        
-      setSession ({ type: SessionField.loggedIn, payload: false })
+      if (typeof setSession !== 'undefined') {
+        setSession ({ type: SessionField.loggedIn, payload: false })
+      }
       return;
     }
   

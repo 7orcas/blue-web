@@ -1,4 +1,5 @@
 import apiGet from '../api/apiGet'
+import Message from '../system/Message'
 
 /*
   Retieve the label package
@@ -17,12 +18,16 @@ export interface LabelI {
   label: string
 }
 
-const loadLabels = async (loadFlag : string, setSession : any, setMessage : any) => {
+const loadLabels = async (
+      loadFlag : string, 
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession : ({}) => void) => {
 
   let loadFlagX = loadFlag === null || typeof loadFlag === 'undefined' || loadFlag.length === 0? '' : `?load=${loadFlag}`
 
   try {
-    const data = await apiGet(`lang/pack${loadFlagX}`, setSession, setMessage)
+    const data = await apiGet(`lang/pack${loadFlagX}`, setMessage, setSession)
     let labels : Array<LabelI> = []
     
     for (const l of data) {

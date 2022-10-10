@@ -19,11 +19,13 @@ import { GridSelectionModel } from '@mui/x-data-grid';
 //Load a list and populate the base fields
 export const loadListBase = async <T extends BaseEntI>(
       url : string, 
-      list : Array<T>, 
-      setSession : any, 
-      setMessage : any) => {
+      list : Array<T>,
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
   try {
-    const data = await apiGet(url, setSession, setMessage)
+    const data = await apiGet(url, setMessage, setSession)
     
     for (const l of data) {
       var base : T = {} as T  
@@ -40,10 +42,12 @@ export const loadListBase = async <T extends BaseEntI>(
 export const loadNewBase = async <L extends BaseEntI>(
       url : string, 
       list : L, 
-      setSession : any, 
-      setMessage : any) => {
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
   try {
-    const data = await apiGet(url, setSession, setMessage)
+    const data = await apiGet(url, setMessage, setSession)
     
     for (const l of data) {
       initListBase(l, list)
@@ -71,12 +75,13 @@ export const getObjectById = <T extends BaseEntI>(id : number, list : Array<T>) 
 
 //Load the entity's configuration
 export const loadConfiguration = async(
-    edConf : EditorConfig<BaseEntI, BaseEntI>,
-    configs: Map<string, ConfigI>,
-    setConfigs: any,
-    setSession: any,
-    setMessage: any
-    ) => {
+      edConf : EditorConfig<BaseEntI, BaseEntI>,
+      configs: Map<string, ConfigI>,
+      setConfigs: any,
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
   if (edConf.CONFIG_URL.length === 0) {
     return
   }
@@ -84,7 +89,7 @@ export const loadConfiguration = async(
   for (var i=0;i<edConf.CONFIG_ENTITIES.length;i++) {
     var ce = edConf.CONFIG_ENTITIES[i]
     if (!configs.has(ce)) {
-      var data = await apiGet(edConf.CONFIG_URL + '?entity=' + ce, setSession, setMessage)
+      var data = await apiGet(edConf.CONFIG_URL + '?entity=' + ce, setMessage, setSession)
       if (typeof data !== 'undefined') {
         setConfigs(new Map(configs.set(ce, data))) 
       }
@@ -194,9 +199,9 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       setEdConf : any,        
       url: string,
       loadEntity : any,
-      setSession: any,
-      setMessage: (m : Message) => void
-      ) => {
+      setMessage : (m : Message) => void,
+      // eslint-disable-next-line no-empty-pattern
+      setSession : ({}) => void) => {
 
 
   if (edConf.entities === null) return
@@ -235,7 +240,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
     }
   }
   
-  var data = await apiPost(url, entList, setSession, setMessage)
+  var data = await apiPost(url, entList, setMessage, setSession)
 
   //Reset changes?
   if (data !== undefined){

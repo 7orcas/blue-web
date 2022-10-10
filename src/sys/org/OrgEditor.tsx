@@ -37,7 +37,7 @@ const OrgEditor = () => {
   //Load list records
   const loadListOrg = async() => {
     let list : Array<OrgListI> = []
-    var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
+    var data = await loadListBase(edConf.LIST_URL, list, setMessage, setSession)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var org = list[i]
@@ -49,7 +49,7 @@ const OrgEditor = () => {
 
   //Load entity
   const loadEntityOrg = async(id : number) => {
-    var entity : OrgEntI | undefined = await loadOrgEnt(id, setSession, setMessage)
+    var entity : OrgEntI | undefined = await loadOrgEnt(id, setMessage, setSession)
     if (typeof entity !== 'undefined') {
       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
       return entity
@@ -59,7 +59,7 @@ const OrgEditor = () => {
   //Create new entity
   const handleCreate = async () => {
     var l : OrgListI = {} as OrgListI
-    var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
+    var data = await loadNewBase(edConf.NEW_URL, l, setMessage, setSession)
    
     if (typeof data !== 'undefined') {
       l.dvalue = data[0].dvalue
@@ -90,7 +90,7 @@ const OrgEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-      handleCommit(edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setSession, setMessage)
+      handleCommit(edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setMessage, setSession)
     } catch (err : any) { } 
   }
 

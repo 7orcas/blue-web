@@ -29,7 +29,8 @@
     border: $debug-borders-width solid rgb(255, 0, 255);
   }
   flex-basis: 20%;
-  max-height: 70px;
+  max-height: 80px;
+  margin-bottom: 10px;
   
   .main-subheader {
     display: inline-flex;

@@ -1,4 +1,5 @@
-import { useContext, useMemo, useReducer, useCallback } from 'react'
+import './role.css'
+import { useContext, useMemo, useReducer, useCallback, useState } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import RoleDetail from './RoleDetail'
@@ -6,10 +7,11 @@ import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { RoleEntI } from './role'
+import { RoleEntI, RolePermissionEntI } from './role'
+import { PermissionListI } from './permission'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { initEntBaseOV } from '../definition/interfaces'
+import { initEntBaseOV, initEntBase } from '../definition/interfaces'
 import { EntityStatusType } from '../definition/types'
 
 /*
@@ -35,11 +37,11 @@ const RoleEditor = () => {
   ed.EXCEL_URL = 'role/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
-
+  
   //Load list records
   const loadListRole = async() => {
     let list : Array<RoleEntI> = []
-    var data = await loadListBase(edConf.LIST_URL, list, setSession, setMessage)
+    var data = await loadListBase(edConf.LIST_URL, list, setMessage, setSession)
     if (typeof data !== 'undefined') {
       for (var i=0;i<data.length;i++) {
         var ent = list[i]
@@ -63,20 +65,37 @@ const RoleEditor = () => {
   //Update list and entities
   const updateEntity = (id : number, entity : RoleEntI) => {
     setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
-
-    //Update non base list fields first 
-    // var l : OrgListI | null = getObjectById(id, edConf.list)
-    // if (l !== null) {
-    //   l.dvalue = entity.dvalue
-    // }
-
     updateBaseList (edConf, setEdConf, id, entity, setSession)
+  }
+
+  const updateEntityPermissions = (id : number, list : PermissionListI[]) => {
+    var entity : RoleEntI | null = getObjectById(id, edConf.list)
+    if (entity !== null) {
+      var entityX = JSON.parse(JSON.stringify(entity));
+      for (var i=0;i<list.length;i++) {
+        var p = list[i]
+        var rp = {} as RolePermissionEntI
+        initEntBase (p, rp)
+        rp.permission_id = p.id
+        rp.crud = p.crud
+        entityX.permissions.push(rp)
+      }    
+      updateEntity(id, entityX)
+
+      //Force a reselection of the role
+      var eds1 = edConf.editors.map((i : number) => i) 
+      var eds2 = edConf.editors.filter((i : number) => i !== id)
+      setEdConf ({type: ECF.editors, payload : eds2})
+      setTimeout(() =>  {
+        setEdConf ({type: ECF.editors, payload : eds1})
+      }, 100)
+    }
   }
 
   //Create new entity
   const handleCreate = async () => {
     var l : RoleEntI = {} as RoleEntI
-    var data = await loadNewBase(edConf.NEW_URL, l, setSession, setMessage)
+    var data = await loadNewBase(edConf.NEW_URL, l, setMessage, setSession)
    
     if (typeof data !== 'undefined') {
       setEdConf ({type: ECF.list, payload : [l, ...edConf.list]})
@@ -86,7 +105,7 @@ const RoleEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-      handleCommit(edConf, setEdConf, edConf.POST_URL, null, setSession, setMessage)
+      handleCommit(edConf, setEdConf, edConf.POST_URL, null, setMessage, setSession)
     } catch (err : any) { } 
   }
 
@@ -138,41 +157,44 @@ const RoleEditor = () => {
   ];
 
   return (
-    <div>
-      <Editor 
-        style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
-        editorConfig={edConf}
-        setEditorConfig={setEdConf}
-        listColumns={columns}
-        loadList={loadListRole}
-        loadEntity={loadEntityRole}
-        updateList={updateList}
-        disableSelectionOnClick={true}
-      >
-      <div className='menu-header'>
-        <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-          <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-          <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
-        </TableMenu>
+    <div className='editor-container'>
+      <div >
+        <div className='menu-header'>
+          <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
+            <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
+            <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+          </TableMenu>
+        </div>
+        <Editor 
+          style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
+          editorConfig={edConf}
+          setEditorConfig={setEdConf}
+          listColumns={columns}
+          loadList={loadListRole}
+          loadEntity={loadEntityRole}
+          updateList={updateList}
+          disableSelectionOnClick={true}
+        >
+        </Editor>
       </div>
-        {edConf.editors.map((id : number) => {
-          var e = edConf.entities.get(id)
-          return(
-          e !== undefined ?
-          <div key={id}>
-              <RoleDetail 
-                editorConfig={edConf}
-                setEditorConfig={setEdConf}
-                key={id} 
-                id={id}
-                entity={e}
-                updateEntity={updateEntity}
-              />
-            </div>
-            : <div>problem</div>
-        )}
-        )}
-      </Editor>
+      {edConf.editors.map((id : number) => {
+        var e = edConf.entities.get(id)
+        return(
+        e !== undefined ?
+        <div key={id}>
+            <RoleDetail 
+              editorConfig={edConf}
+              setEditorConfig={setEdConf}
+              key={id} 
+              id={id}
+              entity={e}
+              updateEntity={updateEntityPermissions}
+            />
+          </div>
+          //ToDo
+          : <div>problem</div>
+      )}
+      )}
     </div>
   )
 }

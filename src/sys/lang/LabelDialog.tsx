@@ -2,8 +2,8 @@ import { FC, useState, useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionField } from '../system/Session'
 import { LabelI } from './loadLabels'
-import get from '../api/apiGet'
-import post from '../api/apiPost'
+import apiGet from '../api/apiGet'
+import apiPost from '../api/apiPost'
 import { Button, TextField } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -32,7 +32,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
   const handleClickOpen = () => {
     const load = async () => {
       try {
-        const data = await get(`lang/label?langKey=${langkey}`, setSession, setMessage)
+        const data = await apiGet(`lang/label?langKey=${langkey}`, setMessage, setSession)
         
         let labels : Array<LangLabelI> = []
         for (const l of data) {
@@ -51,7 +51,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
   const handleCommit = () => {
     const put = async () => {
-      await post('lang/label', labels, setSession, setMessage)
+      await apiPost('lang/label', labels, setMessage, setSession)
 
       //Get label for current org
       let l = {} as LabelI;

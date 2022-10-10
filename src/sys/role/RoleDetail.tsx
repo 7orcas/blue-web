@@ -1,9 +1,12 @@
-import { useContext, useReducer, FC } from 'react'
+import { useContext, useReducer, FC, useState } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
-import { BaseEntI } from '../definition/interfaces'
+import PermissionDialog from './PermissionDialog'
+import Button from '../component/utils/Button'
+import { BaseEntI, initEntBase } from '../definition/interfaces'
 import { RoleEntI, RolePermissionEntI } from './role'
+import { PermissionListI } from './permission'
 import { useLabel } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
@@ -22,11 +25,9 @@ interface Props {
   setEditorConfig : any
   id : number
   entity : RoleEntI
-  updateEntity : any
+  updateEntity : (id : number, list : PermissionListI[]) => void
 }
   
-  
-
 const RoleDetail : FC<Props> = ({ 
       editorConfig,
       setEditorConfig,
@@ -34,11 +35,12 @@ const RoleDetail : FC<Props> = ({
       entity, 
       updateEntity}) => {
   
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+  // const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
    
   //State 
   var ed : EditorConfig<RolePermissionEntI, RoleEntI> = new EditorConfig()
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
+  const [dialog, setDialog] = useState(false)
 
   //Set the list from the entity permissions list
   const loadListPermissions = () => {
@@ -46,11 +48,9 @@ const RoleDetail : FC<Props> = ({
     setEdConf ({type: ECF.list, payload : list})
   }
 
-  //Commit CUD operations
-  const handleCommitX = async() => {
-    // try {
-    //   handleCommit(edConf, setEdConf, edConf.POST_URL, null, setSession, setMessage)
-    // } catch (err : any) { } 
+  //Update entity
+  const updateEntityX = (list : PermissionListI[]) => {
+    updateEntity (id, list)
   }
 
   //Set Changes
@@ -76,6 +76,11 @@ const RoleDetail : FC<Props> = ({
     //     updateList (ent, field, !ent[fieldX])
     //   }
     // }
+  }
+
+  //Open and close dialog
+  const handleDialog = () => {
+    setDialog(!dialog)
   }
 
   //List Columns
@@ -105,9 +110,15 @@ const RoleDetail : FC<Props> = ({
 
   return (
     <div>
+      <PermissionDialog 
+        dialog={dialog}
+        setDialog={setDialog}
+        updateEntity={updateEntityX}
+      />
       <div className='menu-header'>
         <TableMenu>
-          <div className='table-menu-item'>{entity.code}</div>
+          <div className='table-menu-item table-menu-label'>{entity.code}</div>
+          <Button onClick={handleDialog} langkey='addperm' className='table-menu-item' />
         </TableMenu>
       </div>
       <Editor 

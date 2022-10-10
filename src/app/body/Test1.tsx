@@ -9,7 +9,7 @@ const Test1 = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   const loadLabelsX = async() => {
-    var l = await loadLabels('', setSession, setMessage)
+    var l = await loadLabels('', setMessage, setSession)
     if (l !== null) {
       setSession ({type: SessionField.labels, payload: l})
     }

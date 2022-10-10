@@ -170,6 +170,10 @@
   
 }
 
+.editor-container {
+  display: flex;
+}
+
 .editor {
   margin: $editor-margin;
   border-radius: 5px;

@@ -25,7 +25,7 @@ const LabelsEditor = () => {
   
   useEffect(() => {
     const loadLabelsX = async() => {
-      var l : LabelI[] | undefined = await loadLabels('All', setSession, setMessage)
+      var l : LabelI[] | undefined = await loadLabels('All', setMessage, setSession)
       if (typeof l !== 'undefined') {
         setDataSource(l)
       }

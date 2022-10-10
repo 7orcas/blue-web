@@ -7,10 +7,6 @@ const Header = () => {
 
   const { session, title } = useContext(AppContext) as AppContextI
 
-  const lable = () => {
-    
-  }
-
   return (
     <div className='main-header'>
       {session.loggedIn && <Navbar />}
