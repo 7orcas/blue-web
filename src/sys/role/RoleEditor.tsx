@@ -7,11 +7,10 @@ import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { RoleEntI, RolePermissionEntI } from './role'
-import { PermissionListI } from './permission'
+import { RoleEntI, PermissionListI, newRolePermissionEnt } from './role'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { initEntBaseOV, initEntBase } from '../definition/interfaces'
+import { initEntBaseOV } from '../definition/interfaces'
 import { EntityStatusType } from '../definition/types'
 
 /*
@@ -40,7 +39,7 @@ const RoleEditor = () => {
   useEffect(() => {
     setTitle('roleadmin')
   },[setTitle])
-
+  
   //Load list records
   const loadListRole = async() => {
     let list : Array<RoleEntI> = []
@@ -49,7 +48,10 @@ const RoleEditor = () => {
       for (var i=0;i<data.length;i++) {
         var ent = list[i]
         ent.permissions = data[i].permissions !== 'undefined'? data[i].permissions : []
-        ent.permissions.map((p) => p.entityStatus = EntityStatusType.valid)
+        ent.permissions.map((p) => p.caEntityStatus = EntityStatusType.valid)
+        for (var j=0;j<ent.permissions.length;j++) {
+          ent.permissions[j].caParent = ent
+        }
         initEntBaseOV(ent)
       }
       setEdConf ({type: ECF.list, payload : list})
@@ -68,21 +70,25 @@ const RoleEditor = () => {
   //Update list and entities
   const updateEntity = (id : number, entity : RoleEntI) => {
     setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
+    var list : RoleEntI | null = getObjectById(id, edConf.list)
+    if (list !== null) {
+      list.permissions = entity.permissions
+    }
     updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
 
   const updateEntityPermissions = (id : number, list : PermissionListI[]) => {
     var entity : RoleEntI | null = getObjectById(id, edConf.list)
+    var tempId = edConf.tempId;
+
     if (entity !== null) {
       var entityX = JSON.parse(JSON.stringify(entity));
       for (var i=0;i<list.length;i++) {
-        var p = list[i]
-        var rp = {} as RolePermissionEntI
-        initEntBase (p, rp)
-        rp.permission_id = p.id
-        rp.crud = p.crud
+        var rp = newRolePermissionEnt(list[i], tempId, entity)
         entityX.permissions.push(rp)
+        tempId -= 1
       }    
+      setEdConf ({type: ECF.tempId, payload : tempId})
       updateEntity(id, entityX)
 
       //Force a reselection of the role
@@ -186,11 +192,10 @@ const RoleEditor = () => {
         e !== undefined ?
         <div key={id}>
             <RoleDetail 
-              editorConfig={edConf}
-              setEditorConfig={setEdConf}
               key={id} 
               id={id}
               entity={e}
+              updateList={updateList}
               updateEntity={updateEntityPermissions}
             />
           </div>

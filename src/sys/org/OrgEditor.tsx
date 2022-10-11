@@ -6,7 +6,7 @@ import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { OrgListI, OrgEntI, loadOrgEnt } from './org'
+import { OrgListI, OrgEntI, loadOrgEnt, newOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
 import { initEntBase } from '../definition/interfaces'
 
@@ -67,12 +67,7 @@ const OrgEditor = () => {
    
     if (typeof data !== 'undefined') {
       l.dvalue = data[0].dvalue
-      
-      var e : OrgEntI = {} as OrgEntI
-      initEntBase(l, e)
-      e.dvalue = l.dvalue
-      e.entityStatus = l.entityStatus
-      
+      var e : OrgEntI = newOrgEnt(l)
       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(e.id, e))})
       setEdConf ({type: ECF.list, payload : [l, ...edConf.list]})
     }

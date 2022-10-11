@@ -1,4 +1,4 @@
-import { BaseEntI } from "../definition/interfaces"
+import { BaseEntI, initEntBase, initParent } from "../definition/interfaces"
 
 /*
   Role entity
@@ -8,11 +8,26 @@ import { BaseEntI } from "../definition/interfaces"
   @author John Stewart
  */
 
-export interface RolePermissionEntI extends BaseEntI {
-  permission_id: number //Immutatble
+export interface PermissionListI extends BaseEntI {
   crud: string
 }
+
+export interface RolePermissionEntI extends BaseEntI {
+  permission_id: number //Immutatble
+  crud: string //Immutatble
+}
+
 export interface RoleEntI extends BaseEntI {
   permissions : RolePermissionEntI[]
 }
 
+//Create and populate new role permission object
+export const newRolePermissionEnt = (p : PermissionListI, tempId : number, parent: RoleEntI) : RolePermissionEntI => {
+  var rp = {} as RolePermissionEntI
+  initEntBase (p, rp)
+  rp.id = tempId
+  rp.permission_id = p.id
+  rp.crud = p.crud
+  initParent (rp, parent)
+  return rp
+}

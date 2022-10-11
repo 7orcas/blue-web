@@ -5,7 +5,7 @@ import useLabelX from '../../lang/useLabel'
 import Message, { MessageType } from '../../system/Message'
 import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types';
-import { BaseEntI, initListBase, entBaseOV, ConfigI } from '../../definition/interfaces';
+import { BaseEntI, initListBase, entBaseOV, ConfigI, entRemoveClientFields } from '../../definition/interfaces';
 import { GridSelectionModel } from '@mui/x-data-grid';
 
 /*
@@ -51,7 +51,7 @@ export const loadNewBase = async <L extends BaseEntI>(
     
     for (const l of data) {
       initListBase(l, list)
-      list.entityStatus = Status.invalid
+      list.caEntityStatus = Status.invalid
     }
     
     return data
@@ -121,22 +121,22 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
 
   if (o !== null) {
 
-    o.changed = entity.originalValue !== x
+    o.caChanged = entity.caOriginalValue !== x
     o.active = entity.active
     o.orgNr = entity.orgNr
     o.code = entity.code
     o.descr = entity.descr
 
     //Set status
-    o.entityStatus = Status.valid
+    o.caEntityStatus = Status.valid
     if (entity.delete) {
-      o.entityStatus = Status.delete
+      o.caEntityStatus = Status.delete
     }
     else if (o.code.length === 0) {
-      o.entityStatus = Status.invalid
+      o.caEntityStatus = Status.invalid
     }
-    else if (o.changed) {
-      o.entityStatus = Status.changed
+    else if (o.caChanged) {
+      o.caEntityStatus = Status.changed
     }
 
     var newList : L[] = []
@@ -152,7 +152,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     //Set changed (eg to activate the Commit button)
     var changed = false
     for (i=0;i<newList.length;i++){
-      if (newList[i].changed === true) {
+      if (newList[i].caChanged === true) {
         changed = true
         break
       } 
@@ -208,7 +208,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
 
   //Validate changes
   for (var i=0;i<edConf.list.length;i++){
-    if (edConf.list[i].entityStatus === Status.invalid) {
+    if (edConf.list[i].caEntityStatus === Status.invalid) {
       var m = new Message()
       m.type = MessageType.error
       m.message = 'saveError1'
@@ -221,7 +221,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   //Remember deleted records
   var dIds : Array<number> = []
   for (var j=0;j<edConf.list.length;j++) {
-    if (edConf.list[j].changed) {
+    if (edConf.list[j].caChanged) {
       var e = edConf.entities.get(edConf.list[j].id)
       if (e !== null && e !== undefined && e.delete) {
         dIds.push(edConf.list[j].id)
@@ -232,10 +232,10 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   //Only send updates
   var entList : E[] = []
   for (i=0;i<edConf.list.length;i++){
-    if (edConf.list[i].changed === true) {
+    if (edConf.list[i].caChanged === true) {
       e = edConf.entities.get(edConf.list[i].id)
       if (e !== null && e !== undefined) {
-        entList.push(e)
+        entList.push(entRemoveClientFields(e))
       }
     }
   }

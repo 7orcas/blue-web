@@ -21,6 +21,7 @@ export enum EditorConfigField {
   editors,
   entities,
   load,
+  tempId,
 }
 
 //Class to store editor variables
@@ -36,6 +37,7 @@ export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
   editors : Array<number> = []  //detailed editors (contains entity id)
   entities : Map<number,E> = new Map()  //loaded full entities
   load : boolean = true  //flag to load editor (always initialise true)
+  tempId : number = -1
 }
 
 //EditorConfig state object reducer
@@ -71,6 +73,9 @@ export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(edit
   
     case EditorConfigField.load:
       return {...editor, load: action.payload}      
+      
+    case EditorConfigField.tempId:
+        return {...editor, tempId: action.payload}
 
     default:
       throw new Error()

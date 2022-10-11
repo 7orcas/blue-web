@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import LangLabel from '../lang/LangLabel'
 import { loadListBase, useLabel, getObjectById } from '../component/editor/editorUtil'
-import { PermissionListI } from './permission'
+import { PermissionListI } from './role'
 
 /*
   Dialog to show and select permissions

@@ -18,6 +18,7 @@ export interface OrgEntI extends BaseEntI {
   dvalue: boolean
 }
 
+//Load org entity
 export const loadOrgEnt = async (
       id : number, 
       setMessage : (m : Message) => void, 
@@ -36,3 +37,11 @@ export const loadOrgEnt = async (
   } catch (err : any) { } 
 }
 
+//Create and populate new org object
+export const newOrgEnt = (l : OrgListI) : OrgEntI => {
+  var e : OrgEntI = {} as OrgEntI
+  initEntBase(l, e)
+  e.dvalue = l.dvalue
+  e.caEntityStatus = l.caEntityStatus
+  return e
+}

@@ -16,10 +16,13 @@ export interface BaseEntI {
   descr: string
   active: boolean
   updated: string
-  delete: boolean //Client attribute
-  changed: boolean  //Client attribute
-  originalValue: string | undefined  //Client attribute
-  entityStatus: EntityStatusType //Client attribute
+  delete: boolean //@Transient field defined in ejb BaseEnt
+  
+  //Client attributes
+  caChanged: boolean  
+  caOriginalValue: string | undefined  
+  caEntityStatus: EntityStatusType 
+  caParent: any 
 }
 
 //Flag entities that are not used
@@ -28,9 +31,8 @@ export interface UsedI extends BaseEntI {}
 //Populate base list fields
 export const initListBase = (data : any, ent : BaseEntI) => {
   initBase (data, ent)
-  ent.changed = false
+  ent.caChanged = false
 }
-
 
 //Populate base entity fields
 export const initEntBase = (data : any, ent : BaseEntI) => {
@@ -46,22 +48,32 @@ const initBase = (data : any, base : BaseEntI) => {
   base.active = typeof data.active !== 'undefined'? data.active : true
   base.updated = typeof data.updated !== 'undefined'? data.updated : null
   base.delete = false
-  base.entityStatus = EntityStatusType.valid
+  base.caEntityStatus = EntityStatusType.valid
+  base.caParent = null
+}
+
+export const initParent = (child : BaseEntI, ent : BaseEntI) => {
+  child.caParent = ent.caParent
 }
 
 export const initEntBaseOV = (ent : BaseEntI) => {
-  ent.originalValue = JSON.stringify(ent, jsonReplacer)
+  ent.caOriginalValue = JSON.stringify(ent, jsonReplacer)
 }
 
 export const entBaseOV = (ent : BaseEntI) => {
   return JSON.stringify(ent, jsonReplacer)
 }
 
+export const entRemoveClientFields = <E extends BaseEntI>(ent : E) : E => {
+  return JSON.parse(JSON.stringify(ent, jsonReplacer))
+}
+
 //When using JSON.stringify on entity, don't include the control fields
  export const jsonReplacer = (key : string, value : any) => {
-  if (key === 'originalValue' 
-    || key === 'entityStatus'
-    || key === 'changed') {
+  if (key === 'caOriginalValue' 
+    || key === 'caEntityStatus'
+    || key === 'caChanged'
+    || key === 'caParent') {
     return undefined;
   } 
   return value;
