@@ -42,6 +42,6 @@ export const newOrgEnt = (l : OrgListI) : OrgEntI => {
   var e : OrgEntI = {} as OrgEntI
   initEntBase(l, e)
   e.dvalue = l.dvalue
-  e.caEntityStatus = l.caEntityStatus
+  e._caEntityStatus = l._caEntityStatus
   return e
 }

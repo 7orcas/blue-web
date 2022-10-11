@@ -1,13 +1,13 @@
 import './role.css'
 import { useContext, useMemo, useReducer, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
+import { RoleEntI, PermissionListI, loadRoleList, newRolePermissionEnt, appendPermissions } from './role'
 import Editor from '../component/editor/Editor'
 import RoleDetail from './RoleDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
+import { loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { RoleEntI, PermissionListI, newRolePermissionEnt } from './role'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 import { initEntBaseOV } from '../definition/interfaces'
@@ -42,23 +42,11 @@ const RoleEditor = () => {
   
   //Load list records
   const loadListRole = async() => {
-    let list : Array<RoleEntI> = []
-    var data = await loadListBase(edConf.LIST_URL, list, setMessage, setSession)
-    if (typeof data !== 'undefined') {
-      for (var i=0;i<data.length;i++) {
-        var ent = list[i]
-        ent.permissions = data[i].permissions !== 'undefined'? data[i].permissions : []
-        ent.permissions.map((p) => p.caEntityStatus = EntityStatusType.valid)
-        for (var j=0;j<ent.permissions.length;j++) {
-          ent.permissions[j].caParent = ent
-        }
-        initEntBaseOV(ent)
-      }
-      setEdConf ({type: ECF.list, payload : list})
-    }
+    var list = await loadRoleList(edConf.LIST_URL, setMessage, setSession)
+    setEdConf ({type: ECF.list, payload : list})
   }
 
-  //Load entity
+  //Load entity (from list object)
   const loadEntityRole = async(id : number) => {
     var l : RoleEntI | null = getObjectById(id, edConf.list)
     if (l !== null) {
@@ -82,12 +70,15 @@ const RoleEditor = () => {
     var tempId = edConf.tempId;
 
     if (entity !== null) {
+var parent = entity._caParent
+entity._caParent = null
       var entityX = JSON.parse(JSON.stringify(entity));
       for (var i=0;i<list.length;i++) {
         var rp = newRolePermissionEnt(list[i], tempId, entity)
         entityX.permissions.push(rp)
         tempId -= 1
       }    
+entityX._caParent = parent
       setEdConf ({type: ECF.tempId, payload : tempId})
       updateEntity(id, entityX)
 

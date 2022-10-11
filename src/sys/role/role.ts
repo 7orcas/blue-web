@@ -1,7 +1,10 @@
-import { BaseEntI, initEntBase, initParent } from "../definition/interfaces"
+import { BaseEntI, initListBase, initEntBase, initParent, initEntBaseOV } from "../definition/interfaces"
+import { EntityStatusType } from '../definition/types'
+import apiGet from '../api/apiGet'
+import Message from '../system/Message'
 
 /*
-  Role entity
+  Role entities
 
   [Licence]
   Created 05.10.22
@@ -21,6 +24,58 @@ export interface RoleEntI extends BaseEntI {
   permissions : RolePermissionEntI[]
 }
 
+//Load Role list and populate the fields
+export const loadRoleList = async (
+      url : string, 
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
+  try {
+    const data = await apiGet(url, setMessage, setSession)
+
+    if (typeof data !== 'undefined') {
+      var list : Array<RoleEntI> = []
+
+      for (const l of data) {
+        var ent : RoleEntI = {} as RoleEntI  
+        initListBase(l, ent)
+        list.push (ent)
+        appendPermissions(l.permissions, ent)
+        initEntBaseOV(ent)
+      }
+
+      return list
+    }
+  } catch (err : any) { } 
+}
+
+//Load Permission list and populate the fields
+export const loadPermissionList = async (
+      url : string, 
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
+  try {
+    const data = await apiGet(url, setMessage, setSession)
+
+    if (typeof data !== 'undefined') {
+      var list : Array<PermissionListI> = []
+
+      for (const l of data) {
+        var ent : PermissionListI = {} as PermissionListI  
+        initListBase(l, ent)
+        ent.crud = l.crud
+        list.push (ent)
+        initEntBaseOV(ent)
+      }
+
+      return list
+    }
+  } catch (err : any) { } 
+}
+
 //Create and populate new role permission object
 export const newRolePermissionEnt = (p : PermissionListI, tempId : number, parent: RoleEntI) : RolePermissionEntI => {
   var rp = {} as RolePermissionEntI
@@ -31,3 +86,15 @@ export const newRolePermissionEnt = (p : PermissionListI, tempId : number, paren
   initParent (rp, parent)
   return rp
 }
+
+//Append permissions
+export const appendPermissions = (permissions : any, ent: RoleEntI) => {
+  ent.permissions = permissions !== 'undefined'? permissions : []
+  ent.permissions.map((p) => p._caEntityStatus = EntityStatusType.valid)
+  for (var j=0;j<ent.permissions.length;j++) {
+    var p = ent.permissions[j]
+    initEntBase(p, p)
+    initEntBaseOV(p)
+    p._caParent = ent
+  }
+}        

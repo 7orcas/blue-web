@@ -51,7 +51,7 @@ export const loadNewBase = async <L extends BaseEntI>(
     
     for (const l of data) {
       initListBase(l, list)
-      list.caEntityStatus = Status.invalid
+      list._caEntityStatus = Status.invalid
     }
     
     return data
@@ -121,22 +121,22 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
 
   if (o !== null) {
 
-    o.caChanged = entity.caOriginalValue !== x
+    o._caChanged = entity._caOriginalValue !== x
     o.active = entity.active
     o.orgNr = entity.orgNr
     o.code = entity.code
     o.descr = entity.descr
 
     //Set status
-    o.caEntityStatus = Status.valid
+    o._caEntityStatus = Status.valid
     if (entity.delete) {
-      o.caEntityStatus = Status.delete
+      o._caEntityStatus = Status.delete
     }
     else if (o.code.length === 0) {
-      o.caEntityStatus = Status.invalid
+      o._caEntityStatus = Status.invalid
     }
-    else if (o.caChanged) {
-      o.caEntityStatus = Status.changed
+    else if (o._caChanged) {
+      o._caEntityStatus = Status.changed
     }
 
     var newList : L[] = []
@@ -152,7 +152,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     //Set changed (eg to activate the Commit button)
     var changed = false
     for (i=0;i<newList.length;i++){
-      if (newList[i].caChanged === true) {
+      if (newList[i]._caChanged === true) {
         changed = true
         break
       } 
@@ -208,7 +208,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
 
   //Validate changes
   for (var i=0;i<edConf.list.length;i++){
-    if (edConf.list[i].caEntityStatus === Status.invalid) {
+    if (edConf.list[i]._caEntityStatus === Status.invalid) {
       var m = new Message()
       m.type = MessageType.error
       m.message = 'saveError1'
@@ -221,7 +221,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   //Remember deleted records
   var dIds : Array<number> = []
   for (var j=0;j<edConf.list.length;j++) {
-    if (edConf.list[j].caChanged) {
+    if (edConf.list[j]._caChanged) {
       var e = edConf.entities.get(edConf.list[j].id)
       if (e !== null && e !== undefined && e.delete) {
         dIds.push(edConf.list[j].id)
@@ -232,7 +232,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   //Only send updates
   var entList : E[] = []
   for (i=0;i<edConf.list.length;i++){
-    if (edConf.list[i].caChanged === true) {
+    if (edConf.list[i]._caChanged === true) {
       e = edConf.entities.get(edConf.list[i].id)
       if (e !== null && e !== undefined) {
         entList.push(entRemoveClientFields(e))

@@ -1,10 +1,10 @@
 import { useContext, useEffect, FC, useState } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
+import { PermissionListI, loadPermissionList } from './role'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
 import LangLabel from '../lang/LangLabel'
-import { loadListBase, useLabel, getObjectById } from '../component/editor/editorUtil'
-import { PermissionListI } from './role'
+import { useLabel, getObjectById } from '../component/editor/editorUtil'
 
 /*
   Dialog to show and select permissions
@@ -34,15 +34,18 @@ const PermissionDialog: FC<Props> = ({
   //Load permissions
   useEffect(() => {
     const loadListPermission = async () => {
-      let list: Array<PermissionListI> = []
-      var data = await loadListBase('permission/list', list, setMessage)
-      if (typeof data !== 'undefined') {
-        for (var i = 0; i < data.length; i++) {
-          var ent = list[i]
-          ent.crud = data[i].crud
-        }
+      let list = await loadPermissionList('permission/list', setMessage)
+      if (typeof list !== 'undefined') {
         setList(list)
       }
+      // var data = await loadListBase('permission/list', list, setMessage)
+      // if (typeof data !== 'undefined') {
+      //   for (var i = 0; i < data.length; i++) {
+      //     var ent = list[i]
+      //     ent.crud = data[i].crud
+      //   }
+      //   setList(list)
+      // }
     }
     loadListPermission()
   }, [setMessage])

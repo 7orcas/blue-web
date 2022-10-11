@@ -52,14 +52,11 @@ const RoleDetail : FC<Props> = ({
   //Set Changes
   const updateListX = (entity : RolePermissionEntI, field : string, value : any) => {
     updateBaseEntity(entity, field, value)
-
-    //Load entity (required to facilitate processing)
     setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(entity.id, entity))})
-    
     updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
-
+    
     //Update parent
-    updateList (entity.caParent, '', null)
+    updateList (entity._caParent, '', null)
   }
 
   //Process checkbox clicks

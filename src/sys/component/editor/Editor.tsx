@@ -98,7 +98,7 @@ import { BaseEntI } from '../../definition/interfaces'
             onSelectionModelChange={handleSelection}
             disableSelectionOnClick={disableSelectionOnClick}
             onCellEditCommit={handleRowEditCommit}
-            getRowClassName={(params) => `table-grid-status-${params.row.caEntityStatus}`}
+            getRowClassName={(params) => `table-grid-status-${params.row._caEntityStatus}`}
             getCellClassName={(params: GridCellParams<number>) => {
               return 'table-cell';
             }}

@@ -19,10 +19,10 @@ export interface BaseEntI {
   delete: boolean //@Transient field defined in ejb BaseEnt
   
   //Client attributes
-  caChanged: boolean  
-  caOriginalValue: string | undefined  
-  caEntityStatus: EntityStatusType 
-  caParent: any 
+  _caChanged: boolean  
+  _caOriginalValue: string | undefined  
+  _caEntityStatus: EntityStatusType 
+  _caParent: any 
 }
 
 //Flag entities that are not used
@@ -31,7 +31,7 @@ export interface UsedI extends BaseEntI {}
 //Populate base list fields
 export const initListBase = (data : any, ent : BaseEntI) => {
   initBase (data, ent)
-  ent.caChanged = false
+  ent._caChanged = false
 }
 
 //Populate base entity fields
@@ -48,16 +48,16 @@ const initBase = (data : any, base : BaseEntI) => {
   base.active = typeof data.active !== 'undefined'? data.active : true
   base.updated = typeof data.updated !== 'undefined'? data.updated : null
   base.delete = false
-  base.caEntityStatus = EntityStatusType.valid
-  base.caParent = null
+  base._caEntityStatus = EntityStatusType.valid
+  base._caParent = null
 }
 
 export const initParent = (child : BaseEntI, ent : BaseEntI) => {
-  child.caParent = ent.caParent
+  child._caParent = ent._caParent
 }
 
 export const initEntBaseOV = (ent : BaseEntI) => {
-  ent.caOriginalValue = JSON.stringify(ent, jsonReplacer)
+  ent._caOriginalValue = JSON.stringify(ent, jsonReplacer)
 }
 
 export const entBaseOV = (ent : BaseEntI) => {
@@ -70,10 +70,10 @@ export const entRemoveClientFields = <E extends BaseEntI>(ent : E) : E => {
 
 //When using JSON.stringify on entity, don't include the control fields
  export const jsonReplacer = (key : string, value : any) => {
-  if (key === 'caOriginalValue' 
-    || key === 'caEntityStatus'
-    || key === 'caChanged'
-    || key === 'caParent') {
+  if (key === '_caOriginalValue' 
+    || key === '_caEntityStatus'
+    || key === '_caChanged'
+    || key === '_caParent') {
     return undefined;
   } 
   return value;
