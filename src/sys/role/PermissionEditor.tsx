@@ -1,4 +1,4 @@
-import { useContext, useMemo, useReducer } from 'react'
+import { useContext, useMemo, useReducer, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
@@ -21,8 +21,7 @@ import { initEntBaseOV } from '../definition/interfaces'
 const PermissionEditor = () => {
   
   const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
-  setTitle('permadmin')
-  
+    
   //State 
   var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntPermission'], [])
@@ -33,6 +32,10 @@ const PermissionEditor = () => {
   ed.EXCEL_URL = 'permission/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
+
+  useEffect(() => {
+    setTitle('permadmin')
+  },[setTitle])
 
   //Load list records
   const loadListPermission = async() => {

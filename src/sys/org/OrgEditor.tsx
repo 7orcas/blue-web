@@ -1,4 +1,4 @@
-import { useContext, useMemo, useReducer } from 'react'
+import { useContext, useMemo, useReducer, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
@@ -21,8 +21,7 @@ import { initEntBase } from '../definition/interfaces'
 const OrgEditor = () => {
   
   const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
-  setTitle('orgadmin')
-
+  
   //State 
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
@@ -33,6 +32,11 @@ const OrgEditor = () => {
   ed.EXCEL_URL = 'org/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
+
+  useEffect(() => {
+    setTitle('orgadmin')
+  },[setTitle])
+
 
   //Load list records
   const loadListOrg = async() => {

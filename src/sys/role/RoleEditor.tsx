@@ -1,5 +1,5 @@
 import './role.css'
-import { useContext, useMemo, useReducer, useCallback, useState } from 'react'
+import { useContext, useMemo, useReducer, useEffect } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import RoleDetail from './RoleDetail'
@@ -25,7 +25,6 @@ import { EntityStatusType } from '../definition/types'
 const RoleEditor = () => {
   
   const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
-  setTitle('roleadmin')
   
   //State 
   var ed : EditorConfig<RoleEntI, RoleEntI> = new EditorConfig()
@@ -38,6 +37,10 @@ const RoleEditor = () => {
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
   
+  useEffect(() => {
+    setTitle('roleadmin')
+  },[setTitle])
+
   //Load list records
   const loadListRole = async() => {
     let list : Array<RoleEntI> = []

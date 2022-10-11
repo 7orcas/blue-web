@@ -20,7 +20,8 @@ import Button from '../component/utils/Button'
 
 const LabelsEditor = () => {
   
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage, setTitle } = useContext(AppContext) as AppContextI
+  
   const [dataSource, setDataSource] = useState<LabelI[]>([])
   
   useEffect(() => {
@@ -31,7 +32,8 @@ const LabelsEditor = () => {
       }
     }
     loadLabelsX()
-  },[setSession, setMessage])
+    setTitle('labeladmin')
+  },[setSession, setMessage, setTitle])
 
   const columns = [
     { name: 'id', header : 'ID', type: 'number', defaultWidth: 60, editable: false },
