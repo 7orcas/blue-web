@@ -13,7 +13,6 @@ import { BaseEntI } from '../../definition/interfaces'
 export enum EditorConfigField {
   configEntities,
   configUrl,
-  listUrl,
   newUrl,
   postUrl,
   excelUrl,
@@ -21,6 +20,7 @@ export enum EditorConfigField {
   editors,
   entities,
   load,
+  reload,
   tempId,
 }
 
@@ -28,7 +28,6 @@ export enum EditorConfigField {
 export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
   CONFIG_ENTITIES : string[] = ['']
   CONFIG_URL : string = ''
-  LIST_URL : string = ''
   NEW_URL : string = ''
   POST_URL : string = ''
   EXCEL_URL : string = ''
@@ -37,6 +36,7 @@ export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
   editors : Array<number> = []  //detailed editors (contains entity id)
   entities : Map<number,E> = new Map()  //loaded full entities
   load : boolean = true  //flag to load editor (always initialise true)
+  reload : Array<number> = []  //reload editors and entities via thier id
   tempId : number = -1
 }
 
@@ -50,9 +50,6 @@ export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(edit
     case EditorConfigField.configUrl:
       return {...editor, CONFIG_URL: action.payload}
 
-    case EditorConfigField.listUrl:
-      return {...editor, LIST_URL: action.payload}
-  
     case EditorConfigField.newUrl:
       return {...editor, NEW_URL: action.payload}
 
@@ -73,9 +70,12 @@ export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(edit
   
     case EditorConfigField.load:
       return {...editor, load: action.payload}      
-      
+
+    case EditorConfigField.reload:
+      return {...editor, reload: action.payload}      
+  
     case EditorConfigField.tempId:
-        return {...editor, tempId: action.payload}
+      return {...editor, tempId: action.payload}
 
     default:
       throw new Error()

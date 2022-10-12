@@ -16,47 +16,25 @@ import { GridSelectionModel } from '@mui/x-data-grid';
   @author John Stewart
 */
 
-//Load a list and populate the base fields
-export const loadListBase = async <T extends BaseEntI>(
-      url : string, 
-      list : Array<T>,
-      setMessage : (m : Message) => void, 
-      // eslint-disable-next-line no-empty-pattern
-      setSession? : ({}) => void) => {
-
-  try {
-    const data = await apiGet(url, setMessage, setSession)
-    
-    for (const l of data) {
-      var base : T = {} as T  
-      initListBase(l, base)
-      list.push (base)
-    }
-    
-    return data
-  } catch (err : any) { } 
-}
-
-
 //Load a new list entity
-export const loadNewBase = async <L extends BaseEntI>(
-      url : string, 
-      list : L, 
-      setMessage : (m : Message) => void, 
-      // eslint-disable-next-line no-empty-pattern
-      setSession? : ({}) => void) => {
+// export const loadNewBase = async <L extends BaseEntI>(
+//       url : string, 
+//       list : L, 
+//       setMessage : (m : Message) => void, 
+//       // eslint-disable-next-line no-empty-pattern
+//       setSession? : ({}) => void) => {
 
-  try {
-    const data = await apiGet(url, setMessage, setSession)
+//   try {
+//     const data = await apiGet(url, setMessage, setSession)
     
-    for (const l of data) {
-      initListBase(l, list)
-      list._caEntityStatus = Status.invalid
-    }
+//     for (const l of data) {
+//       initListBase(l, list)
+//       list._caEntityStatus = Status.invalid
+//     }
     
-    return data
-  } catch (err : any) { } 
-}
+//     return data
+//   } catch (err : any) { } 
+// }
 
 //Return a label
 export const useLabel = (key : string) => {
@@ -195,6 +173,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
 
 //Commit updates, reload entity list, reselect list and reload entities
 export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
+      entList : L[],
       edConf : EditorConfig<L, E>,
       setEdConf : any,        
       url: string,
@@ -207,8 +186,8 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   if (edConf.entities === null) return
 
   //Validate changes
-  for (var i=0;i<edConf.list.length;i++){
-    if (edConf.list[i]._caEntityStatus === Status.invalid) {
+  for (var i=0;i<entList.length;i++){
+    if (entList[i]._caEntityStatus === Status.invalid) {
       var m = new Message()
       m.type = MessageType.error
       m.message = 'saveError1'
@@ -220,23 +199,10 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
 
   //Remember deleted records
   var dIds : Array<number> = []
-  for (var j=0;j<edConf.list.length;j++) {
-    if (edConf.list[j]._caChanged) {
-      var e = edConf.entities.get(edConf.list[j].id)
-      if (e !== null && e !== undefined && e.delete) {
-        dIds.push(edConf.list[j].id)
-      }
-    }
-  }
-
-  //Only send updates
-  var entList : E[] = []
-  for (i=0;i<edConf.list.length;i++){
-    if (edConf.list[i]._caChanged === true) {
-      e = edConf.entities.get(edConf.list[i].id)
-      if (e !== null && e !== undefined) {
-        entList.push(entRemoveClientFields(e))
-      }
+  for (var j=0;j<entList.length;j++) {
+    var e = edConf.entities.get(entList[j].id)
+    if (e !== null && e !== undefined && e.delete) {
+      dIds.push(entList[j].id)
     }
   }
   
@@ -244,14 +210,21 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
 
   //Reset changes?
   if (data !== undefined){
+    
     setEdConf ({type: ECF.load, payload : true})
     setSession ({type: SessionField.changed, payload : false})
+    
+    //Remove all editors and entities
+    setEdConf ({type: ECF.editors, payload : []})
+    setEdConf ({type: ECF.entities, payload : new Map()})  
 
     //Reselect newly created records (if present) and remove deleted ones
-    setTimeout(() =>  {
+// console.log('setting timer')
+//     const timer =setTimeout(() =>  {
+    // useTimeout(() => {
       var ids : Array<number> = edConf.editors.slice()
 
-      //deletes
+      //remove deleted ids
       for (var j=0;j<dIds.length;j++) {
         const index = ids.indexOf(dIds[j]);
         if (index > -1) { 
@@ -259,7 +232,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
         }
       }  
 
-      //new
+      //new entity, find new id
       for (var i=0;i<data.data.length;i++) {
         var id0 = data.data[i][0]
         var id1 = data.data[i][1]
@@ -273,16 +246,27 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
               ids.splice(index, 1); 
             }
             ids.push(id1)
-            loadEntity(id1)
             break
           }
         }  
       }
-      if (ids.length>0){
-        setEdConf ({type: ECF.editors, payload : ids})
-      }
-    }, 500)
-    return data
+      
+      //Reload entities
+      // setEdConf ({type: ECF.reload, payload : ids})
+
+//       if (loadEntity !== null) {
+//         for (j=0;j<ids.length;j++) {
+// console.log('force load id =' + ids[j])
+//           loadEntity(ids[j])
+//         }
+//       }
+
+//       if (ids.length>0){
+//         setEdConf ({type: ECF.editors, payload : ids})
+//       }
+    // }, 1000)
+
+    return ids  //() => clearTimeout(timer)
   }
   
 }

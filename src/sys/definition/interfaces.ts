@@ -31,7 +31,6 @@ export interface UsedI extends BaseEntI {}
 //Populate base list fields
 export const initListBase = (data : any, ent : BaseEntI) => {
   initBase (data, ent)
-  ent._caChanged = false
 }
 
 //Populate base entity fields
@@ -48,6 +47,8 @@ const initBase = (data : any, base : BaseEntI) => {
   base.active = typeof data.active !== 'undefined'? data.active : true
   base.updated = typeof data.updated !== 'undefined'? data.updated : null
   base.delete = false
+  
+  base._caChanged = false
   base._caEntityStatus = EntityStatusType.valid
   base._caParent = null
 }

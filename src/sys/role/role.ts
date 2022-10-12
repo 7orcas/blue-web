@@ -26,13 +26,12 @@ export interface RoleEntI extends BaseEntI {
 
 //Load Role list and populate the fields
 export const loadRoleList = async (
-      url : string, 
       setMessage : (m : Message) => void, 
       // eslint-disable-next-line no-empty-pattern
       setSession? : ({}) => void) => {
 
   try {
-    const data = await apiGet(url, setMessage, setSession)
+    const data = await apiGet('role/list', setMessage, setSession)
 
     if (typeof data !== 'undefined') {
       var list : Array<RoleEntI> = []
@@ -52,13 +51,12 @@ export const loadRoleList = async (
 
 //Load Permission list and populate the fields
 export const loadPermissionList = async (
-      url : string, 
       setMessage : (m : Message) => void, 
       // eslint-disable-next-line no-empty-pattern
       setSession? : ({}) => void) => {
 
   try {
-    const data = await apiGet(url, setMessage, setSession)
+    const data = await apiGet('permission/list', setMessage, setSession)
 
     if (typeof data !== 'undefined') {
       var list : Array<PermissionListI> = []
@@ -73,7 +71,55 @@ export const loadPermissionList = async (
 
       return list
     }
-  } catch (err : any) { } 
+  } catch (err : any) {
+    console.log (err)
+  } 
+}
+
+//Create new role entity
+export const newRoleEnt = async (
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+  
+  try {
+    const data = await apiGet('role/new', setMessage, setSession)
+    
+    if (typeof data !== 'undefined') {
+      var ent : RoleEntI = {} as RoleEntI
+      for (const l of data) {
+        initEntBase(l, ent)
+        ent.permissions = []
+      }
+      return ent
+    }
+
+  } catch (err : any) {
+    console.log (err)
+  }
+}
+
+//Create new permission entity
+export const newPermissionList = async (
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
+
+  try {
+    const data = await apiGet('permission/new', setMessage, setSession)
+
+    if (typeof data !== 'undefined') {
+      var ent : PermissionListI = {} as PermissionListI
+      for (const l of data) {
+        initEntBase(l, ent)
+        ent.crud = l.crud
+      }
+      return ent
+    }
+
+  } catch (err : any) {
+    console.log (err)
+  }
 }
 
 //Create and populate new role permission object

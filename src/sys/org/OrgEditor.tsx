@@ -4,11 +4,11 @@ import Editor from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadListBase, loadNewBase, useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
+import { OrgListI, OrgEntI, loadOrgList, loadOrgEnt, newOrgList, newOrgEnt } from './org'
+import { useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { OrgListI, OrgEntI, loadOrgEnt, newOrgEnt } from './org'
 import { GridColDef } from '@mui/x-data-grid';
-import { initEntBase } from '../definition/interfaces'
+import { initEntBase, entRemoveClientFields } from '../definition/interfaces'
 
 /*
   CRUD Editor for organisations
@@ -26,8 +26,6 @@ const OrgEditor = () => {
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
   ed.CONFIG_URL = 'org/config'
-  ed.LIST_URL = 'org/list'
-  ed.NEW_URL = 'org/new'
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
 
@@ -40,15 +38,8 @@ const OrgEditor = () => {
 
   //Load list records
   const loadListOrg = async() => {
-    let list : Array<OrgListI> = []
-    var data = await loadListBase(edConf.LIST_URL, list, setMessage, setSession)
-    if (typeof data !== 'undefined') {
-      for (var i=0;i<data.length;i++) {
-        var org = list[i]
-        org.dvalue = data[i].dvalue
-      }
-      setEdConf ({type: ECF.list, payload : list})
-    }
+    var list = await loadOrgList(setMessage, setSession)
+    setEdConf ({type: ECF.list, payload : list})
   }
 
   //Load entity
@@ -62,14 +53,11 @@ const OrgEditor = () => {
 
   //Create new entity
   const handleCreate = async () => {
-    var l : OrgListI = {} as OrgListI
-    var data = await loadNewBase(edConf.NEW_URL, l, setMessage, setSession)
-   
-    if (typeof data !== 'undefined') {
-      l.dvalue = data[0].dvalue
+    var l = await newOrgList(setMessage, setSession)
+    if (typeof l !== 'undefined') {
       var e : OrgEntI = newOrgEnt(l)
-      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(e.id, e))})
       setEdConf ({type: ECF.list, payload : [l, ...edConf.list]})
+      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(e.id, e))})
     }
   }
 
@@ -89,7 +77,20 @@ const OrgEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-      handleCommit(edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setMessage, setSession)
+
+      //Only send updates
+      var entList : OrgEntI[] = []
+      for (var i=0;i<edConf.list.length;i++){
+        if (edConf.list[i]._caChanged === true) {
+          var e = edConf.entities.get(edConf.list[i].id)
+          if (e !== null && e !== undefined) {
+            e = entRemoveClientFields(e)
+            entList.push(e)
+          }
+        }
+      }
+
+      handleCommit(entList, edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setMessage, setSession)
     } catch (err : any) { } 
   }
 

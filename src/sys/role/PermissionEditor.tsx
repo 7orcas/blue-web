@@ -3,12 +3,12 @@ import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { loadListBase, loadNewBase, useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
+import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { PermissionListI } from './role'
+import { PermissionListI, loadPermissionList, newPermissionList } from './role'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { initEntBaseOV } from '../definition/interfaces'
+import { initEntBaseOV, entRemoveClientFields } from '../definition/interfaces'
 
 /*
   CRUD Editor for permissions
@@ -26,8 +26,6 @@ const PermissionEditor = () => {
   var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
   ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntPermission'], [])
   ed.CONFIG_URL = 'permission/config'
-  ed.LIST_URL = 'permission/list'
-  ed.NEW_URL = 'permission/new'
   ed.POST_URL = 'permission/post'
   ed.EXCEL_URL = 'permission/excel'
 
@@ -39,25 +37,14 @@ const PermissionEditor = () => {
 
   //Load list records
   const loadListPermission = async() => {
-    let list : Array<PermissionListI> = []
-    var data = await loadListBase(edConf.LIST_URL, list, setMessage, setSession)
-    if (typeof data !== 'undefined') {
-      for (var i=0;i<data.length;i++) {
-        var ent = list[i]
-        ent.crud = data[i].crud
-        initEntBaseOV(ent)
-      }
-      setEdConf ({type: ECF.list, payload : list})
-    }
+    var list = await loadPermissionList(setMessage, setSession)
+    setEdConf ({type: ECF.list, payload : list})
   }
 
   //Create new entity
   const handleCreate = async () => {
-    var l : PermissionListI = {} as PermissionListI
-    var data = await loadNewBase(edConf.NEW_URL, l, setMessage, setSession)
-   
-    if (typeof data !== 'undefined') {
-      l.crud = data[0].crud
+    var l = await newPermissionList(setMessage, setSession)
+    if (typeof l !== 'undefined') {
       setEdConf ({type: ECF.list, payload : [l, ...edConf.list]})
     }
   }
@@ -65,7 +52,20 @@ const PermissionEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-      handleCommit(edConf, setEdConf, edConf.POST_URL, null, setMessage, setSession)
+
+      //Only send updates
+      var entList : PermissionListI[] = []
+      for (var i=0;i<edConf.list.length;i++){
+        if (edConf.list[i]._caChanged === true) {
+          var e = edConf.entities.get(edConf.list[i].id)
+          if (e !== null && e !== undefined) {
+            e = entRemoveClientFields(e)
+            entList.push(e)
+          }
+        }
+      }
+      
+      handleCommit(entList, edConf, setEdConf, edConf.POST_URL, null, setMessage, setSession)
     } catch (err : any) { } 
   }
 

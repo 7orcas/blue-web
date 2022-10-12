@@ -34,18 +34,10 @@ const PermissionDialog: FC<Props> = ({
   //Load permissions
   useEffect(() => {
     const loadListPermission = async () => {
-      let list = await loadPermissionList('permission/list', setMessage)
+      let list = await loadPermissionList(setMessage)
       if (typeof list !== 'undefined') {
         setList(list)
       }
-      // var data = await loadListBase('permission/list', list, setMessage)
-      // if (typeof data !== 'undefined') {
-      //   for (var i = 0; i < data.length; i++) {
-      //     var ent = list[i]
-      //     ent.crud = data[i].crud
-      //   }
-      //   setList(list)
-      // }
     }
     loadListPermission()
   }, [setMessage])

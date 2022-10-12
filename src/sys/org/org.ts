@@ -1,6 +1,6 @@
 import apiGet from '../api/apiGet'
 import Message from '../system/Message'
-import { BaseEntI, initEntBase, initEntBaseOV } from "../definition/interfaces"
+import { BaseEntI, initListBase, initEntBase, initEntBaseOV } from "../definition/interfaces"
 
 /*
   Organisation's entities and load function
@@ -16,6 +16,31 @@ export interface OrgListI extends BaseEntI {
 
 export interface OrgEntI extends BaseEntI {
   dvalue: boolean
+}
+
+//Load Org list and populate the fields
+export const loadOrgList = async (
+  setMessage : (m : Message) => void, 
+  // eslint-disable-next-line no-empty-pattern
+  setSession? : ({}) => void) => {
+
+  try {
+    const data = await apiGet('org/list', setMessage, setSession)
+
+    if (typeof data !== 'undefined') {
+      var list : Array<OrgListI> = []
+
+      for (const l of data) {
+        var ent : OrgListI = {} as OrgListI  
+        initListBase(l, ent)
+        list.push (ent)
+        ent.dvalue = l.dvalue
+        initEntBaseOV(ent)
+      }
+
+      return list
+    }
+  } catch (err : any) { } 
 }
 
 //Load org entity
@@ -36,6 +61,30 @@ export const loadOrgEnt = async (
     return org
   } catch (err : any) { } 
 }
+
+//Create new org list entity
+export const newOrgList = async (
+  setMessage : (m : Message) => void, 
+  // eslint-disable-next-line no-empty-pattern
+  setSession? : ({}) => void) => {
+
+try {
+  const data = await apiGet('org/new', setMessage, setSession)
+
+  if (typeof data !== 'undefined') {
+    var ent : OrgListI = {} as OrgListI
+    for (const l of data) {
+      initListBase(l, ent)
+      ent.dvalue = l.dvalue
+    }
+    return ent
+  }
+
+} catch (err : any) {
+  console.log (err)
+}
+}
+
 
 //Create and populate new org object
 export const newOrgEnt = (l : OrgListI) : OrgEntI => {

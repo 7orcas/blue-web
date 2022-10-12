@@ -79,6 +79,7 @@ const RoleDetail : FC<Props> = ({
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
+    { field: '_caChanged', headerName: useLabel('changed'), type: 'number', width: 50 },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 40, hide: true },
     { field: 'code', headerName: useLabel('url-c'), width: 100, type: 'string' },
     { field: 'descr', headerName: useLabel('desc'), width: 150, type: 'string' },
@@ -115,7 +116,7 @@ const RoleDetail : FC<Props> = ({
         </TableMenu>
       </div>
       <Editor 
-        style={{ height: '80vh', minWidth : 410, maxWidth : 410 }}
+        style={{ height: '80vh', minWidth : 450, maxWidth : 450 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
         listColumns={columns}
