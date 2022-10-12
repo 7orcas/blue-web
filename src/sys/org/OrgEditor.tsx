@@ -20,21 +20,17 @@ import { initEntBase, entRemoveClientFields } from '../definition/interfaces'
 
 const OrgEditor = () => {
   
-  const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //State 
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
+  ed.EDITOR_TITLE = 'orgadmin'
   ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
   ed.CONFIG_URL = 'org/config'
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
-
-  useEffect(() => {
-    setTitle('orgadmin')
-  },[setTitle])
-
 
   //Load list records
   const loadListOrg = async() => {

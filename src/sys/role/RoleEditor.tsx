@@ -1,5 +1,5 @@
 import './role.css'
-import { useContext, useMemo, useReducer, useEffect, useRef } from 'react'
+import { useContext, useMemo, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { RoleEntI, PermissionListI, loadRoleList, newRoleEnt, newRolePermissionEnt, appendPermissions, RolePermissionEntI } from './role'
 import Editor from '../component/editor/Editor'
@@ -10,9 +10,9 @@ import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { initEntBaseOV, entRemoveClientFields } from '../definition/interfaces'
-import { EntityStatusType } from '../definition/types'
-import useTimeout from '../component/editor/useTimeout'
+import { entRemoveClientFields } from '../definition/interfaces'
+import { EntityStatusType as Status } from '../definition/types'
+
 
 /*
   CRUD Editor for roles
@@ -24,62 +24,40 @@ import useTimeout from '../component/editor/useTimeout'
 
 const RoleEditor = () => {
   
-  const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //State 
   var ed : EditorConfig<RoleEntI, RoleEntI> = new EditorConfig()
+  ed.EDITOR_TITLE = 'roleadmin'
   ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntRole','system.role.ent.EntRolePermission'], [])
   ed.CONFIG_URL = 'role/config'
   ed.POST_URL = 'role/post'
   ed.EXCEL_URL = 'role/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
-  
-  
-  useEffect(() => {
-    setTitle('roleadmin')
-  },[setTitle])
-  
-  useEffect(() => {
-    if (edConf.reload.length === 0) return
-console.log('useEffect1 ' + edConf.reload.length)
-    const timer =setTimeout(() =>  {
-console.log('useEffect2 ' + edConf.reload.length)
-
-      // for (var j=0;j<edConf.reload.length;j++) {
-      //   loadEntityRole(edConf.reload[j])
-      // }
-      setEdConf ({type: ECF.editors, payload : edConf.reload})
-    }, 2000)
-
-    setEdConf ({type: ECF.reload, payload : []})
-    // return () => clearTimeout(timer)
-  },[edConf.reload])
-  
-
+ 
   //Load list records
   const loadListRole = async() => {
     var list = await loadRoleList(setMessage, setSession)
     if (typeof list !== 'undefined') {
       setEdConf ({type: ECF.list, payload : list})
 
+      var m = new Map()
       for (var i=0;i<list.length;i++) {
-        setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(list[i].id, list[i]))})    
+        m.set(list[i].id, list[i])
       }
-
-
-// console.log('loadListRole ' + list[1].id + ' ' + list[1].permissions[0].delete)
+      // setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(list[i].id, list[i]))})    
+      setEdConf ({type: ECF.entities, payload : m})
     }
   }
 
   //Load entity (from list object)
   const loadEntityRole = (id : number) => {
-//     var l : RoleEntI | null = getObjectById(id, edConf.list)
-// console.log('loadEntityRole ' + l?.id + ' ' +  l?.permissions[0].delete)
-//     if (l !== null) {
-//       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, l))})  
-//       return l
-//     }
+    var l : RoleEntI | null = getObjectById(id, edConf.list)
+    if (l !== null) {
+      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, l))})  
+      return l
+    }
   }
 
   //Update list and entities
@@ -92,6 +70,7 @@ console.log('useEffect2 ' + edConf.reload.length)
     updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
 
+  //Update permission dialog selections
   const updateEntityPermissions = (id : number, list : PermissionListI[]) => {
     var entity : RoleEntI | null = getObjectById(id, edConf.list)
     var tempId = edConf.tempId;
@@ -105,6 +84,8 @@ console.log('useEffect2 ' + edConf.reload.length)
       var entityX = JSON.parse(JSON.stringify(entity));
       for (i=0;i<list.length;i++) {
         var rp = newRolePermissionEnt(list[i], tempId, entity)
+        rp._caChanged = true
+        rp._caEntityStatus = Status.changed
         entityX.permissions.push(rp)
         tempId -= 1
       }
@@ -139,11 +120,12 @@ console.log('useEffect2 ' + edConf.reload.length)
   const handleCommitX = async() => {
     try {
 
+      var saveList : RoleEntI[] = []
+
       //Only send updates
-      var entList : RoleEntI[] = []
       for (var i=0;i<edConf.list.length;i++){
         if (edConf.list[i]._caChanged === true) {
-console.log('change 1')
+
           var e = edConf.entities.get(edConf.list[i].id)
 
           var permissions : RolePermissionEntI[] = []
@@ -153,34 +135,28 @@ console.log('change 1')
             }
           }
 
-          if (e !== null && e !== undefined) {
-            e = entRemoveClientFields(e)
-            e.permissions = permissions
-console.log('change 2 id=' + e.id + ' permissions.length=' + permissions.length)
-            entList.push(e)
-          }
+          e = entRemoveClientFields(e)
+          e.permissions = permissions
+          saveList.push(e)
         }
       }
 
-      var ids : number [] | undefined = await handleCommit(entList, edConf, setEdConf, edConf.POST_URL, loadEntityRole, setMessage, setSession)
+      var ids : number [] | undefined = await handleCommit(saveList, edConf, setEdConf, edConf.POST_URL, loadEntityRole, setMessage, setSession)
+      
+      //Reselect editors
       if (ids !== undefined){
-console.log('change 3 ' + ids.length)
-      setEdConf ({type: ECF.reload, payload : ids})
-console.log('done')
+        const timer = setTimeout(() =>  {
+          setEdConf ({type: ECF.editors, payload : ids})
+        }, 500)
+          
+        return () => clearTimeout(timer)             
       }
-      // useTimeout(() => {
-
-      // }, 5000)
 
     } catch (err : any) { 
-console.log(err)      
+      console.log(err)      
     } 
   }
-
-  useTimeout(() => {
-
-  }, 5000)
-
+ 
   //Set Changes
   const updateList = (entity : RoleEntI, field : string, value : any) => {
     updateBaseEntity(entity, field, value)

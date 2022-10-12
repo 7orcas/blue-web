@@ -1,4 +1,4 @@
-import { useContext, useEffect, FC, useCallback } from 'react'
+import { useContext, useEffect, FC } from 'react'
 import AppContext, { AppContextI } from '../../system/AppContext'
 import { getObjectById, loadConfiguration, onListSelectionSetEditors } from './editorUtil'
 import { DataGrid, GridColDef, GridSelectionModel, GridCellParams, GridCellEditCommitParams } from '@mui/x-data-grid';
@@ -24,6 +24,7 @@ import { BaseEntI } from '../../definition/interfaces'
     updateList?: any
     disableSelectionOnClick? : boolean
     checkboxSelection? : boolean
+    useChangesPrompt?: boolean
     children: any
   }
     
@@ -37,9 +38,10 @@ import { BaseEntI } from '../../definition/interfaces'
         updateList=null,
         disableSelectionOnClick=false,
         checkboxSelection=true,
+        useChangesPrompt=true,
         children }) => {
   
-  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage, setTitle, configs, setConfigs } = useContext(AppContext) as AppContextI
   
   //Initial load 
   useEffect(() => {
@@ -59,12 +61,16 @@ import { BaseEntI } from '../../definition/interfaces'
     //Load in list
     loadList()
 
+    if (editorConfig.EDITOR_TITLE.length > 0) {
+      setTitle(editorConfig.EDITOR_TITLE)
+    }
+
     setEditorConfig ({type: EditorConfigField.load, payload : false})
   },[editorConfig.load])
 
   //Warn the user of unsaved changes
-  usePrompt(session.changed, setMessage);
-
+  usePrompt(useChangesPrompt && session.changed, setMessage);
+  
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
     onListSelectionSetEditors(editorConfig, setEditorConfig, ids, loadEntity)

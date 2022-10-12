@@ -20,15 +20,14 @@ export enum EditorConfigField {
   editors,
   entities,
   load,
-  reload,
   tempId,
 }
 
 //Class to store editor variables
 export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
+  EDITOR_TITLE : string = ''
   CONFIG_ENTITIES : string[] = ['']
   CONFIG_URL : string = ''
-  NEW_URL : string = ''
   POST_URL : string = ''
   EXCEL_URL : string = ''
 
@@ -36,7 +35,6 @@ export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
   editors : Array<number> = []  //detailed editors (contains entity id)
   entities : Map<number,E> = new Map()  //loaded full entities
   load : boolean = true  //flag to load editor (always initialise true)
-  reload : Array<number> = []  //reload editors and entities via thier id
   tempId : number = -1
 }
 
@@ -44,20 +42,20 @@ export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
 export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(editor : EditorConfig<L,E>, action : any) => {
   switch (action.type) {
 
-    case EditorConfigField.configEntities:
-      return {...editor, CONFIG_ENTITIES: action.payload}
+    // case EditorConfigField.configEntities:
+    //   return {...editor, CONFIG_ENTITIES: action.payload}
 
-    case EditorConfigField.configUrl:
-      return {...editor, CONFIG_URL: action.payload}
+    // case EditorConfigField.configUrl:
+    //   return {...editor, CONFIG_URL: action.payload}
 
-    case EditorConfigField.newUrl:
-      return {...editor, NEW_URL: action.payload}
+    // case EditorConfigField.newUrl:
+    //   return {...editor, NEW_URL: action.payload}
 
-    case EditorConfigField.postUrl:
-      return {...editor, POST_URL: action.payload}
+    // case EditorConfigField.postUrl:
+    //   return {...editor, POST_URL: action.payload}
  
-    case EditorConfigField.excelUrl:
-      return {...editor, EXCEL_URL: action.payload}
+    // case EditorConfigField.excelUrl:
+    //   return {...editor, EXCEL_URL: action.payload}
 
     case EditorConfigField.list:
       return {...editor, list: action.payload}
@@ -71,9 +69,6 @@ export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(edit
     case EditorConfigField.load:
       return {...editor, load: action.payload}      
 
-    case EditorConfigField.reload:
-      return {...editor, reload: action.payload}      
-  
     case EditorConfigField.tempId:
       return {...editor, tempId: action.payload}
 
@@ -81,7 +76,3 @@ export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(edit
       throw new Error()
   }
 }
-
-
-
-

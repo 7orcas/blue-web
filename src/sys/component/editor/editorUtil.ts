@@ -4,9 +4,9 @@ import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
 import Message, { MessageType } from '../../system/Message'
 import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
-import { EntityStatusType as Status } from '../../definition/types';
-import { BaseEntI, initListBase, entBaseOV, ConfigI, entRemoveClientFields } from '../../definition/interfaces';
-import { GridSelectionModel } from '@mui/x-data-grid';
+import { EntityStatusType as Status } from '../../definition/types'
+import { BaseEntI, entBaseOV, ConfigI } from '../../definition/interfaces'
+import { GridSelectionModel } from '@mui/x-data-grid'
 
 /*
   Editor utility functions
@@ -15,26 +15,6 @@ import { GridSelectionModel } from '@mui/x-data-grid';
   Created 15.09.22
   @author John Stewart
 */
-
-//Load a new list entity
-// export const loadNewBase = async <L extends BaseEntI>(
-//       url : string, 
-//       list : L, 
-//       setMessage : (m : Message) => void, 
-//       // eslint-disable-next-line no-empty-pattern
-//       setSession? : ({}) => void) => {
-
-//   try {
-//     const data = await apiGet(url, setMessage, setSession)
-    
-//     for (const l of data) {
-//       initListBase(l, list)
-//       list._caEntityStatus = Status.invalid
-//     }
-    
-//     return data
-//   } catch (err : any) { } 
-// }
 
 //Return a label
 export const useLabel = (key : string) => {
@@ -171,7 +151,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
   setEdConf ({type: ECF.editors, payload : editors})
 }
 
-//Commit updates, reload entity list, reselect list and reload entities
+//Commit updates, reload entity list, return reselected list ids 
 export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       entList : L[],
       edConf : EditorConfig<L, E>,
@@ -218,38 +198,35 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
     setEdConf ({type: ECF.editors, payload : []})
     setEdConf ({type: ECF.entities, payload : new Map()})  
 
-    //Reselect newly created records (if present) and remove deleted ones
-// console.log('setting timer')
-//     const timer =setTimeout(() =>  {
-    // useTimeout(() => {
-      var ids : Array<number> = edConf.editors.slice()
+    //Reselect open editor ids (if present) and remove deleted ones
+    var ids : Array<number> = edConf.editors.slice()
 
-      //remove deleted ids
-      for (var j=0;j<dIds.length;j++) {
-        const index = ids.indexOf(dIds[j]);
-        if (index > -1) { 
-          ids.splice(index, 1); 
+    //remove deleted ids
+    for (j=0;j<dIds.length;j++) {
+      const index = ids.indexOf(dIds[j]);
+      if (index > -1) { 
+        ids.splice(index, 1); 
+      }
+    }  
+
+    //if new entity (it has a negative id) find new id
+    for (i=0;i<data.data.length;i++) {
+      var id0 = data.data[i][0]
+      var id1 = data.data[i][1]
+
+      for (j=0;j<edConf.list.length;j++) {
+
+        //remove temp id and add new id
+        if (edConf.list[j].id === id0) {
+          const index = ids.indexOf(id0);
+          if (index > -1) { 
+            ids.splice(index, 1); 
+          }
+          ids.push(id1)
+          break
         }
       }  
-
-      //new entity, find new id
-      for (var i=0;i<data.data.length;i++) {
-        var id0 = data.data[i][0]
-        var id1 = data.data[i][1]
-
-        for (j=0;j<edConf.list.length;j++) {
-
-          //remove temp id and add new id
-          if (edConf.list[j].id === id0) {
-            const index = ids.indexOf(id0);
-            if (index > -1) { 
-              ids.splice(index, 1); 
-            }
-            ids.push(id1)
-            break
-          }
-        }  
-      }
+    }
       
       //Reload entities
       // setEdConf ({type: ECF.reload, payload : ids})
@@ -266,7 +243,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
 //       }
     // }, 1000)
 
-    return ids  //() => clearTimeout(timer)
+    return ids 
   }
   
 }

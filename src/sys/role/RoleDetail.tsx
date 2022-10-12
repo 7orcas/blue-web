@@ -124,6 +124,7 @@ const RoleDetail : FC<Props> = ({
         updateList={updateListX}
         disableSelectionOnClick={true}
         checkboxSelection={false}
+        useChangesPrompt={false}
       >
       </Editor>
     </div>

@@ -20,20 +20,17 @@ import { initEntBaseOV, entRemoveClientFields } from '../definition/interfaces'
 
 const PermissionEditor = () => {
   
-  const { session, setSession, setTitle, setMessage } = useContext(AppContext) as AppContextI
+  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
     
   //State 
   var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
+  ed.EDITOR_TITLE = 'permadmin'
   ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntPermission'], [])
   ed.CONFIG_URL = 'permission/config'
   ed.POST_URL = 'permission/post'
   ed.EXCEL_URL = 'permission/excel'
 
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
-
-  useEffect(() => {
-    setTitle('permadmin')
-  },[setTitle])
 
   //Load list records
   const loadListPermission = async() => {
