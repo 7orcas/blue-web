@@ -1,8 +1,9 @@
 import { useContext, useEffect, FC, useState } from 'react'
+import Draggable from 'react-draggable'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { PermissionListI, loadPermissionList } from './role'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from '@mui/x-data-grid'
 import LangLabel from '../lang/LangLabel'
 import { useLabel, getObjectById } from '../component/editor/editorUtil'
 
@@ -57,6 +58,17 @@ const PermissionDialog: FC<Props> = ({
     setSelection(perms) 
   }
 
+  //Single selection
+  const handleDoubleClick = (ids : GridRowParams) => {
+    var perms: Array<PermissionListI> = []
+    var ent : PermissionListI | null = getObjectById(Number(ids.id), list)
+    if (ent !== null) {
+      perms.push(ent)
+    }
+    updateEntity(perms) 
+    setDialog(false)
+  }
+
   const updateEntityX = () => {
     updateEntity(selection)
     setDialog(false)
@@ -76,9 +88,11 @@ const PermissionDialog: FC<Props> = ({
 
   return (
     <>
+      <Draggable>
       <Dialog
         onClose={handleClose}
         open={dialog}
+        
         PaperProps={{ sx: { position: "fixed", top: '5%', left: '30%', m: 0, minWidth: '630px' } }}
       >
         <div className={'permission-dialog'}>
@@ -94,6 +108,7 @@ const PermissionDialog: FC<Props> = ({
                 rowsPerPageOptions={[9]}
                 checkboxSelection
                 onSelectionModelChange={handleSelection}
+                onRowDoubleClick={handleDoubleClick}
               />
             </div>
           </DialogContent>
@@ -103,6 +118,7 @@ const PermissionDialog: FC<Props> = ({
           </DialogActions>
         </div>
       </Dialog>
+      </Draggable>
     </>
   )
 }

@@ -21,7 +21,7 @@ export interface PermissionListI extends BaseEntI {
 }
 
 export interface RolePermissionEntI extends BaseEntI {
-  permission_id: number //Immutatble
+  permissionId: number //Immutatble
   crud: string //Immutatble
 }
 
@@ -153,7 +153,7 @@ export const newRolePermissionEnt = (p : PermissionListI, tempId : number, paren
   var rp = {} as RolePermissionEntI
   initEntBase (p, rp)
   rp.id = tempId
-  rp.permission_id = p.id
+  rp.permissionId = p.id
   rp.crud = p.crud
   initParent (rp, parent)
   return rp
