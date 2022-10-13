@@ -79,8 +79,7 @@ const RoleDetail : FC<Props> = ({
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: '_caChanged', headerName: useLabel('changed'), type: 'number', width: 50 },
-    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 40, hide: true },
+    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 40 },
     { field: 'code', headerName: useLabel('url-c'), width: 100, type: 'string' },
     { field: 'descr', headerName: useLabel('desc'), width: 150, type: 'string' },
     { field: 'crud', headerName: useLabel('crud'), width: 60, type: 'string' },

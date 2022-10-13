@@ -1,14 +1,15 @@
-import { useContext, useMemo, useReducer, useEffect } from 'react'
+import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { OrgListI, OrgEntI, loadOrgList, loadOrgEnt, newOrgList, newOrgEnt } from './org'
-import { useLabel, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
-import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
+import { editorConfig, OrgListI, OrgEntI, loadOrgList, loadOrgEnt, newOrgList, newOrgEnt } from './org'
+import { useLabel, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
+import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid';
-import { initEntBase, entRemoveClientFields } from '../definition/interfaces'
+import { entRemoveClientFields } from '../definition/interfaces'
+import { EntityStatusType as Status } from "../definition/types"
 
 /*
   CRUD Editor for organisations
@@ -23,14 +24,7 @@ const OrgEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //State 
-  var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
-  ed.EDITOR_TITLE = 'orgadmin'
-  ed.CONFIG_ENTITIES = useMemo(() => ['system.org.ent.EntOrg'], [])
-  ed.CONFIG_URL = 'org/config'
-  ed.POST_URL = 'org/post'
-  ed.EXCEL_URL = 'org/excel'
-
-  const [edConf, setEdConf] = useReducer(edConfRed, ed) 
+  const [edConf, setEdConf] = useReducer(edConfRed, editorConfig()) 
 
   //Load list records
   const loadListOrg = async() => {
@@ -74,10 +68,15 @@ const OrgEditor = () => {
   const handleCommitX = async() => {
     try {
 
+      if (containsInvalid(edConf.list, setMessage)) {
+        return
+      }
+
       //Only send updates
       var entList : OrgEntI[] = []
       for (var i=0;i<edConf.list.length;i++){
-        if (edConf.list[i]._caChanged === true) {
+        if (edConf.list[i]._caEntityStatus === Status.changed 
+          || edConf.list[i]._caEntityStatus === Status.delete) {
           var e = edConf.entities.get(edConf.list[i].id)
           if (e !== null && e !== undefined) {
             e = entRemoveClientFields(e)

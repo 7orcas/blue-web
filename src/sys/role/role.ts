@@ -1,10 +1,15 @@
 import { BaseEntI, initListBase, initEntBase, initParent, initEntBaseOV } from "../definition/interfaces"
 import { EntityStatusType } from '../definition/types'
+import { EditorConfig } from '../component/editor/EditorConfig'
 import apiGet from '../api/apiGet'
 import Message from '../system/Message'
 
 /*
-  Role entities
+  Role configurations.
+  Includes
+  - editor configuration
+  - entity interfaces
+  - get (data) functions
 
   [Licence]
   Created 05.10.22
@@ -23,6 +28,27 @@ export interface RolePermissionEntI extends BaseEntI {
 export interface RoleEntI extends BaseEntI {
   permissions : RolePermissionEntI[]
 }
+
+export const editorConfigRole = () : EditorConfig<RoleEntI, RoleEntI> => {
+  var ed : EditorConfig<RoleEntI, RoleEntI> = new EditorConfig()
+  ed.EDITOR_TITLE = 'roleadmin'
+  ed.CONFIG_ENTITIES = ['system.role.ent.EntRole','system.role.ent.EntRolePermission']
+  ed.CONFIG_URL = 'role/config'
+  ed.POST_URL = 'role/post'
+  ed.EXCEL_URL = 'role/excel'
+  return ed
+}
+
+export const editorConfigPermission = () : EditorConfig<PermissionListI, PermissionListI> => {
+  var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
+  ed.EDITOR_TITLE = 'permadmin'
+  ed.CONFIG_ENTITIES = ['system.role.ent.EntPermission']
+  ed.CONFIG_URL = 'permission/config'
+  ed.POST_URL = 'permission/post'
+  ed.EXCEL_URL = 'permission/excel'
+  return ed
+}
+
 
 //Load Role list and populate the fields
 export const loadRoleList = async (

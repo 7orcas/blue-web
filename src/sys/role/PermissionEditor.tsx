@@ -1,14 +1,15 @@
-import { useContext, useMemo, useReducer, useEffect } from 'react'
+import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
-import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { PermissionListI, loadPermissionList, newPermissionList } from './role'
+import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
+import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
+import { editorConfigPermission, PermissionListI, loadPermissionList, newPermissionList } from './role'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
-import { initEntBaseOV, entRemoveClientFields } from '../definition/interfaces'
+import { entRemoveClientFields } from '../definition/interfaces'
+import { EntityStatusType as Status } from "../definition/types"
 
 /*
   CRUD Editor for permissions
@@ -23,14 +24,7 @@ const PermissionEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
     
   //State 
-  var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
-  ed.EDITOR_TITLE = 'permadmin'
-  ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntPermission'], [])
-  ed.CONFIG_URL = 'permission/config'
-  ed.POST_URL = 'permission/post'
-  ed.EXCEL_URL = 'permission/excel'
-
-  const [edConf, setEdConf] = useReducer(edConfRed, ed) 
+  const [edConf, setEdConf] = useReducer(edConfRed, editorConfigPermission()) 
 
   //Load list records
   const loadListPermission = async() => {
@@ -50,10 +44,15 @@ const PermissionEditor = () => {
   const handleCommitX = async() => {
     try {
 
+      if (containsInvalid(edConf.list, setMessage)) {
+        return
+      }
+
       //Only send updates
       var entList : PermissionListI[] = []
       for (var i=0;i<edConf.list.length;i++){
-        if (edConf.list[i]._caChanged === true) {
+        if (edConf.list[i]._caEntityStatus === Status.changed 
+          || edConf.list[i]._caEntityStatus === Status.delete) {
           var e = edConf.entities.get(edConf.list[i].id)
           if (e !== null && e !== undefined) {
             e = entRemoveClientFields(e)

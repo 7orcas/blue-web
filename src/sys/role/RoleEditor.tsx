@@ -1,13 +1,13 @@
 import './role.css'
-import { useContext, useMemo, useReducer } from 'react'
+import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { RoleEntI, PermissionListI, loadRoleList, newRoleEnt, newRolePermissionEnt, appendPermissions, RolePermissionEntI } from './role'
+import { editorConfigRole, RoleEntI, PermissionListI, loadRoleList, newRoleEnt, newRolePermissionEnt, RolePermissionEntI } from './role'
 import Editor from '../component/editor/Editor'
 import RoleDetail from './RoleDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit } from '../component/editor/editorUtil'
-import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
+import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
+import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 import { entRemoveClientFields } from '../definition/interfaces'
@@ -27,14 +27,7 @@ const RoleEditor = () => {
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //State 
-  var ed : EditorConfig<RoleEntI, RoleEntI> = new EditorConfig()
-  ed.EDITOR_TITLE = 'roleadmin'
-  ed.CONFIG_ENTITIES = useMemo(() => ['system.role.ent.EntRole','system.role.ent.EntRolePermission'], [])
-  ed.CONFIG_URL = 'role/config'
-  ed.POST_URL = 'role/post'
-  ed.EXCEL_URL = 'role/excel'
-
-  const [edConf, setEdConf] = useReducer(edConfRed, ed) 
+  const [edConf, setEdConf] = useReducer(edConfRed, editorConfigRole()) 
  
   //Load list records
   const loadListRole = async() => {
@@ -84,7 +77,6 @@ const RoleEditor = () => {
       var entityX = JSON.parse(JSON.stringify(entity));
       for (i=0;i<list.length;i++) {
         var rp = newRolePermissionEnt(list[i], tempId, entity)
-        rp._caChanged = true
         rp._caEntityStatus = Status.changed
         entityX.permissions.push(rp)
         tempId -= 1
@@ -119,18 +111,24 @@ const RoleEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
+      
+      if (containsInvalid(edConf.list, setMessage)) {
+        return
+      }
 
       var saveList : RoleEntI[] = []
 
       //Only send updates
       for (var i=0;i<edConf.list.length;i++){
-        if (edConf.list[i]._caChanged === true) {
+        if (edConf.list[i]._caEntityStatus === Status.changed 
+          || edConf.list[i]._caEntityStatus === Status.delete) {
 
           var e = edConf.entities.get(edConf.list[i].id)
 
           var permissions : RolePermissionEntI[] = []
           for (var j=0;j<e.permissions.length;j++){
-            if (e.permissions[j]._caChanged === true) {
+            if (e.permissions[j]._caEntityStatus === Status.changed 
+              || e.permissions[j]._caEntityStatus === Status.delete) {
               permissions.push(entRemoveClientFields(e.permissions[j]))
             }
           }
@@ -179,12 +177,10 @@ const RoleEditor = () => {
     }
   }
 
-
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: '_caChanged', headerName: useLabel('changed'), type: 'number', width: 50 },
-    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 50, hide: true },
+    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 50 },
     { field: 'code', headerName: useLabel('role'), width: 100, type: 'string', editable: true, },
     { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: true, },
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,

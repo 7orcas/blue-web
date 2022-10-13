@@ -19,7 +19,6 @@ export interface BaseEntI {
   delete: boolean //@Transient field defined in ejb BaseEnt
   
   //Client attributes
-  _caChanged: boolean  
   _caOriginalValue: string | undefined  
   _caEntityStatus: EntityStatusType 
   _caParent: any 
@@ -48,7 +47,6 @@ const initBase = (data : any, base : BaseEntI) => {
   base.updated = typeof data.updated !== 'undefined'? data.updated : null
   base.delete = false
   
-  base._caChanged = false
   base._caEntityStatus = EntityStatusType.valid
   base._caParent = null
 }
@@ -73,7 +71,6 @@ export const entRemoveClientFields = <E extends BaseEntI>(ent : E) : E => {
  export const jsonReplacer = (key : string, value : any) => {
   if (key === '_caOriginalValue' 
     || key === '_caEntityStatus'
-    || key === '_caChanged'
     || key === '_caParent') {
     return undefined;
   } 

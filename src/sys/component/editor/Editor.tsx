@@ -49,6 +49,7 @@ import { BaseEntI } from '../../definition/interfaces'
     if (!editorConfig.load) {
       return
     }
+    setEditorConfig ({type: EditorConfigField.load, payload : false})
 
     //Load entity configurations
     loadConfiguration(
@@ -65,7 +66,6 @@ import { BaseEntI } from '../../definition/interfaces'
       setTitle(editorConfig.EDITOR_TITLE)
     }
 
-    setEditorConfig ({type: EditorConfigField.load, payload : false})
   },[editorConfig.load])
 
   //Warn the user of unsaved changes

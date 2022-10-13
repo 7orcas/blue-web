@@ -66,7 +66,7 @@ export const updateBaseEntity = (entity : BaseEntI, field : string, value : any)
 }
 
 
-//Update the editor list
+//Update the editor list based on changes to the entities
 export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     edConf : EditorConfig<L, E>,
     setEdConf : any,    
@@ -79,7 +79,6 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
 
   if (o !== null) {
 
-    o._caChanged = entity._caOriginalValue !== x
     o.active = entity.active
     o.orgNr = entity.orgNr
     o.code = entity.code
@@ -93,7 +92,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     else if (o.code.length === 0) {
       o._caEntityStatus = Status.invalid
     }
-    else if (o._caChanged) {
+    else if (entity._caOriginalValue !== x) {
       o._caEntityStatus = Status.changed
     }
 
@@ -108,14 +107,12 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     setEdConf ({type: ECF.list, payload : newList})
     
     //Set changed (eg to activate the Commit button)
-    var changed = false
     for (i=0;i<newList.length;i++){
-      if (newList[i]._caChanged === true) {
-        changed = true
-        break
-      } 
+      if (newList[i]._caEntityStatus === Status.changed 
+        || newList[i]._caEntityStatus === Status.delete) {
+        setSession ({type: SessionField.changed, payload : true})
+      }
     }
-    setSession ({type: SessionField.changed, payload : changed})
     
     return newList
   }
@@ -151,6 +148,26 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
   setEdConf ({type: ECF.editors, payload : editors})
 }
 
+//Check if list contains invalid entities
+export const containsInvalid = <L extends BaseEntI>(
+      entList : L[],
+      setMessage? : (m : Message) => void) => {
+        
+  for (var i=0;i<entList.length;i++){
+    if (entList[i]._caEntityStatus === Status.invalid) {
+      if (setMessage) {
+        var m = new Message()
+        m.type = MessageType.error
+        m.message = 'saveError1'
+        m.detail = 'saveErrorFix'
+        setMessage(m)
+      }
+      return true
+    }
+  }
+  return false
+}
+
 //Commit updates, reload entity list, return reselected list ids 
 export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
       entList : L[],
@@ -166,15 +183,8 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
   if (edConf.entities === null) return
 
   //Validate changes
-  for (var i=0;i<entList.length;i++){
-    if (entList[i]._caEntityStatus === Status.invalid) {
-      var m = new Message()
-      m.type = MessageType.error
-      m.message = 'saveError1'
-      m.detail = 'saveErrorFix'
-      setMessage(m)
-      return
-    }
+  if (containsInvalid(entList, setMessage)) {
+    return
   }
 
   //Remember deleted records
@@ -210,7 +220,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
     }  
 
     //if new entity (it has a negative id) find new id
-    for (i=0;i<data.data.length;i++) {
+    for (var i=0;i<data.data.length;i++) {
       var id0 = data.data[i][0]
       var id1 = data.data[i][1]
 

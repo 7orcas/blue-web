@@ -1,6 +1,7 @@
-import apiGet from '../api/apiGet'
-import Message from '../system/Message'
 import { BaseEntI, initListBase, initEntBase, initEntBaseOV } from "../definition/interfaces"
+import apiGet from '../api/apiGet'
+import { EditorConfig } from '../component/editor/EditorConfig'
+import Message from '../system/Message'
 
 /*
   Organisation's entities and load function
@@ -16,6 +17,16 @@ export interface OrgListI extends BaseEntI {
 
 export interface OrgEntI extends BaseEntI {
   dvalue: boolean
+}
+
+export const editorConfig = () : EditorConfig<OrgListI, OrgEntI> => {
+  var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
+  ed.EDITOR_TITLE = 'orgadmin'
+  ed.CONFIG_ENTITIES = ['system.org.ent.EntOrg']
+  ed.CONFIG_URL = 'org/config'
+  ed.POST_URL = 'org/post'
+  ed.EXCEL_URL = 'org/excel'
+  return ed
 }
 
 //Load Org list and populate the fields
