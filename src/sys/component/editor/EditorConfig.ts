@@ -27,7 +27,7 @@ export enum EditorConfigField {
 export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
   EDITOR_TITLE : string = ''
   CONFIG_ENTITIES : string[] = ['']
-  CONFIG_URL : string = ''
+  CONFIG_URL : string = 'config/entity'
   POST_URL : string = ''
   EXCEL_URL : string = ''
 

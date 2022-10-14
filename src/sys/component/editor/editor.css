@@ -25,6 +25,9 @@
   background: white;
   border: 1px solid #f1f1f1;
 }
+#light .table-menu .table-menu-label {
+  border: 1px solid #f1f1f1;
+}
 #light .table-grid .MuiDataGrid-columnHeader {
   color: rgb(29, 28, 28) !important;
 }
@@ -99,6 +102,9 @@
 #dark .table-menu button:disabled {
   color: #3a8fe4;
   background: #1e1e1e;
+  border: 1px solid #cccccc;
+}
+#dark .table-menu .table-menu-label {
   border: 1px solid #cccccc;
 }
 #dark .table-grid .MuiDataGrid-columnHeader {

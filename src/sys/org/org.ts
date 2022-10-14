@@ -23,7 +23,6 @@ export const editorConfig = () : EditorConfig<OrgListI, OrgEntI> => {
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.EDITOR_TITLE = 'orgadmin'
   ed.CONFIG_ENTITIES = ['system.org.ent.EntOrg']
-  ed.CONFIG_URL = 'org/config'
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
   return ed

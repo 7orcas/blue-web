@@ -33,7 +33,6 @@ export const editorConfigRole = () : EditorConfig<RoleEntI, RoleEntI> => {
   var ed : EditorConfig<RoleEntI, RoleEntI> = new EditorConfig()
   ed.EDITOR_TITLE = 'roleadmin'
   ed.CONFIG_ENTITIES = ['system.role.ent.EntRole','system.role.ent.EntRolePermission']
-  ed.CONFIG_URL = 'role/config'
   ed.POST_URL = 'role/post'
   ed.EXCEL_URL = 'role/excel'
   return ed
@@ -43,7 +42,6 @@ export const editorConfigPermission = () : EditorConfig<PermissionListI, Permiss
   var ed : EditorConfig<PermissionListI, PermissionListI> = new EditorConfig()
   ed.EDITOR_TITLE = 'permadmin'
   ed.CONFIG_ENTITIES = ['system.role.ent.EntPermission']
-  ed.CONFIG_URL = 'permission/config'
   ed.POST_URL = 'permission/post'
   ed.EXCEL_URL = 'permission/excel'
   return ed

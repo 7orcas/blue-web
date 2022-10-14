@@ -40,7 +40,7 @@ export const loadConfiguration = async(
       // eslint-disable-next-line no-empty-pattern
       setSession? : ({}) => void) => {
 
-  if (edConf.CONFIG_URL.length === 0) {
+  if (edConf.CONFIG_URL.length === 0 || configs.size === 0) {
     return
   }
 
