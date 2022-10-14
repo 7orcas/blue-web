@@ -237,22 +237,7 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
         }
       }  
     }
-      
-      //Reload entities
-      // setEdConf ({type: ECF.reload, payload : ids})
-
-//       if (loadEntity !== null) {
-//         for (j=0;j<ids.length;j++) {
-// console.log('force load id =' + ids[j])
-//           loadEntity(ids[j])
-//         }
-//       }
-
-//       if (ids.length>0){
-//         setEdConf ({type: ECF.editors, payload : ids})
-//       }
-    // }, 1000)
-
+     
     return ids 
   }
   

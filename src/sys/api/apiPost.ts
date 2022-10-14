@@ -31,8 +31,8 @@ const apiPost = async (
       return response.data
     }
 
-    if (response.data.returnCode === JsonResponseI.updateConflict) {
-
+    if (response.data.returnCode === JsonResponseI.validationErrors) {
+console.log('XXXXX')
     }
 
     message = response.data.error

@@ -13,7 +13,7 @@ export enum JsonResponseI {
   ok = 0,
   error = -1,
   invalid = -2,
-  updateConflict = -3,
+  validationErrors = -3,
   noChange = 1,
   uploaded = 3,
 }
