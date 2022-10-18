@@ -43,6 +43,7 @@ class Session {
   theme : ThemeType = ThemeType.dark
   messageDialog : string = ''
   changed : boolean = false
+  tsFormat : string = 'DD-MMM-YYYY hh:mm A'
 }
 
 export default Session

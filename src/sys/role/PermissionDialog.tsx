@@ -89,35 +89,35 @@ const PermissionDialog: FC<Props> = ({
   return (
     <>
       <Draggable>
-      <Dialog
-        onClose={handleClose}
-        open={dialog}
-        
-        PaperProps={{ sx: { position: "fixed", top: '5%', left: '30%', m: 0, minWidth: '630px' } }}
-      >
-        <div className={'permission-dialog'}>
-          <div className='dialog-color'>
-            <DialogTitle><LangLabel langkey='addperm' /></DialogTitle>
-          </div>
-          <DialogContent>
-            <div style={{ height: '600px' }} className='dialog-content'>
-              <DataGrid
-                rows={list}
-                columns={columns}
-                pageSize={9}
-                rowsPerPageOptions={[9]}
-                checkboxSelection
-                onSelectionModelChange={handleSelection}
-                onRowDoubleClick={handleDoubleClick}
-              />
+        <Dialog
+          onClose={handleClose}
+          open={dialog}
+          
+          PaperProps={{ sx: { position: "fixed", top: '5%', left: '30%', m: 0, minWidth: '630px' } }}
+        >
+          <div className={'permission-dialog'}>
+            <div className='dialog-color'>
+              <DialogTitle><LangLabel langkey='addperm' /></DialogTitle>
             </div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={updateEntityX} className='dialog-color dialog-button'><LangLabel langkey='addsels' /></Button>
-            <Button onClick={handleClose} className='dialog-color'><LangLabel langkey='close' /></Button>
-          </DialogActions>
-        </div>
-      </Dialog>
+            <DialogContent>
+              <div style={{ height: '600px' }} className='dialog-content'>
+                <DataGrid
+                  rows={list}
+                  columns={columns}
+                  pageSize={9}
+                  rowsPerPageOptions={[9]}
+                  checkboxSelection
+                  onSelectionModelChange={handleSelection}
+                  onRowDoubleClick={handleDoubleClick}
+                />
+              </div>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={updateEntityX} className='dialog-color dialog-button'><LangLabel langkey='addsels' /></Button>
+              <Button onClick={handleClose} className='dialog-color'><LangLabel langkey='close' /></Button>
+            </DialogActions>
+          </div>
+        </Dialog>
       </Draggable>
     </>
   )

@@ -1,3 +1,4 @@
+import { BaseEntI } from "../definition/interfaces"
 
 /*
  Store messages to users (via dialogs)
@@ -14,7 +15,15 @@ export enum MessageType {
   warn,
   message,
   detail,
+  commitError,
   unsaved
+}
+
+export interface CommitErrorI extends BaseEntI {
+  entityId: number 
+  action: string
+  updated: string
+	updatedUser: string
 }
 
 class Message {
@@ -23,6 +32,7 @@ class Message {
   context : string = ''
   detail : string = ''
   transition : any = undefined  //used in unsaved dialog (usePrompt hook)
+  commitErrors : Array<CommitErrorI> = []  
 }
 
 export default Message

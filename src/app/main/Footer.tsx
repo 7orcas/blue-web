@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import MessageDialog from '../../sys/component/dialog/MessageDialog'
+import CommitErrorDialog from '../../sys/component/dialog/CommitErrorDialog'
 import UnsavedDialog from '../../sys/component/dialog/UnsavedDialog'
 import useLabel from '../../sys/lang/useLabel'
 
@@ -16,6 +17,7 @@ const Footer = () => {
       </section>
       <MessageDialog />
       <UnsavedDialog />
+      <CommitErrorDialog />
     </>
   )
 }

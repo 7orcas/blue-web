@@ -1,7 +1,8 @@
 import axios from './apiAxios'
 import { SessionField } from '../system/Session'
-import Message, { MessageType } from '../system/Message'
+import Message, { MessageType, CommitErrorI } from '../system/Message'
 import { JsonResponseI } from '../definition/types';
+import { initListBase } from "../definition/interfaces"
 
 /*
   Generic POST method to contact the server
@@ -31,8 +32,22 @@ const apiPost = async (
       return response.data
     }
 
-    if (response.data.returnCode === JsonResponseI.validationErrors) {
-console.log('XXXXX')
+    //Save Errors (from server validation)
+    if (response.data.returnCode === JsonResponseI.commitErrors) {
+      var errors : Array<CommitErrorI> = []
+      for (const e of response.data.data.errors) {
+        var ent : CommitErrorI = {} as CommitErrorI  
+        initListBase(e, ent)
+        ent.entityId = e.entityId
+        ent.action = e.action
+        ent.updated = e.updated
+        ent.updatedUser = e.updatedUser
+        errors.push (ent)
+      }
+      m.commitErrors = errors
+      m.type = MessageType.commitError
+      setMessage(m)
+      return;
     }
 
     message = response.data.error

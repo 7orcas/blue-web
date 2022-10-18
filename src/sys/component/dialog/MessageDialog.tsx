@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
+import Draggable from 'react-draggable'
 import AppContext, { AppContextI } from '../../system/AppContext'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import LangLabel from '../../lang/LangLabel'
@@ -7,7 +8,7 @@ import { MessageType } from '../../system/Message'
 
 const MessageDialog = () => {
   
-  const { message, setMessage } = useContext(AppContext) as AppContextI
+  const { message } = useContext(AppContext) as AppContextI
   const [open, setOpen] = useState (false)
   const [title, setTitle] = useState ('message')
   const [classname, setClassname] = useState ('message')
@@ -18,6 +19,7 @@ const MessageDialog = () => {
   //Watch message assignment
   useEffect(() => {
     if (message.type !== MessageType.none
+      && message.type !== MessageType.commitError
       && message.message !== null 
       && typeof message.message !== 'undefined' 
       && message.message.length > 0) {
@@ -43,11 +45,10 @@ const MessageDialog = () => {
 
   const handleClose = () => {
     setOpen (false)
-    // setMessage({ type: MessageReducer.type, payload: MessageType.none })
   }
 
   return (
-    <>
+    <Draggable>
       <Dialog 
         onClose={handleClose} 
         open={open}
@@ -82,7 +83,7 @@ const MessageDialog = () => {
             </DialogActions>
         </div>
       </Dialog>
-    </>
+    </Draggable>
   )
 }
 
