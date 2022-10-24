@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
+import { LangLabelAppend } from '../definition/interfaces'
 
 const useLabel = (langKey : string) => {
 
@@ -15,7 +16,7 @@ const useLabel = (langKey : string) => {
   }
 
   //Look for appended data to the langkey
-  const idx = langKey.indexOf('|')
+  const idx = langKey.indexOf(LangLabelAppend())
   var append = ''
   var langKeyX = langKey
   if (idx !== -1) {

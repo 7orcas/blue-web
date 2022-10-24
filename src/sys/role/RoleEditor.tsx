@@ -70,21 +70,25 @@ const RoleEditor = () => {
 
     if (entity !== null) {
 
-      for (var i=0;i<entity.permissions.length;i++) {
-        entity.permissions[i]._caParent = null
-      }
+      entity.permissions.forEach((p : RolePermissionEntI) => p._caParent = null)
 
       var entityX = JSON.parse(JSON.stringify(entity));
-      for (i=0;i<list.length;i++) {
-        var rp = newRolePermissionEnt(list[i], tempId, entity)
-        rp._caEntityStatus = Status.changed
-        entityX.permissions.push(rp)
-        tempId -= 1
+      for (var i=0;i<list.length;i++) {
+        var found = false
+        
+        for (var j=0;j<entity.permissions.length;j++) {
+          if (entity.permissions[j].permissionId === list[i].id) found = true
+        }
+
+        if (!found) {
+          var rp = newRolePermissionEnt(list[i], tempId, entity)
+          rp._caEntityStatus = Status.changed
+          entityX.permissions.push(rp)
+          tempId -= 1
+        }
       }
       
-      for (i=0;i<entityX.permissions.length;i++) {
-        entityX.permissions[i]._caParent = entityX
-      }    
+      entityX.permissions.forEach((p : RolePermissionEntI) => p._caParent = entityX)
 
       setEdConf ({type: ECF.tempId, payload : tempId})
       updateEntity(id, entityX)

@@ -1,7 +1,7 @@
 import { useContext, useEffect, FC, useState } from 'react'
 import Draggable from 'react-draggable'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { PermissionListI, loadPermissionList } from './role'
+import { RoleEntI, PermissionListI, loadPermissionList } from './role'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from '@mui/x-data-grid'
 import LangLabel from '../lang/LangLabel'
@@ -18,12 +18,14 @@ import { useLabel, getObjectById } from '../component/editor/editorUtil'
 interface Props {
   dialog: boolean
   setDialog: (x: boolean) => void
+  entity : RoleEntI
   updateEntity: (list : PermissionListI[]) => void
 }
 
 const PermissionDialog: FC<Props> = ({
   dialog,
   setDialog,
+  entity,
   updateEntity }) => {
 
   const { setMessage } = useContext(AppContext) as AppContextI
@@ -37,7 +39,18 @@ const PermissionDialog: FC<Props> = ({
     const loadListPermission = async () => {
       let list = await loadPermissionList(setMessage)
       if (typeof list !== 'undefined') {
-        setList(list)
+        var listX : PermissionListI[] = []
+        //Filter out current permissions
+        for (var i=0;i<list.length;i++) {
+          var found = false
+          for (var j=0;j<entity.permissions.length;j++) {
+            if (entity.permissions[j].permissionId === list[i].id) found = true
+          }
+          if (!found) {
+            listX.push(list[i])
+          }
+        }
+        setList(listX)
       }
     }
     loadListPermission()

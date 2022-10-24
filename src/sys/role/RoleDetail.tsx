@@ -106,6 +106,7 @@ const RoleDetail : FC<Props> = ({
       <PermissionDialog 
         dialog={dialog}
         setDialog={setDialog}
+        entity={entity}
         updateEntity={updateEntityX}
       />
       <div className='menu-header'>

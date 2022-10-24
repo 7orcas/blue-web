@@ -90,3 +90,9 @@ export interface ConfigFieldI  {
 export interface ConfigI  {
   fields: ConfigFieldI []
 }
+
+//Defined in Java. Keep in-sync!
+//LABEL_APPEND 
+export const LangLabelAppend = () => {
+  return '|'
+}
