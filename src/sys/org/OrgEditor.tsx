@@ -4,8 +4,9 @@ import Editor from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
+import { Checkbox } from '@mui/material'
 import { editorConfig, OrgListI, OrgEntI, loadOrgList, loadOrgEnt, newOrgList, newOrgEnt } from './org'
-import { useLabel, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
+import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid';
 import { entRemoveClientFields } from '../definition/interfaces'
@@ -13,6 +14,7 @@ import { EntityStatusType as Status } from "../definition/types"
 
 /*
   CRUD Editor for organisations
+  - Don't allow fields to be updated in list and editors - it can only be in one place
 
   [Licence]
   Created 13.09.22
@@ -51,19 +53,37 @@ const OrgEditor = () => {
     }
   }
 
-  //Update list and entities
+  //Update entity (assumes the list object is up-to-date, ie no shared entry fields between list and editor)
   const updateEntity = (id : number, entity : OrgEntI) => {
     setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
-
-    //Update non base list fields first 
-    var l : OrgListI | null = getObjectById(id, edConf.list)
-    if (l !== null) {
-      l.dvalue = entity.dvalue
-    }
-
+    //Update list fields
     updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
   
+  //Process checkbox clicks
+  const handleCheckboxClick = (id : number | undefined, field : string) => {
+    if (id !== undefined) {
+
+      //Load entity (if required)
+      if (!edConf.entities.has(id)) {
+        loadEntityOrg(id)
+      }
+      
+      //Update list object
+      var list : OrgListI | null = getObjectById(Number(id), edConf.list)
+      if (list !== null) {
+        switch (field) {
+          case 'dvalue': list.dvalue = !list.dvalue; break
+        }
+        type ObjectKey = keyof OrgListI;
+        const fieldX = field as ObjectKey
+        updateBaseEntity(list, field, !list[fieldX])
+        updateBaseList (edConf, setEdConf, list.id, list, setSession)
+        // updateList (list, field, !list[fieldX])
+      }
+    }
+  }
+
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
@@ -75,28 +95,67 @@ const OrgEditor = () => {
       //Only send updates
       var entList : OrgEntI[] = []
       for (var i=0;i<edConf.list.length;i++){
-        if (edConf.list[i]._caEntityStatus === Status.changed 
-          || edConf.list[i]._caEntityStatus === Status.delete) {
-          var e = edConf.entities.get(edConf.list[i].id)
+        var list : OrgListI = edConf.list[i]
+
+        if (list._caEntityStatus === Status.changed 
+          || list._caEntityStatus === Status.delete) {
+          var e = edConf.entities.get(list.id)
           if (e !== null && e !== undefined) {
             e = entRemoveClientFields(e)
+
+            //Update entity from list field changes
+            e.dvalue = list.dvalue
+            e.active = list.active
+            e.delete = list.delete
+
             entList.push(e)
           }
         }
       }
 
-      handleCommit(entList, edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setMessage, setSession)
+      var ids : number [] | undefined = await handleCommit(entList, edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setMessage, setSession)
+
+      //Reselect editors
+      if (ids !== undefined){
+        const timer = setTimeout(() =>  {
+          setEdConf ({type: ECF.editors, payload : ids})
+        }, 500)
+          
+        return () => clearTimeout(timer)             
+      }
+
     } catch (err : any) { } 
   }
 
   //List Columns
   const columns: GridColDef[] = [
-    { field: 'id', headerName: useLabel('id'), type: 'number', width: 50 },
+    { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 60 },
     { field: 'code', headerName: useLabel('code'), width: 200 },
-    { field: 'dvalue', headerName: useLabel('dvalue'), width: 60, type: 'boolean' },
-    { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean' },
-    { field: 'changed', headerName: useLabel('changed'), width: 60, type: 'boolean' },
+    { field: 'dvalue', headerName: useLabel('dvalue'), width: 60, type: 'boolean', editable: true,
+      renderCell: (params) => (
+        <Checkbox
+          checked={params.row?.dvalue}
+          onChange={() => handleCheckboxClick(params.row.id, 'dvalue')}
+        />
+      ),
+    },
+    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
+      renderCell: (params) => (
+        <Checkbox
+          checked={params.row?.active}
+          onChange={() => handleCheckboxClick(params.row.id, 'active')}
+        />
+      ),
+    },
+    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: true,
+      renderCell: (params) => (
+        <Checkbox
+          checked={params.row?.delete}
+          onChange={() => handleCheckboxClick(params.row.id, 'delete')}
+        />
+      ),
+    },
   ];
 
   return (
@@ -108,12 +167,13 @@ const OrgEditor = () => {
         </TableMenu>
       </div>
       <Editor 
-        style={{ height: '80vh', minWidth : 500, maxWidth : 500 }}
+        style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
         editorConfig={edConf}
         setEditorConfig={setEdConf}
         listColumns={columns}
         loadList={loadListOrg}
         loadEntity={loadEntityOrg}
+        disableSelectionOnClick={true}
       >
         {edConf.editors.map((id : number) => {
           var e = edConf.entities.get(id)

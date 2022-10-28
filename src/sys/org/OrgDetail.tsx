@@ -51,23 +51,21 @@ const OrgDetail : FC<Props> = ({
   },[loadConfigurationX])
 
 
-  const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
-    entity.active = event.target.checked;
-    updateEntity(id, entity)
-  };
+  // const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   entity.active = event.target.checked;
+  //   updateEntity(id, entity)
+  // };
  
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // setValue(event.target.value)
-    if (typeof entity !== 'undefined'){
-      const { name } = event.target;
-      switch (name) {
-        case 'delete': entity.delete = event.target.checked; break
-        case 'dvalue': entity.dvalue = event.target.checked; break
-        case 'code': entity.code = event.target.value; break
-      }
-      updateEntity(id, entity)
-    }
-  };
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   // setValue(event.target.value)
+  //   if (typeof entity !== 'undefined'){
+  //     const { name } = event.target;
+  //     switch (name) {
+  //       case 'code': entity.code = event.target.value; break
+  //     }
+  //     updateEntity(id, entity)
+  //   }
+  // };
 
   const maxLength = (field : string) => {
     if (configs.has('system.org.ent.EntOrg')) {
@@ -110,34 +108,34 @@ const OrgDetail : FC<Props> = ({
         <p>active= {entity.active ? 'true' : 'false'}</p>
         <div onClick={close}>X</div>
       
-          <div> 
+          {/* <div> 
             <LangLabel langkey='active'/>
             <Checkbox
               checked={entity.active}
               onChange={handleChangeActive}
             />
-          </div>
-            <TextField
-              type='number'
-              label='orgnr-s'
-              inputProps={{ maxLength: 5 }}
-              entity={entity}
-              field='orgNr'
-              updateEntity={updateEntity}
-              required={true}
-              theme={session.theme}
-              readonly={entity.id > 0}
-            />
-            <TextField
-              label='code'
-              inputProps={{ maxLength: maxLength('code') }}
-              entity={entity}
-              field='code'
-              updateEntity={updateEntity}
-              required={true}
-              theme={session.theme}
-            />
-          <div> 
+          </div> */}
+          <TextField
+            type='number'
+            label='orgnr-s'
+            inputProps={{ maxLength: 5 }}
+            entity={entity}
+            field='orgNr'
+            updateEntity={updateEntity}
+            required={true}
+            theme={session.theme}
+            readonly={entity.id > 0}
+          />
+          <TextField
+            label='code'
+            inputProps={{ maxLength: maxLength('code') }}
+            entity={entity}
+            field='code'
+            updateEntity={updateEntity}
+            required={true}
+            theme={session.theme}
+          />
+          {/* <div> 
             <LangLabel langkey='dvalue'/>
             <Checkbox
               name='dvalue'
@@ -152,7 +150,7 @@ const OrgDetail : FC<Props> = ({
               checked={entity.delete}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
         </>
       }
     </div>

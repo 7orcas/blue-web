@@ -67,7 +67,7 @@ const Navbar = () => {
   admin.label = 'admin'
   admin.link = '/Test3'
   admin.menu.push(f.item('logout', '/Test3'))
-  admin.menu.push(f.item('chgpw', '/Test3'))
+  admin.menu.push(f.item('passchg', '/Test3'))
   admin.menu.push(f.div())
   admin.menu.push(f.item('labeladmin', '/labels'))
   if (containsRole('LangEdit')) {
