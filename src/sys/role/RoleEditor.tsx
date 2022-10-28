@@ -207,24 +207,26 @@ const RoleEditor = () => {
 
   return (
     <div className='editor-container'>
-      <div >
+      <div className='editor'>
         <div className='menu-header'>
           <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
             <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
             <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
           </TableMenu>
         </div>
-        <Editor 
-          style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
-          editorConfig={edConf}
-          setEditorConfig={setEdConf}
-          listColumns={columns}
-          loadList={loadListRole}
-          loadEntity={loadEntityRole}
-          updateList={updateList}
-          disableSelectionOnClick={true}
-        >
-        </Editor>
+        <div className='editor-left'>
+          <Editor 
+            style={{ height: '80vh', minWidth : 600, maxWidth : 600 }}
+            editorConfig={edConf}
+            setEditorConfig={setEdConf}
+            listColumns={columns}
+            loadList={loadListRole}
+            loadEntity={loadEntityRole}
+            updateList={updateList}
+            disableSelectionOnClick={true}
+          >
+          </Editor>
+        </div>
       </div>
       {edConf.editors.map((id : number) => {
         var e = edConf.entities.get(id)

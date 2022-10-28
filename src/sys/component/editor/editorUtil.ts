@@ -65,6 +65,21 @@ export const updateBaseEntity = (entity : BaseEntI, field : string, value : any)
   }
 }
 
+//Close the editor
+export const closeEditor = <L extends BaseEntI, E extends BaseEntI>(
+    edConf : EditorConfig<L, E>,
+    setEdConf : any,    
+    id : number) => {
+    
+  var ids : Array<number> = edConf.editors.slice()
+  for (var j=0;j<ids.length;j++) {
+    const index = ids.indexOf(id);
+    if (index > -1) { 
+      ids.splice(index, 1); 
+    }
+  }  
+  setEdConf ({type: ECF.editors, payload : ids})
+}
 
 //Update the editor list based on changes to the entities
 export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
@@ -240,5 +255,5 @@ export const handleCommit = async <L extends BaseEntI, E extends BaseEntI>(
      
     return ids 
   }
-  
+
 }

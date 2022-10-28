@@ -14,7 +14,7 @@ import { EntityStatusType as Status } from "../definition/types"
 
 /*
   CRUD Editor for organisations
-  - Don't allow fields to be updated in list and editors - it can only be in one place
+  - Don't allow fields to be updated in both list and editors - it can only be in one place
 
   [Licence]
   Created 13.09.22
@@ -33,7 +33,7 @@ const OrgEditor = () => {
     var list = await loadOrgList(setMessage, setSession)
     setEdConf ({type: ECF.list, payload : list})
   }
-
+  
   //Load entity
   const loadEntityOrg = async(id : number) => {
     var entity : OrgEntI | undefined = await loadOrgEnt(id, setMessage, setSession)
@@ -115,10 +115,11 @@ const OrgEditor = () => {
 
       var ids : number [] | undefined = await handleCommit(entList, edConf, setEdConf, edConf.POST_URL, loadEntityOrg, setMessage, setSession)
 
-      //Reselect editors
+      //Reselect editors and reload entitites
       if (ids !== undefined){
         const timer = setTimeout(() =>  {
           setEdConf ({type: ECF.editors, payload : ids})
+          ids?.forEach((id : number) => loadEntityOrg(id))
         }, 500)
           
         return () => clearTimeout(timer)             
@@ -159,40 +160,44 @@ const OrgEditor = () => {
   ];
 
   return (
-    <div>
-      <div className='menu-header'>
-        <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-          <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-          <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
-        </TableMenu>
+    <div className='editor-container'>
+      <div className='editor'>
+        <div className='menu-header'>
+          <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
+            <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
+            <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+          </TableMenu>
+        </div>
+        <div className='editor-left'>
+          <Editor 
+            style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
+            editorConfig={edConf}
+            setEditorConfig={setEdConf}
+            listColumns={columns}
+            loadList={loadListOrg}
+            loadEntity={loadEntityOrg}
+            disableSelectionOnClick={true}
+            >
+          </Editor>
+        </div>
       </div>
-      <Editor 
-        style={{ height: '80vh', minWidth : 550, maxWidth : 550 }}
-        editorConfig={edConf}
-        setEditorConfig={setEdConf}
-        listColumns={columns}
-        loadList={loadListOrg}
-        loadEntity={loadEntityOrg}
-        disableSelectionOnClick={true}
-      >
-        {edConf.editors.map((id : number) => {
-          var e = edConf.entities.get(id)
-          return(
-          e !== undefined ?
-            <div key={id} className='editor-right'>
-              <OrgDetail 
-                editorConfig={edConf}
-                setEditorConfig={setEdConf}
-                key={id} 
-                id={id}
-                entity={e}
-                updateEntity={updateEntity}
-              />
-            </div>
-            : <div>problem</div>
-        )}
-        )}
-      </Editor>
+      {edConf.editors.map((id : number) => {
+        var e = edConf.entities.get(id)
+        return(
+        e !== undefined ?
+          <div key={id} className='editor-right'>
+            <OrgDetail 
+              editorConfig={edConf}
+              setEditorConfig={setEdConf}
+              key={id} 
+              id={id}
+              entity={e}
+              updateEntity={updateEntity}
+            />
+          </div>
+          : <div>loading... </div>
+      )}
+      )}
     </div>
   )
 }

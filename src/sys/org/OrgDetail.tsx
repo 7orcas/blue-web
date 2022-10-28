@@ -1,9 +1,11 @@
 import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration } from '../component/editor/editorUtil'
+import { loadConfiguration, closeEditor } from '../component/editor/editorUtil'
 import { OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
+import TableMenu from '../component/table/TableMenu'
+import Button from '../component/utils/Button'
 import LangLabel from '../lang/LangLabel';
 import { Checkbox } from '@mui/material'
 import TextField from '../component/utils/TextField'
@@ -50,23 +52,6 @@ const OrgDetail : FC<Props> = ({
     loadConfigurationX()
   },[loadConfigurationX])
 
-
-  // const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   entity.active = event.target.checked;
-  //   updateEntity(id, entity)
-  // };
- 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   // setValue(event.target.value)
-  //   if (typeof entity !== 'undefined'){
-  //     const { name } = event.target;
-  //     switch (name) {
-  //       case 'code': entity.code = event.target.value; break
-  //     }
-  //     updateEntity(id, entity)
-  //   }
-  // };
-
   const maxLength = (field : string) => {
     if (configs.has('system.org.ent.EntOrg')) {
       var c = configs.get('system.org.ent.EntOrg')
@@ -83,14 +68,7 @@ const OrgDetail : FC<Props> = ({
 
   //Close this editor
   const close = () => {
-    var ids : Array<number> = editorConfig.editors.slice()
-    for (var j=0;j<ids.length;j++) {
-      const index = ids.indexOf(id);
-      if (index > -1) { 
-        ids.splice(index, 1); 
-      }
-    }  
-    setEditorConfig ({type: ECF.editors, payload : ids})
+    closeEditor(editorConfig, setEditorConfig, id)
   }
 
   const title = () => {
@@ -101,58 +79,67 @@ const OrgDetail : FC<Props> = ({
   }
 
   return (
-    <div className='editor-detail'>
-      {typeof entity !== 'undefined' &&
-      <>
-        <p>DETAIL for {title()} (id:{entity.id})</p>
-        <p>active= {entity.active ? 'true' : 'false'}</p>
-        <div onClick={close}>X</div>
-      
-          {/* <div> 
-            <LangLabel langkey='active'/>
-            <Checkbox
-              checked={entity.active}
-              onChange={handleChangeActive}
+    <div className='editor'>
+      <div className='menu-header'>
+        <TableMenu>
+          <div className='table-menu-item table-menu-label'>{entity.code}</div>
+          <Button onClick={close} langkey='X' className='table-menu-right' />
+        </TableMenu>
+      </div>
+      <div key={id} className='editor-detail'>
+        {typeof entity !== 'undefined' &&
+        <>
+        
+          <p>DETAIL for {title()} (id:{entity.id})</p>
+          <p>active= {entity.active ? 'true' : 'false'}</p>
+          <div onClick={close}>X</div>
+        
+            {/* <div> 
+              <LangLabel langkey='active'/>
+              <Checkbox
+                checked={entity.active}
+                onChange={handleChangeActive}
+              />
+            </div> */}
+            <TextField
+              type='number'
+              label='orgnr-s'
+              inputProps={{ maxLength: 5 }}
+              entity={entity}
+              field='orgNr'
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+              readonly={entity.id > 0}
             />
-          </div> */}
-          <TextField
-            type='number'
-            label='orgnr-s'
-            inputProps={{ maxLength: 5 }}
-            entity={entity}
-            field='orgNr'
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-            readonly={entity.id > 0}
-          />
-          <TextField
-            label='code'
-            inputProps={{ maxLength: maxLength('code') }}
-            entity={entity}
-            field='code'
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-          />
-          {/* <div> 
-            <LangLabel langkey='dvalue'/>
-            <Checkbox
-              name='dvalue'
-              checked={entity.dvalue}
-              onChange={handleChange}
+            <TextField
+              label='code'
+              inputProps={{ maxLength: maxLength('code') }}
+              entity={entity}
+              field='code'
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
             />
-          </div>
-          <div> 
-            <LangLabel langkey='delete'/>
-            <Checkbox
-              name='delete'
-              checked={entity.delete}
-              onChange={handleChange}
-            />
-          </div> */}
-        </>
-      }
+            {/* <div> 
+              <LangLabel langkey='dvalue'/>
+              <Checkbox
+                name='dvalue'
+                checked={entity.dvalue}
+                onChange={handleChange}
+              />
+            </div>
+            <div> 
+              <LangLabel langkey='delete'/>
+              <Checkbox
+                name='delete'
+                checked={entity.delete}
+                onChange={handleChange}
+              />
+            </div> */}
+          </>
+        }
+      </div>
     </div>
   )
 }

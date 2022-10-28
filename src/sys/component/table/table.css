@@ -9,9 +9,6 @@
   Created 13.09.22
   @author John Stewart
 */
-.menu-header {
-  margin: 0px 0px 0px 20px;
-}
 .menu-header .table-grid-header {
   font-size: 1.2em;
 }
@@ -24,6 +21,11 @@
 }
 .menu-header .table-menu .table-menu-item {
   margin-right: 20px;
+  min-height: 30px;
+}
+.menu-header .table-menu .table-menu-right {
+  margin-right: 0px;
+  margin-left: auto;
   min-height: 30px;
 }
 .menu-header .table-menu .table-menu-label {

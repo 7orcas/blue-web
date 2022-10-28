@@ -45,10 +45,10 @@ import { BaseEntI } from '../../definition/interfaces'
   
   //Initial load 
   useEffect(() => {
-
     if (!editorConfig.load) {
       return
     }
+
     setEditorConfig ({type: EditorConfigField.load, payload : false})
 
     //Load entity configurations
@@ -87,14 +87,13 @@ import { BaseEntI } from '../../definition/interfaces'
   }
 
   return (
-    <div className='editor editor-multi-select'>
-      <div className='editor-left table-grid'>
+    <div>
+      <div className='table-grid'>
         <div style={style}>
           <DataGrid
-            // sx={{color: 'yellow'}} //text color
+// sx={{color: 'yellow'}} //text color
 // hideFooterPagination
 // hideFooter
-
             rows={editorConfig.list}
             columns={listColumns}
             pageSize={25}

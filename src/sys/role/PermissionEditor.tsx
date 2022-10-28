@@ -116,7 +116,7 @@ const PermissionEditor = () => {
   ];
 
   return (
-    <div>
+    <div className='editor'>
       <div className='menu-header'>
         <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
           <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>

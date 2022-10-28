@@ -183,7 +183,7 @@
 }
 
 .editor {
-  margin: $editor-margin;
+  margin: 0px 20px 0px 20px;
   border-radius: 5px;
 }
 
@@ -191,22 +191,16 @@
   display: flex;
 }
 
-.editor-multi-select {
-  display: flex;
+.editor-left {
+  flex-grow: 0;
+}
 
-  .editor-left {
-    flex-grow: 0;
-    margin: 0px 20px 0px 0px;
-  }
-
-  .editor-right {
-    flex: auto;
-  }
+.editor-right {
+  flex: auto;
 }
 
 .editor-detail {
   height: 80vh;
-  margin: 0px 5px 0px 0px;
   padding: 5px;
   border-radius: 5px;
 }

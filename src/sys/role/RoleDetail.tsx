@@ -109,24 +109,28 @@ const RoleDetail : FC<Props> = ({
         entity={entity}
         updateEntity={updateEntityX}
       />
-      <div className='menu-header'>
-        <TableMenu>
-          <div className='table-menu-item table-menu-label'>{entity.code}</div>
-          <Button onClick={handleDialog} langkey='addperm' className='table-menu-item' />
-        </TableMenu>
+      <div className='editor'>
+        <div className='menu-header'>
+          <TableMenu>
+            <div className='table-menu-item table-menu-label'>{entity.code}</div>
+            <Button onClick={handleDialog} langkey='addperm' className='table-menu-item' />
+          </TableMenu>
+        </div>
+        <div className='editor-right'>
+          <Editor 
+            style={{ height: '80vh', minWidth : 480, maxWidth : 480 }}
+            editorConfig={edConf}
+            setEditorConfig={setEdConf}
+            listColumns={columns}
+            loadList={loadListPermissions}
+            updateList={updateListX}
+            disableSelectionOnClick={true}
+            checkboxSelection={false}
+            useChangesPrompt={false}
+          >
+          </Editor>
+        </div>
       </div>
-      <Editor 
-        style={{ height: '80vh', minWidth : 450, maxWidth : 450 }}
-        editorConfig={edConf}
-        setEditorConfig={setEdConf}
-        listColumns={columns}
-        loadList={loadListPermissions}
-        updateList={updateListX}
-        disableSelectionOnClick={true}
-        checkboxSelection={false}
-        useChangesPrompt={false}
-      >
-      </Editor>
     </div>
   )
 }
