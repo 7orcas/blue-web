@@ -234,6 +234,8 @@ const RoleEditor = () => {
         e !== undefined ?
         <div key={id}>
             <RoleDetail 
+              editorConfig={edConf}
+              setEditorConfig={setEdConf}
               key={id} 
               id={id}
               entity={e}

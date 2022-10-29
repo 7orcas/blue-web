@@ -5,7 +5,7 @@ import { OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
 import TableMenu from '../component/table/TableMenu'
-import Button from '../component/utils/Button'
+import ButtonClose from '../component/utils/ButtonClose'
 import LangLabel from '../lang/LangLabel';
 import { Checkbox } from '@mui/material'
 import TextField from '../component/utils/TextField'
@@ -83,44 +83,33 @@ const OrgDetail : FC<Props> = ({
       <div className='menu-header'>
         <TableMenu>
           <div className='table-menu-item table-menu-label'>{entity.code}</div>
-          <Button onClick={close} langkey='X' className='table-menu-right' />
+          <ButtonClose onClick={close} className='table-menu-right' />
         </TableMenu>
       </div>
       <div key={id} className='editor-detail'>
         {typeof entity !== 'undefined' &&
         <>
-        
-          <p>DETAIL for {title()} (id:{entity.id})</p>
-          <p>active= {entity.active ? 'true' : 'false'}</p>
-          <div onClick={close}>X</div>
-        
-            {/* <div> 
-              <LangLabel langkey='active'/>
-              <Checkbox
-                checked={entity.active}
-                onChange={handleChangeActive}
-              />
-            </div> */}
-            <TextField
-              type='number'
-              label='orgnr-s'
-              inputProps={{ maxLength: 5 }}
-              entity={entity}
-              field='orgNr'
-              updateEntity={updateEntity}
-              required={true}
-              theme={session.theme}
-              readonly={entity.id > 0}
-            />
-            <TextField
-              label='code'
-              inputProps={{ maxLength: maxLength('code') }}
-              entity={entity}
-              field='code'
-              updateEntity={updateEntity}
-              required={true}
-              theme={session.theme}
-            />
+          <p>id:{entity.id}</p>
+          <TextField
+            type='number'
+            label='orgnr-s'
+            inputProps={{ maxLength: 5 }}
+            entity={entity}
+            field='orgNr'
+            updateEntity={updateEntity}
+            required={true}
+            theme={session.theme}
+            readonly={entity.id > 0}
+          />
+          <TextField
+            label='code'
+            inputProps={{ maxLength: maxLength('code') }}
+            entity={entity}
+            field='code'
+            updateEntity={updateEntity}
+            required={true}
+            theme={session.theme}
+          />
             {/* <div> 
               <LangLabel langkey='dvalue'/>
               <Checkbox

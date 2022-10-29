@@ -4,8 +4,10 @@ import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
 import PermissionDialog from './PermissionDialog'
 import Button from '../component/utils/Button'
+import ButtonClose from '../component/utils/ButtonClose'
+import { BaseEntI } from '../definition/interfaces'
 import { RoleEntI, RolePermissionEntI, PermissionListI } from './role'
-import { useLabel, getObjectById, updateBaseList, updateBaseEntity } from '../component/editor/editorUtil'
+import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
@@ -19,6 +21,8 @@ import { Checkbox } from '@mui/material'
  */
 
 interface Props {
+  editorConfig : EditorConfig<BaseEntI, BaseEntI>
+  setEditorConfig : any
   id : number
   entity : RoleEntI
   updateList: (entity : RoleEntI, field : string, value : any) => void
@@ -26,6 +30,8 @@ interface Props {
 }
   
 const RoleDetail : FC<Props> = ({ 
+      editorConfig,
+      setEditorConfig,
       id, 
       entity, 
       updateList,
@@ -71,6 +77,11 @@ const RoleDetail : FC<Props> = ({
     }
   }
 
+  //Close this editor
+  const close = () => {
+    closeEditor(editorConfig, setEditorConfig, id)
+  }
+
   //Open and close dialog
   const handleDialog = () => {
     setDialog(!dialog)
@@ -114,6 +125,7 @@ const RoleDetail : FC<Props> = ({
           <TableMenu>
             <div className='table-menu-item table-menu-label'>{entity.code}</div>
             <Button onClick={handleDialog} langkey='addperm' className='table-menu-item' />
+            <ButtonClose onClick={close} className='table-menu-right' />
           </TableMenu>
         </div>
         <div className='editor-right'>
