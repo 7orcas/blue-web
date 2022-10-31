@@ -1,6 +1,6 @@
 import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, closeEditor } from '../component/editor/editorUtil'
+import { loadConfiguration, closeEditor, formatTs } from '../component/editor/editorUtil'
 import { OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
@@ -89,7 +89,7 @@ const OrgDetail : FC<Props> = ({
       <div key={id} className='editor-detail'>
         {typeof entity !== 'undefined' &&
         <>
-          <p>id:{entity.id}</p>
+          <p>id:{entity.id} updated:{formatTs(entity.updated)}</p>
           <TextField
             type='number'
             label='orgnr-s'

@@ -2,6 +2,7 @@ import { SessionField } from '../../system/Session'
 import apiGet from '../../api/apiGet'
 import apiPost from '../../api/apiPost'
 import useLabelX from '../../lang/useLabel'
+import Moment from 'moment';
 import Message, { MessageType } from '../../system/Message'
 import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types'
@@ -80,6 +81,11 @@ export const closeEditor = <L extends BaseEntI, E extends BaseEntI>(
   }  
   setEdConf ({type: ECF.editors, payload : ids})
 }
+
+export const formatTs = (updated: string) : string => {
+  return Moment(updated, 'YYYY-MM-DDThh:mm:ss.ffffffZ').format('DD-MMM-YYYY hh:mm A')
+}
+
 
 //Update the editor list based on changes to the entities
 export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
