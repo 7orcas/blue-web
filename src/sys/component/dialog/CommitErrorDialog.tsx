@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import Draggable from 'react-draggable'
 import Moment from 'moment';
 import AppContext, { AppContextI } from '../../system/AppContext'
+import { TS_DISPLAY } from '../../definition/interfaces'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import LangLabel from '../../lang/LangLabel'
@@ -10,7 +11,7 @@ import { MessageType } from '../../system/Message'
 
 const CommitErrorDialog = () => {
   
-  const { session, message } = useContext(AppContext) as AppContextI
+  const { message } = useContext(AppContext) as AppContextI
   const [open, setOpen] = useState (false)
   
   //Watch message assignment
@@ -32,7 +33,7 @@ const CommitErrorDialog = () => {
       { field: 'descr', headerName: useLabel('problem'), width: 300, type: 'string' },
       { field: 'updatedUser', headerName: useLabel('lastupby'), width: 250, type: 'string' },
       { field: 'updated', headerName: useLabel('lastup'), width: 180, 
-        valueFormatter: params => Moment().format(session.tsFormat) },
+        valueFormatter: params => Moment().format(TS_DISPLAY) },
       { field: 'action', headerName: useLabel('action'), width: 300, type: 'string' },
     ];
   

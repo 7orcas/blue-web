@@ -6,7 +6,7 @@ import Moment from 'moment';
 import Message, { MessageType } from '../../system/Message'
 import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types'
-import { BaseEntI, entBaseOV, ConfigI } from '../../definition/interfaces'
+import { BaseEntI, entBaseOV, ConfigI, TS_FORMAT, TS_DISPLAY } from '../../definition/interfaces'
 import { GridSelectionModel } from '@mui/x-data-grid'
 
 /*
@@ -83,9 +83,9 @@ export const closeEditor = <L extends BaseEntI, E extends BaseEntI>(
 }
 
 export const formatTs = (updated: string) : string => {
-  return Moment(updated, 'YYYY-MM-DDThh:mm:ss.ffffffZ').format('DD-MMM-YYYY hh:mm A')
+  return Moment(updated, TS_FORMAT).format(TS_DISPLAY)
 }
-
+ 
 
 //Update the editor list based on changes to the entities
 export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(

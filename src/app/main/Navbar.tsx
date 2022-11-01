@@ -32,6 +32,7 @@ const Navbar = () => {
   }
 
   //Top Level
+  f.main('useradmin', '/useradmin')
   f.main('roleadmin', '/roleadmin')
   f.main('permadmin', '/permadmin')
   f.main('orgadmin', '/orgadmin')
@@ -78,9 +79,10 @@ const Navbar = () => {
     admin.menu.push(editLabel)
     admin.menu.push(f.div())
   }
-  admin.menu.push(f.item('orgadmin', '/orgadmin'))
+  admin.menu.push(f.item('useradmin', '/useradmin'))
   admin.menu.push(f.item('roleadmin', '/roleadmin'))
   admin.menu.push(f.item('permadmin', '/permadmin'))
+  admin.menu.push(f.item('orgadmin', '/orgadmin'))
 
 
   //Separate theme icon  

@@ -1,13 +1,15 @@
 import { EntityStatusType } from "./types"
 
 /*
-  Entity Interfaces
+  Interfaces and constants
 
   [Licence]
   Created 22.09.22
   @author John Stewart
 */
 
+export const TS_FORMAT : string = 'YYYY-MM-DDThh:mm:ss.ffffffZ'
+export const TS_DISPLAY : string = 'DD-MMM-YYYY hh:mm A'
 
 export interface BaseEntI {
   id: number //Immutatble
@@ -96,3 +98,4 @@ export interface ConfigI  {
 export const LangLabelAppend = () => {
   return '|'
 }
+
