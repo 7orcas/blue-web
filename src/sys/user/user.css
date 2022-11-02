@@ -1,0 +1,32 @@
+/*
+  User CSS
+
+  [Licence]
+  Created 10.10.22
+  @author John Stewart
+*/
+.role-dialog {
+  min-height: 800px;
+}
+.role-dialog .dialog-color {
+  background-color: #064d0c;
+  color: #ffffff;
+}
+.role-dialog .dialog-content {
+  margin-bottom: 20px;
+}
+.role-dialog .dialog-text {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.role-dialog .dialog-button {
+  margin-right: 30px;
+}
+.role-dialog button {
+  border: 1px solid #064d0c;
+}
+.role-dialog button:hover {
+  background-color: #ffffff;
+  color: #064d0c;
+  border: 1px solid #064d0c;
+}/*# sourceMappingURL=user.css.map */

@@ -1,9 +1,9 @@
 import './user.css'
 import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { editorConfigRole, RoleEntI, PermissionListI, loadRoleList, newRoleEnt, newRolePermissionEnt, RolePermissionEntI } from './user'
+import { editorConfigUser, UserEntI, UserListI, loadUserList, loadUserEntity, newUserEnt } from './user'
 import Editor from '../component/editor/Editor'
-import RoleDetail from './UserDetail'
+import UserDetail from './UserDetail'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
@@ -15,97 +15,93 @@ import { EntityStatusType as Status } from '../definition/types'
 
 
 /*
-  CRUD Editor for roles
+  Editor for users
 
   [Licence]
-  Created 05.10.22
+  Created 02.11.22
   @author John Stewart
  */
 
-const RoleEditor = () => {
+const UserEditor = () => {
   
   const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
   
   //State 
-  const [edConf, setEdConf] = useReducer(edConfRed, editorConfigRole()) 
+  const [edConf, setEdConf] = useReducer(edConfRed, editorConfigUser()) 
  
   //Load list records
-  const loadListRole = async() => {
-    var list = await loadRoleList(setMessage, setSession)
+  const loadListUser = async() => {
+    var list = await loadUserList(setMessage, setSession)
     if (typeof list !== 'undefined') {
       setEdConf ({type: ECF.list, payload : list})
-
-      var m = new Map()
-      for (var i=0;i<list.length;i++) {
-        m.set(list[i].id, list[i])
-      }
-      // setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(list[i].id, list[i]))})    
-      setEdConf ({type: ECF.entities, payload : m})
     }
   }
 
-  //Load entity (from list object)
-  const loadEntityRole = (id : number) => {
-    var l : RoleEntI | null = getObjectById(id, edConf.list)
-    if (l !== null) {
-      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, l))})  
-      return l
+  //Load full entity 
+  const loadEntityUser = async (id : number) => {
+    if (edConf.entities.has(id)) {
+      return edConf.entities.get(id)
+    }
+    var ent = await loadUserEntity(id, setMessage, setSession)
+    if (typeof ent !== 'undefined') {
+      setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, ent))})  
+      return ent
     }
   }
 
   //Update list and entities
-  const updateEntity = (id : number, entity : RoleEntI) => {
+  const updateEntity = (id : number, entity : UserEntI) => {
     setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
-    var list : RoleEntI | null = getObjectById(id, edConf.list)
+    var list : UserEntI | null = getObjectById(id, edConf.list)
     if (list !== null) {
-      list.permissions = entity.permissions
+      // list.permissions = entity.permissions
     }
     updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
 
-  //Update permission dialog selections
-  const updateEntityPermissions = (id : number, list : PermissionListI[]) => {
-    var entity : RoleEntI | null = getObjectById(id, edConf.list)
-    var tempId = edConf.tempId;
+  //Update role dialog selections
+  // const updateEntityPermissions = (id : number, list : PermissionListI[]) => {
+  //   var entity : UserEntI | null = getObjectById(id, edConf.list)
+  //   var tempId = edConf.tempId;
 
-    if (entity !== null) {
+  //   if (entity !== null) {
 
-      entity.permissions.forEach((p : RolePermissionEntI) => p._caParent = null)
+  //     entity.permissions.forEach((p : UserPermissionEntI) => p._caParent = null)
 
-      var entityX = JSON.parse(JSON.stringify(entity));
-      for (var i=0;i<list.length;i++) {
-        var found = false
+  //     var entityX = JSON.parse(JSON.stringify(entity));
+  //     for (var i=0;i<list.length;i++) {
+  //       var found = false
         
-        for (var j=0;j<entity.permissions.length;j++) {
-          if (entity.permissions[j].permissionId === list[i].id) found = true
-        }
+  //       for (var j=0;j<entity.permissions.length;j++) {
+  //         if (entity.permissions[j].permissionId === list[i].id) found = true
+  //       }
 
-        if (!found) {
-          var rp = newRolePermissionEnt(list[i], tempId, entity)
-          rp._caEntityStatus = Status.changed
-          entityX.permissions.push(rp)
-          tempId -= 1
-        }
-      }
+  //       if (!found) {
+  //         var rp = newUserPermissionEnt(list[i], tempId, entity)
+  //         rp._caEntityStatus = Status.changed
+  //         entityX.permissions.push(rp)
+  //         tempId -= 1
+  //       }
+  //     }
       
-      entityX.permissions.forEach((p : RolePermissionEntI) => p._caParent = entityX)
+  //     entityX.permissions.forEach((p : UserPermissionEntI) => p._caParent = entityX)
 
-      setEdConf ({type: ECF.tempId, payload : tempId})
-      updateEntity(id, entityX)
+  //     setEdConf ({type: ECF.tempId, payload : tempId})
+  //     updateEntity(id, entityX)
 
-      //Force a reselection of the role
-      var eds1 = edConf.editors.map((i : number) => i) 
-      var eds2 = edConf.editors.filter((i : number) => i !== id)
-      setEdConf ({type: ECF.editors, payload : eds2})
-      setTimeout(() =>  {
-        setEdConf ({type: ECF.editors, payload : eds1})
-      }, 100)
-    }
-  }
+  //     //Force a reselection of the role
+  //     var eds1 = edConf.editors.map((i : number) => i) 
+  //     var eds2 = edConf.editors.filter((i : number) => i !== id)
+  //     setEdConf ({type: ECF.editors, payload : eds2})
+  //     setTimeout(() =>  {
+  //       setEdConf ({type: ECF.editors, payload : eds1})
+  //     }, 100)
+  //   }
+  // }
 
   //Create new entity
   const handleCreate = async () => {
-    var ent = await newRoleEnt (setMessage, setSession)
+    var ent = await newUserEnt (setMessage, setSession)
     if (typeof ent !== 'undefined') {
       setEdConf ({type: ECF.list, payload : [ent, ...edConf.list]})
       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(ent.id, ent))})    
@@ -119,31 +115,23 @@ const RoleEditor = () => {
       if (containsInvalid(edConf.list, setMessage)) {
         return
       }
-
-      var saveList : RoleEntI[] = []
-
+      
       //Only send updates
+      var saveList : UserEntI[] = []
       for (var i=0;i<edConf.list.length;i++){
-        if (edConf.list[i]._caEntityStatus === Status.changed 
-          || edConf.list[i]._caEntityStatus === Status.delete) {
+        var l = edConf.list[i]
 
-          var e = edConf.entities.get(edConf.list[i].id)
+        if (l._caEntityStatus === Status.changed 
+          || l._caEntityStatus === Status.delete) {
 
-          var permissions : RolePermissionEntI[] = []
-          for (var j=0;j<e.permissions.length;j++){
-            if (e.permissions[j]._caEntityStatus === Status.changed 
-              || e.permissions[j]._caEntityStatus === Status.delete) {
-              permissions.push(entRemoveClientFields(e.permissions[j]))
-            }
-          }
-
+          var e = edConf.entities.get(l.id)
           e = entRemoveClientFields(e)
-          e.permissions = permissions
+          // e.permissions = permissions
           saveList.push(e)
         }
       }
 
-      var ids : number [] | undefined = await handleCommit(saveList, edConf, setEdConf, edConf.POST_URL, loadEntityRole, setMessage, setSession)
+      var ids : number [] | undefined = await handleCommit(saveList, edConf, setEdConf, edConf.POST_URL, loadEntityUser, setMessage, setSession)
       
       //Reselect editors
       if (ids !== undefined){
@@ -159,24 +147,30 @@ const RoleEditor = () => {
     } 
   }
  
-  //Set Changes
-  const updateList = (entity : RoleEntI, field : string, value : any) => {
-    updateBaseEntity(entity, field, value)
-
-    //Load entity (required to facilitate processing)
-    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(entity.id, entity))})
-    
-    updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
+  //Set Changes (in both list and editor entities)
+  const updateList = async (lst : UserListI, field : string, value : any) => {
+    var ent = await loadEntityUser(lst.id)
+    if (typeof ent !== 'undefined') {
+      updateBaseEntity(lst, field, value)
+      updateBaseEntity(ent, field, value)
+      switch (field) {
+        case 'attempts': 
+          lst.attempts = value
+          ent.attempts = value
+          break
+      }
+      updateBaseList (edConf, setEdConf, ent.id, ent, setSession)
+    }
   }
 
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
     if (id !== undefined) {
-      var ent : RoleEntI | null = getObjectById(Number(id), edConf.list)
-      if (ent !== null) {
-        type ObjectKey = keyof RoleEntI;
+      var lst : UserListI | null = getObjectById(Number(id), edConf.list)
+      if (lst !== null) {
+        type ObjectKey = keyof UserListI;
         const fieldX = field as ObjectKey
-        updateList (ent, field, !ent[fieldX])
+        updateList (lst, field, !lst[fieldX])
       }
     }
   }
@@ -184,9 +178,8 @@ const RoleEditor = () => {
   //List Columns
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 50 },
-    { field: 'code', headerName: useLabel('role'), width: 100, type: 'string', editable: true, },
-    { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: true, },
+    { field: 'code', headerName: useLabel('user'), width: 300, type: 'string' },
+    { field: 'attempts', headerName: useLabel('attempts'), type: 'number', width: 70, editable: true, },
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
       renderCell: (params) => (
         <Checkbox
@@ -195,7 +188,7 @@ const RoleEditor = () => {
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: true,
+    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: false,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
@@ -220,20 +213,20 @@ const RoleEditor = () => {
             editorConfig={edConf}
             setEditorConfig={setEdConf}
             listColumns={columns}
-            loadList={loadListRole}
-            loadEntity={loadEntityRole}
+            loadList={loadListUser}
+            loadEntity={loadEntityUser}
             updateList={updateList}
             disableSelectionOnClick={true}
           >
           </Editor>
         </div>
       </div>
-      {edConf.editors.map((id : number) => {
+      {/* {edConf.editors.map((id : number) => {
         var e = edConf.entities.get(id)
         return(
         e !== undefined ?
         <div key={id}>
-            <RoleDetail 
+            <UserDetail 
               editorConfig={edConf}
               setEditorConfig={setEdConf}
               key={id} 
@@ -246,9 +239,9 @@ const RoleEditor = () => {
           //ToDo
           : <div>problem</div>
       )}
-      )}
+      )} */}
     </div>
   )
 }
 
-export default RoleEditor
+export default UserEditor

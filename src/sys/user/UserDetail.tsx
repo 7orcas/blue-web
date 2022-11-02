@@ -6,7 +6,7 @@ import PermissionDialog from '../role/PermissionDialog'
 import Button from '../component/utils/Button'
 import ButtonClose from '../component/utils/ButtonClose'
 import { BaseEntI } from '../definition/interfaces'
-import { RoleEntI, RolePermissionEntI, PermissionListI } from './user'
+import { UserEntI, UserRoleEntI } from './user'
 import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
@@ -24,39 +24,40 @@ interface Props {
   editorConfig : EditorConfig<BaseEntI, BaseEntI>
   setEditorConfig : any
   id : number
-  entity : RoleEntI
-  updateList: (entity : RoleEntI, field : string, value : any) => void
-  updateEntity : (id : number, list : PermissionListI[]) => void
+  entity : UserEntI
+  updateList: (entity : UserEntI, field : string, value : any) => void
+  // updateEntity : (id : number, list : PermissionListI[]) => void
 }
   
-const RoleDetail : FC<Props> = ({ 
+const UserDetail : FC<Props> = ({ 
       editorConfig,
       setEditorConfig,
       id, 
       entity, 
       updateList,
-      updateEntity}) => {
+      // updateEntity
+    }) => {
   
   const { setSession } = useContext(AppContext) as AppContextI
    
   //State 
-  var ed : EditorConfig<RolePermissionEntI, RoleEntI> = new EditorConfig()
+  var ed : EditorConfig<UserRoleEntI, UserEntI> = new EditorConfig()
   const [edConf, setEdConf] = useReducer(edConfRed, ed) 
   const [dialog, setDialog] = useState(false)
 
   //Set the list from the entity permissions list
   const loadListPermissions = () => {
-    var list = entity.permissions
-    setEdConf ({type: ECF.list, payload : list})
+    // var list = entity.permissions
+    // setEdConf ({type: ECF.list, payload : list})
   }
 
   //Update entity
-  const updateEntityX = (list : PermissionListI[]) => {
-    updateEntity (id, list)
-  }
+  // const updateEntityX = (list : PermissionListI[]) => {
+  //   updateEntity (id, list)
+  // }
 
   //Set Changes
-  const updateListX = (entity : RolePermissionEntI, field : string, value : any) => {
+  const updateListX = (entity : UserRoleEntI, field : string, value : any) => {
     updateBaseEntity(entity, field, value)
     setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(entity.id, entity))})
     updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
@@ -68,9 +69,9 @@ const RoleDetail : FC<Props> = ({
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
     if (id !== undefined) {
-      var ent : RolePermissionEntI | null = getObjectById(Number(id), edConf.list)
+      var ent : UserRoleEntI | null = getObjectById(Number(id), edConf.list)
       if (ent !== null) {
-        type ObjectKey = keyof RolePermissionEntI;
+        type ObjectKey = keyof UserRoleEntI;
         const fieldX = field as ObjectKey
         updateListX (ent, field, !ent[fieldX])
       }
@@ -114,12 +115,12 @@ const RoleDetail : FC<Props> = ({
 
   return (
     <div>
-      <PermissionDialog 
+      {/* <PermissionDialog 
         dialog={dialog}
         setDialog={setDialog}
         entity={entity}
         updateEntity={updateEntityX}
-      />
+      /> */}
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu>
@@ -147,4 +148,4 @@ const RoleDetail : FC<Props> = ({
   )
 }
 
-export default RoleDetail
+export default UserDetail

@@ -5,6 +5,7 @@ import LabelsEditor from '../../sys/lang/LabelsEditor'
 import OrgEditor from '../../sys/org/OrgEditor'
 import PermissionEditor from '../../sys/role/PermissionEditor';
 import RoleEditor from '../../sys/role/RoleEditor';
+import UserEditor from '../../sys/user/UserEditor';
 import Login, {LoginSuccess} from '../../sys/login/Login'
 import Test1 from './Test1'
 import Test2 from './Test2'
@@ -32,6 +33,7 @@ const Body = () => {
         <Route path="orgadmin" element={<OrgEditor />} />
         <Route path="permadmin" element={<PermissionEditor />} />
         <Route path="roleadmin" element={<RoleEditor />} />
+        <Route path="useradmin" element={<UserEditor />} />
         <Route path="test2" element={<Test2 />} />
         <Route path="test3" element={<Test3 />} />
         <Route path="*"
