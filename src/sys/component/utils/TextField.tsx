@@ -57,7 +57,6 @@ const TextField : FC<Props> = ({
   if (typeof inputProps === 'undefined') {
     inputProps={ maxLength: maxLengthText(config, field) }
   }
-console.log(field + ' config=' + config + ' max=' + maxLengthText(config, field))
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     entity[field] = event.target.value;

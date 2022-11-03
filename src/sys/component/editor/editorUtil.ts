@@ -47,7 +47,7 @@ export const loadConfiguration = async(
 
   for (var i=0;i<edConf.CONFIG_ENTITIES.length;i++) {
     var ce = edConf.CONFIG_ENTITIES[i]
-    if (!configs.has(ce)) {
+    if (!configs.has(ce) && ce.length > 0) {
       var data = await apiGet(edConf.CONFIG_URL + '?entity=' + ce, setMessage, setSession)
       if (typeof data !== 'undefined') {
         setConfigs(new Map(configs.set(ce, data))) 
@@ -69,9 +69,9 @@ export const updateBaseEntity = (entity : BaseEntI, field : string, value : any)
 //Text field max length
 export const maxLengthText = (config: ConfigI | undefined, field : string) => {
   if (typeof config !== 'undefined') {
-    for (var i=0;i<config.data.length;i++) {
-      if (config.data[i].name === field){
-        return config.data[i].max
+    for (var i=0;i<config.fields.length;i++) {
+      if (config.fields[i].name === field){
+        return config.fields[i].max
       }
     }
   }

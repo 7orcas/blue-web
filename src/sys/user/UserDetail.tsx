@@ -111,7 +111,7 @@ const UserDetail : FC<Props> = ({
   ];
 
   return (
-    <div>
+    <div key={id} >
       {/* <PermissionDialog 
         dialog={dialog}
         setDialog={setDialog}
@@ -125,7 +125,7 @@ const UserDetail : FC<Props> = ({
             <ButtonClose onClick={close} className='table-menu-right' />
           </TableMenu>
         </div>
-        <div key={id} className='editor-detail'>
+        <div className='editor-detail'>
 
           <p>id:{entity.id} updated:{formatTs(entity.updated)}</p>
           
