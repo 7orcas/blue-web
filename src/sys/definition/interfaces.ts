@@ -90,7 +90,7 @@ export interface ConfigFieldI  {
 
 //Entity configuration
 export interface ConfigI  {
-  fields: ConfigFieldI []
+  data: ConfigFieldI []
 }
 
 //Defined in Java. Keep in-sync!

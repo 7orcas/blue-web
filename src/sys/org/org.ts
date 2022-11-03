@@ -19,10 +19,12 @@ export interface OrgEntI extends BaseEntI {
   dvalue: boolean
 }
 
+export const CONFIG = 'system.org.ent.EntOrg'
+
 export const editorConfig = () : EditorConfig<OrgListI, OrgEntI> => {
   var ed : EditorConfig<OrgListI, OrgEntI> = new EditorConfig()
   ed.EDITOR_TITLE = 'orgadmin'
-  ed.CONFIG_ENTITIES = ['system.org.ent.EntOrg']
+  ed.CONFIG_ENTITIES = [CONFIG]
   ed.POST_URL = 'org/post'
   ed.EXCEL_URL = 'org/excel'
   return ed

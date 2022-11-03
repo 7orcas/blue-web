@@ -1,7 +1,7 @@
 import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, closeEditor, formatTs } from '../component/editor/editorUtil'
-import { OrgEntI } from './org'
+import { loadConfiguration, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
+import { CONFIG, OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
 import TableMenu from '../component/table/TableMenu'
@@ -52,18 +52,10 @@ const OrgDetail : FC<Props> = ({
     loadConfigurationX()
   },[loadConfigurationX])
 
+  //Text field lengths
+  const config = configs.get(CONFIG)
   const maxLength = (field : string) => {
-    if (configs.has('system.org.ent.EntOrg')) {
-      var c = configs.get('system.org.ent.EntOrg')
-      if (typeof c !== 'undefined') {
-        for (var i=0;i<c.fields.length;i++) {
-          if (c.fields[i].name === field){
-            return c.fields[i].max
-          }
-        }
-      }
-    }
-    return 30
+    return maxLengthText(config, field)
   }
 
   //Close this editor

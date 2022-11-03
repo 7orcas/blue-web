@@ -33,7 +33,7 @@ export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
 
   list : L[] = []  //left list of all records
   editors : Array<number> = []  //detailed editors (contains entity id)
-  entities : Map<number,E> = new Map()  //loaded full entities
+  entities : Map<number,E> = new Map<number,E>()  //loaded full entities
   load : boolean = true  //flag to load editor (always initialise true)
   tempId : number = -1
 }
@@ -41,21 +41,6 @@ export class EditorConfig <L extends BaseEntI, E extends BaseEntI> {
 //EditorConfig state object reducer
 export const editorConfigReducer = <L extends BaseEntI, E extends BaseEntI>(editor : EditorConfig<L,E>, action : any) => {
   switch (action.type) {
-
-    // case EditorConfigField.configEntities:
-    //   return {...editor, CONFIG_ENTITIES: action.payload}
-
-    // case EditorConfigField.configUrl:
-    //   return {...editor, CONFIG_URL: action.payload}
-
-    // case EditorConfigField.newUrl:
-    //   return {...editor, NEW_URL: action.payload}
-
-    // case EditorConfigField.postUrl:
-    //   return {...editor, POST_URL: action.payload}
- 
-    // case EditorConfigField.excelUrl:
-    //   return {...editor, EXCEL_URL: action.payload}
 
     case EditorConfigField.list:
       return {...editor, list: action.payload}

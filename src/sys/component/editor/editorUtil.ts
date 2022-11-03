@@ -41,7 +41,7 @@ export const loadConfiguration = async(
       // eslint-disable-next-line no-empty-pattern
       setSession? : ({}) => void) => {
 
-  if (edConf.CONFIG_URL.length === 0 || configs.size === 0) {
+  if (edConf.CONFIG_URL.length === 0) {  // || configs.size === 0) {
     return
   }
 
@@ -64,6 +64,18 @@ export const updateBaseEntity = (entity : BaseEntI, field : string, value : any)
     case 'active': entity.active = value; break
     case 'delete': entity.delete = value; break
   }
+}
+
+//Text field max length
+export const maxLengthText = (config: ConfigI | undefined, field : string) => {
+  if (typeof config !== 'undefined') {
+    for (var i=0;i<config.data.length;i++) {
+      if (config.data[i].name === field){
+        return config.data[i].max
+      }
+    }
+  }
+  return 30
 }
 
 //Close the editor
@@ -95,32 +107,31 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     entity : E, 
     setSession : any) => {
 
-  var x = entBaseOV(entity)
-  var o = getObjectById(id, edConf.list)
+  var lst = getObjectById(id, edConf.list)
 
-  if (o !== null) {
+  if (lst !== null) {
 
-    o.active = entity.active
-    o.orgNr = entity.orgNr
-    o.code = entity.code
-    o.descr = entity.descr
+    lst.active = entity.active
+    lst.orgNr = entity.orgNr
+    lst.code = entity.code
+    lst.descr = entity.descr
 
     //Set status
-    o._caEntityStatus = Status.valid
+    lst._caEntityStatus = Status.valid
     if (entity.delete) {
-      o._caEntityStatus = Status.delete
+      lst._caEntityStatus = Status.delete
     }
-    else if (o.code.length === 0) {
-      o._caEntityStatus = Status.invalid
+    else if (lst.code.length === 0) {
+      lst._caEntityStatus = Status.invalid
     }
-    else if (entity._caOriginalValue !== x) {
-      o._caEntityStatus = Status.changed
+    else if (entity._caOriginalValue !== entBaseOV(entity)) {
+      lst._caEntityStatus = Status.changed
     }
 
     var newList : L[] = []
     for (var i=0;i<edConf.list.length;i++){
       if (edConf.list[i].id === id) {
-        newList.push(o)
+        newList.push(lst)
       } else {
         newList.push(edConf.list[i])
       }

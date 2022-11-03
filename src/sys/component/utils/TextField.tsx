@@ -1,7 +1,8 @@
 import { useState, useEffect, FC } from 'react'
-import { ThemeType } from '../../system/Session';
-import useLabel from '../../lang/useLabel';
 import { TextField as MuiTextField } from '@mui/material';
+import { ThemeType } from '../../system/Session';
+import { ConfigI } from '../../definition/interfaces'
+import { useLabel, maxLengthText } from '../../component/editor/editorUtil'
 
 /*
   Manage TextField input
@@ -13,18 +14,29 @@ import { TextField as MuiTextField } from '@mui/material';
 
 interface Props {
   type? : 'text' | 'number'
-  label : string
+  label? : string | undefined
   entity : any
   field : string
-  inputProps : object
-  updateEntity : (id : number, entity : any) => void
+  inputProps? : object | undefined
+  config? : ConfigI | undefined
+  updateEntity : (entity : any) => void
   theme: ThemeType
   required? : boolean
   readonly? : boolean
 }
   
 
-const TextField : FC<Props> = ({ type='text', label, entity, field, inputProps, updateEntity, theme, required=false, readonly=false }) => {
+const TextField : FC<Props> = ({ 
+      type='text', 
+      label, 
+      entity, 
+      field, 
+      inputProps, 
+      config,
+      updateEntity, 
+      theme, 
+      required=false, 
+      readonly=false }) => {
   
   const [value, setValue] = useState (type==='text'?'':0)
 
@@ -38,10 +50,18 @@ const TextField : FC<Props> = ({ type='text', label, entity, field, inputProps, 
     init()
   },[entity, field])
 
+  if (typeof label === 'undefined') {
+    label = field
+  }
+
+  if (typeof inputProps === 'undefined') {
+    inputProps={ maxLength: maxLengthText(config, field) }
+  }
+console.log(field + ' config=' + config + ' max=' + maxLengthText(config, field))
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     entity[field] = event.target.value;
-    updateEntity(entity.id, entity)
+    updateEntity(entity)
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)

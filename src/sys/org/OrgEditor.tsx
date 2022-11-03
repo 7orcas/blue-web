@@ -54,10 +54,10 @@ const OrgEditor = () => {
   }
 
   //Update entity (assumes the list object is up-to-date, ie no shared entry fields between list and editor)
-  const updateEntity = (id : number, entity : OrgEntI) => {
-    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
+  const updateEntity = (entity : OrgEntI) => {
+    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(entity.id, entity))})
     //Update list fields
-    updateBaseList (edConf, setEdConf, id, entity, setSession)
+    updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
   }
   
   //Process checkbox clicks

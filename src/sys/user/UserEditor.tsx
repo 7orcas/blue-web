@@ -1,7 +1,7 @@
 import './user.css'
 import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { editorConfigUser, UserEntI, UserListI, loadUserList, loadUserEntity, newUserEnt } from './user'
+import { editorConfigUser, UserListI, UserEntI, loadUserList, loadUserEntity, newUserEnt } from './user'
 import Editor from '../component/editor/Editor'
 import UserDetail from './UserDetail'
 import TableMenu from '../component/table/TableMenu'
@@ -47,16 +47,6 @@ const UserEditor = () => {
       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, ent))})  
       return ent
     }
-  }
-
-  //Update list and entities
-  const updateEntity = (id : number, entity : UserEntI) => {
-    setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
-    var list : UserEntI | null = getObjectById(id, edConf.list)
-    if (list !== null) {
-      // list.permissions = entity.permissions
-    }
-    updateBaseList (edConf, setEdConf, id, entity, setSession)
   }
 
   //Update role dialog selections
@@ -163,6 +153,11 @@ const UserEditor = () => {
     }
   }
 
+  //Update entities (from detail editor)
+  const updateEntity = (entity : UserEntI) => {
+    updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
+  }
+
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
     if (id !== undefined) {
@@ -221,7 +216,7 @@ const UserEditor = () => {
           </Editor>
         </div>
       </div>
-      {/* {edConf.editors.map((id : number) => {
+      {edConf.editors.map((id : number) => {
         var e = edConf.entities.get(id)
         return(
         e !== undefined ?
@@ -233,13 +228,13 @@ const UserEditor = () => {
               id={id}
               entity={e}
               updateList={updateList}
-              updateEntity={updateEntityPermissions}
+              updateEntity={updateEntity}
             />
           </div>
           //ToDo
           : <div>problem</div>
       )}
-      )} */}
+      )}
     </div>
   )
 }

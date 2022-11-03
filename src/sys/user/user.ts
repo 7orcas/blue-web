@@ -34,10 +34,12 @@ export interface UserRoleEntI extends BaseEntI {
   code: string
 }  
 
+export const CONFIG = 'system.user.ent.EntUser'
+
 export const editorConfigUser = () : EditorConfig<UserListI, UserEntI> => {
-  var ed : EditorConfig<UserListI, UserEntI> = new EditorConfig()
+  var ed : EditorConfig<UserListI, UserEntI> = new EditorConfig<UserListI, UserEntI>()
   ed.EDITOR_TITLE = 'useradmin'
-  ed.CONFIG_ENTITIES = ['system.user.ent.EntUser','system.user.ent.EntUserRole']
+  ed.CONFIG_ENTITIES = [CONFIG,'system.user.ent.EntUserRole']
   ed.POST_URL = 'user/post'
   ed.EXCEL_URL = 'user/excel'
   return ed

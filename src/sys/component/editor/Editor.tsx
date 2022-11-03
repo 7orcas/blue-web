@@ -50,7 +50,7 @@ import { BaseEntI } from '../../definition/interfaces'
     }
 
     setEditorConfig ({type: EditorConfigField.load, payload : false})
-
+console.log('z1')
     //Load entity configurations
     loadConfiguration(
       editorConfig, 
