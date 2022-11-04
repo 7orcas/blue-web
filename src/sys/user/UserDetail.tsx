@@ -40,7 +40,7 @@ const UserDetail : FC<Props> = ({
       updateEntity
     }) => {
   
-  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
+  const { session, setSession, configs } = useContext(AppContext) as AppContextI
   
   //State 
   var roleEdConf : EditorConfig<UserRoleEntI, UserEntI> = new EditorConfig()
@@ -66,46 +66,41 @@ const UserDetail : FC<Props> = ({
     }
   }
 
-//Update role dialog selections
-const updateEntityRoles = (list : RoleListI[]) => {
-  var tempId = editorConfig.tempId;
-  
-  // entity.roles.forEach((p : UserRoleEntI) => p._caParent = null)
-  
-  var entityX = JSON.parse(JSON.stringify(entity));
-  for (var i=0;i<list.length;i++) {
-    var found = false
+  //Update role dialog selections
+  const updateEntityRoles = (list : RoleListI[]) => {
+    var tempId = editorConfig.tempId;
+
+    entity.roles.forEach((p : UserRoleEntI) => p._caParent = null)
     
-    for (var j=0;j<entity.roles.length;j++) {
-      if (entity.roles[j].roleId === list[i].id) found = true
-    }
-    
-    if (!found) {
-      var rec = newUserRoleEnt(list[i], tempId, entity)
-      rec._caEntityStatus = Status.changed
-      entityX.roles.push(rec)
-      tempId -= 1
-    }
+    var entityX = JSON.parse(JSON.stringify(entity));
+    for (var i=0;i<list.length;i++) {
+      var found = false
       
-    entityX.roles.forEach((p : UserRoleEntI) => p._caParent = entityX)
-    setEditorConfig ({type: ECF.tempId, payload : tempId})
-    setEditorConfig ({type: ECF.entities, payload : new Map(editorConfig.entities.set(entityX.id, entityX))})
-    updateEntity(entityX)
+      for (var j=0;j<entity.roles.length;j++) {
+        if (entity.roles[j].roleId === list[i].id) found = true
+      }
+      
+      if (!found) {
+        var rec = newUserRoleEnt(list[i], tempId, entity)
+        rec._caEntityStatus = Status.changed
+        entityX.roles.push(rec)
+        tempId -= 1
+      }
+        
+      entityX.roles.forEach((p : UserRoleEntI) => p._caParent = entityX)
+      setEditorConfig ({type: ECF.tempId, payload : tempId})
+      setEditorConfig ({type: ECF.entities, payload : new Map(editorConfig.entities.set(entityX.id, entityX))})
+      updateEntity(entityX)
 
-    //Force a reselection of the user
-    // var eds1 = edConf.editors.map((i : number) => i) 
-    // var eds2 = edConf.editors.filter((i : number) => i !== id)
-    // setEdConf ({type: ECF.editors, payload : eds2})
-    // setTimeout(() =>  {
-    //   setEdConf ({type: ECF.editors, payload : eds1})
-    // }, 100)
+      //Force a reselection of the user
+      var eds1 = editorConfig.editors.map((i : number) => i) 
+      var eds2 = editorConfig.editors.filter((i : number) => i !== entityX.id)
+      setEditorConfig ({type: ECF.editors, payload : eds2})
+      setTimeout(() =>  {
+        setEditorConfig ({type: ECF.editors, payload : eds1})
+      }, 100)
+    }
   }
-}
-
-  // //Update roles on the entity
-  // const updateEntityRole = (list : RoleListI[]) => {
-  //   // updateEntity (id, list)
-  // }
 
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {

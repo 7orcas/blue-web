@@ -1,7 +1,7 @@
 import './user.css'
 import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { editorConfigUser, UserListI, UserEntI, loadUserList, loadUserEntity, newUserEnt } from './user'
+import { editorConfigUser, UserListI, UserEntI, UserRoleEntI, loadUserList, loadUserEntity, newUserEnt } from './user'
 import Editor from '../component/editor/Editor'
 import UserDetail from './UserDetail'
 import TableMenu from '../component/table/TableMenu'
@@ -73,19 +73,29 @@ const UserEditor = () => {
 
         if (l._caEntityStatus === Status.changed 
           || l._caEntityStatus === Status.delete) {
-
+            
           var e = edConf.entities.get(l.id)
+
+          var roles : UserRoleEntI[] = []
+          for (var j=0;j<e.roles.length;j++){
+            if (e.roles[j]._caEntityStatus === Status.changed 
+              || e.roles[j]._caEntityStatus === Status.delete) {
+              roles.push(entRemoveClientFields(e.roles[j]))
+            }
+          }
+
           e = entRemoveClientFields(e)
-          // e.permissions = permissions
+          e.roles = roles
           saveList.push(e)
         }
       }
 
       var ids : number [] | undefined = await handleCommit(saveList, edConf, setEdConf, edConf.POST_URL, loadEntityUser, setMessage, setSession)
-      
+console.log (ids)      
       //Reselect editors
       if (ids !== undefined){
         const timer = setTimeout(() =>  {
+console.log('reselect')          
           setEdConf ({type: ECF.editors, payload : ids})
         }, 500)
           
@@ -115,7 +125,6 @@ const UserEditor = () => {
 
   //Update entities (from detail editor)
   const updateEntity = (entity : UserEntI) => {
-console.log(entity.roles)    
     updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
   }
 

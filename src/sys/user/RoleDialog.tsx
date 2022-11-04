@@ -58,18 +58,18 @@ const RoleDialog: FC<Props> = ({
 
   //Add checkbox selection
   const handleSelection = (ids : GridSelectionModel) => {
-    var selection: Array<RoleListI> = []
-
+    var selectionX: Array<RoleListI> = []
+    
     //Iterate selected list ids
     if (ids !== null && typeof ids !== 'undefined') {
       ids.forEach((id) => {
-        var ent : RoleListI | null = getObjectById(Number(id), selection)
+        var ent : RoleListI | null = getObjectById(Number(id), list)
         if (ent !== null) {
-          selection.push(ent)
+          selectionX.push(ent)
         }
       })
     }
-    setSelection(selection) 
+    setSelection(selectionX) 
   }
 
   //Single selection
