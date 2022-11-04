@@ -49,46 +49,6 @@ const UserEditor = () => {
     }
   }
 
-  //Update role dialog selections
-  // const updateEntityPermissions = (id : number, list : PermissionListI[]) => {
-  //   var entity : UserEntI | null = getObjectById(id, edConf.list)
-  //   var tempId = edConf.tempId;
-
-  //   if (entity !== null) {
-
-  //     entity.permissions.forEach((p : UserPermissionEntI) => p._caParent = null)
-
-  //     var entityX = JSON.parse(JSON.stringify(entity));
-  //     for (var i=0;i<list.length;i++) {
-  //       var found = false
-        
-  //       for (var j=0;j<entity.permissions.length;j++) {
-  //         if (entity.permissions[j].permissionId === list[i].id) found = true
-  //       }
-
-  //       if (!found) {
-  //         var rp = newUserPermissionEnt(list[i], tempId, entity)
-  //         rp._caEntityStatus = Status.changed
-  //         entityX.permissions.push(rp)
-  //         tempId -= 1
-  //       }
-  //     }
-      
-  //     entityX.permissions.forEach((p : UserPermissionEntI) => p._caParent = entityX)
-
-  //     setEdConf ({type: ECF.tempId, payload : tempId})
-  //     updateEntity(id, entityX)
-
-  //     //Force a reselection of the role
-  //     var eds1 = edConf.editors.map((i : number) => i) 
-  //     var eds2 = edConf.editors.filter((i : number) => i !== id)
-  //     setEdConf ({type: ECF.editors, payload : eds2})
-  //     setTimeout(() =>  {
-  //       setEdConf ({type: ECF.editors, payload : eds1})
-  //     }, 100)
-  //   }
-  // }
-
   //Create new entity
   const handleCreate = async () => {
     var ent = await newUserEnt (setMessage, setSession)
@@ -155,6 +115,7 @@ const UserEditor = () => {
 
   //Update entities (from detail editor)
   const updateEntity = (entity : UserEntI) => {
+console.log(entity.roles)    
     updateBaseList (edConf, setEdConf, entity.id, entity, setSession)
   }
 

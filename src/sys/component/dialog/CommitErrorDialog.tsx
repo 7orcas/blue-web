@@ -45,7 +45,7 @@ const CommitErrorDialog = () => {
           
           PaperProps={{ sx: { position: "fixed", top: '5%', left: '30%', m: 0, minWidth: '1270px' } }}
         >
-          <div className={'permission-dialog'}>
+          <div className={'popup-dialog'}>
             <div className='dialog-color'>
               <DialogTitle><LangLabel langkey='valErrT' /></DialogTitle>
             </div>

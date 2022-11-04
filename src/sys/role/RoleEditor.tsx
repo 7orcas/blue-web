@@ -1,4 +1,3 @@
-import './role.css'
 import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { editorConfigRole, RoleEntI, PermissionListI, loadRoleList, newRoleEnt, newRolePermissionEnt, RolePermissionEntI } from './role'

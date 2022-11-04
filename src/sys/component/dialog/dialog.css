@@ -1,32 +1,32 @@
 /*
-  Role CSS
+  Dialog CSS
 
   [Licence]
   Created 10.10.22
   @author John Stewart
 */
-.permission-dialog {
+.popup-dialog {
   min-height: 800px;
 }
-.permission-dialog .dialog-color {
+.popup-dialog .dialog-color {
   background-color: #064d0c;
   color: #ffffff;
 }
-.permission-dialog .dialog-content {
+.popup-dialog .dialog-content {
   margin-bottom: 20px;
 }
-.permission-dialog .dialog-text {
+.popup-dialog .dialog-text {
   font-weight: bold;
   margin-bottom: 20px;
 }
-.permission-dialog .dialog-button {
+.popup-dialog .dialog-button {
   margin-right: 30px;
 }
-.permission-dialog button {
+.popup-dialog button {
   border: 1px solid #064d0c;
 }
-.permission-dialog button:hover {
+.popup-dialog button:hover {
   background-color: #ffffff;
   color: #064d0c;
   border: 1px solid #064d0c;
-}/*# sourceMappingURL=role.css.map */
+}/*# sourceMappingURL=dialog.css.map */

@@ -27,6 +27,11 @@ export interface UserEntI extends BaseEntI {
   roles : UserRoleEntI[]
 }
 
+export interface RoleListI extends BaseEntI {
+  roleId: number 
+  code: string
+}  
+
 //Immutatble
 export interface UserRoleEntI extends BaseEntI {
   userId: number 
@@ -101,34 +106,30 @@ export const loadUserEntity = async (
   } catch (err : any) { } 
 }
 
-
-
 //Load Role list and populate the fields
-// export const loadRoleList = async (
-//       setMessage : (m : Message) => void, 
-//       // eslint-disable-next-line no-empty-pattern
-//       setSession? : ({}) => void) => {
+export const loadRoleList = async (
+      setMessage : (m : Message) => void, 
+      // eslint-disable-next-line no-empty-pattern
+      setSession? : ({}) => void) => {
 
-//   try {
-//     const data = await apiGet('user/list', setMessage, setSession)
+  try {
+    const data = await apiGet('role/list', setMessage, setSession)
 
-//     if (typeof data !== 'undefined') {
-//       var list : Array<RoleListI> = []
+    if (typeof data !== 'undefined') {
+      var list : Array<RoleListI> = []
 
-//       for (const l of data) {
-//         var ent : RoleListI = {} as RoleListI  
-//         initListBase(l, ent)
-//         ent.crud = l.crud
-//         list.push (ent)
-//         initEntBaseOV(ent)
-//       }
+      for (const l of data) {
+        var ent : RoleListI = {} as RoleListI  
+        initListBase(l, ent)
+        list.push (ent)
+      }
 
-//       return list
-//     }
-//   } catch (err : any) {
-//     console.log (err)
-//   } 
-// }
+      return list
+    }
+  } catch (err : any) {
+    console.log (err)
+  } 
+}
 
 //Create new user entity
 export const newUserEnt = async (
@@ -177,15 +178,15 @@ export const newUserEnt = async (
 // }
 
 //Create and populate new user user object
-// export const newUserRoleEnt = (p : RoleListI, tempId : number, parent: UserEntI) : UserRoleEntI => {
-//   var rp = {} as UserRoleEntI
-//   initEntBase (p, rp)
-//   rp.id = tempId
-//   rp.userId = p.id
-//   rp.crud = p.crud
-//   initParent (rp, parent)
-//   return rp
-// }
+export const newUserRoleEnt = (p : RoleListI, tempId : number, parent: UserEntI) : UserRoleEntI => {
+  var rp = {} as UserRoleEntI
+  initEntBase (p, rp)
+  rp.id = tempId
+  rp.userId = parent.id
+  rp.roleId = p.id
+  initParent (rp, parent)
+  return rp
+}
 
 //Append user-roles
 export const appendRoles = (roles : any, ent: UserEntI) => {

@@ -2,14 +2,15 @@ import { useContext, useReducer, FC, useState } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
-import PermissionDialog from '../role/PermissionDialog'
+import RoleDialog from './RoleDialog'
 import Button from '../component/utils/Button'
 import ButtonClose from '../component/utils/ButtonClose'
 import TextField from '../component/utils/TextField'
 import { BaseEntI } from '../definition/interfaces'
-import { CONFIG, UserListI, UserEntI, UserRoleEntI } from './user'
-import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
+import { CONFIG, UserListI, UserEntI, UserRoleEntI, RoleListI, newUserRoleEnt } from './user'
+import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor, formatTs } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as roleConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
+import { EntityStatusType as Status } from '../definition/types'
 import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 
@@ -65,6 +66,47 @@ const UserDetail : FC<Props> = ({
     }
   }
 
+//Update role dialog selections
+const updateEntityRoles = (list : RoleListI[]) => {
+  var tempId = editorConfig.tempId;
+  
+  // entity.roles.forEach((p : UserRoleEntI) => p._caParent = null)
+  
+  var entityX = JSON.parse(JSON.stringify(entity));
+  for (var i=0;i<list.length;i++) {
+    var found = false
+    
+    for (var j=0;j<entity.roles.length;j++) {
+      if (entity.roles[j].roleId === list[i].id) found = true
+    }
+    
+    if (!found) {
+      var rec = newUserRoleEnt(list[i], tempId, entity)
+      rec._caEntityStatus = Status.changed
+      entityX.roles.push(rec)
+      tempId -= 1
+    }
+      
+    entityX.roles.forEach((p : UserRoleEntI) => p._caParent = entityX)
+    setEditorConfig ({type: ECF.tempId, payload : tempId})
+    setEditorConfig ({type: ECF.entities, payload : new Map(editorConfig.entities.set(entityX.id, entityX))})
+    updateEntity(entityX)
+
+    //Force a reselection of the user
+    // var eds1 = edConf.editors.map((i : number) => i) 
+    // var eds2 = edConf.editors.filter((i : number) => i !== id)
+    // setEdConf ({type: ECF.editors, payload : eds2})
+    // setTimeout(() =>  {
+    //   setEdConf ({type: ECF.editors, payload : eds1})
+    // }, 100)
+  }
+}
+
+  // //Update roles on the entity
+  // const updateEntityRole = (list : RoleListI[]) => {
+  //   // updateEntity (id, list)
+  // }
+
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
     if (id !== undefined) {
@@ -112,12 +154,12 @@ const UserDetail : FC<Props> = ({
 
   return (
     <div key={id} >
-      {/* <PermissionDialog 
+      <RoleDialog 
         dialog={dialog}
         setDialog={setDialog}
         entity={entity}
-        updateEntity={updateEntityX}
-      /> */}
+        updateEntity={updateEntityRoles}
+      />
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu>

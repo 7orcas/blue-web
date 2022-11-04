@@ -1,28 +1,28 @@
 import { useContext, useEffect, FC, useState } from 'react'
 import Draggable from 'react-draggable'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { RoleEntI, PermissionListI, loadPermissionList } from './role'
+import { UserEntI, RoleListI, loadRoleList } from './user'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from '@mui/x-data-grid'
 import LangLabel from '../lang/LangLabel'
 import { useLabel, getObjectById } from '../component/editor/editorUtil'
 
 /*
-  Dialog to show and select permissions
+  Dialog to show and select roles
 
   [Licence]
-  Created 10.10.22
+  Created 04.11.22
   @author John Stewart
  */
 
 interface Props {
   dialog: boolean
   setDialog: (x: boolean) => void
-  entity : RoleEntI
-  updateEntity: (list : PermissionListI[]) => void
+  entity : UserEntI
+  updateEntity: (list : RoleListI[]) => void
 }
 
-const PermissionDialog: FC<Props> = ({
+const RoleDialog: FC<Props> = ({
   dialog,
   setDialog,
   entity,
@@ -31,20 +31,20 @@ const PermissionDialog: FC<Props> = ({
   const { setMessage } = useContext(AppContext) as AppContextI
 
   //State 
-  const [list, setList] = useState<PermissionListI[]>([])
-  const [selection, setSelection] = useState<PermissionListI[]>([])
+  const [list, setList] = useState<RoleListI[]>([])
+  const [selection, setSelection] = useState<RoleListI[]>([])
 
-  //Load permissions
+  //Load roles
   useEffect(() => {
-    const loadListPermission = async () => {
-      let list = await loadPermissionList(setMessage)
+    const loadListRole = async () => {
+      let list = await loadRoleList(setMessage)
       if (typeof list !== 'undefined') {
-        var listX : PermissionListI[] = []
-        //Filter out current permissions
+        var listX : RoleListI[] = []
+        //Filter out current roles
         for (var i=0;i<list.length;i++) {
           var found = false
-          for (var j=0;j<entity.permissions.length;j++) {
-            if (entity.permissions[j].permissionId === list[i].id) found = true
+          for (var j=0;j<entity.roles.length;j++) {
+            if (entity.roles[j].roleId === list[i].id) found = true
           }
           if (!found) {
             listX.push(list[i])
@@ -53,36 +53,38 @@ const PermissionDialog: FC<Props> = ({
         setList(listX)
       }
     }
-    loadListPermission()
+    loadListRole()
   }, [setMessage])
 
+  //Add checkbox selection
   const handleSelection = (ids : GridSelectionModel) => {
-    var perms: Array<PermissionListI> = []
+    var selection: Array<RoleListI> = []
 
     //Iterate selected list ids
     if (ids !== null && typeof ids !== 'undefined') {
       ids.forEach((id) => {
-        var ent : PermissionListI | null = getObjectById(Number(id), list)
+        var ent : RoleListI | null = getObjectById(Number(id), selection)
         if (ent !== null) {
-          perms.push(ent)
+          selection.push(ent)
         }
       })
     }
-    setSelection(perms) 
+    setSelection(selection) 
   }
 
   //Single selection
   const handleDoubleClick = (ids : GridRowParams) => {
-    var perms: Array<PermissionListI> = []
-    var ent : PermissionListI | null = getObjectById(Number(ids.id), list)
+    var selection: Array<RoleListI> = []
+    var ent : RoleListI | null = getObjectById(Number(ids.id), list)
     if (ent !== null) {
-      perms.push(ent)
+      selection.push(ent)
     }
-    updateEntity(perms) 
+    updateEntity(selection) 
     setDialog(false)
   }
 
-  const updateEntityX = () => {
+  //Add Selection button action
+  const handleAddSelection = () => {
     updateEntity(selection)
     setDialog(false)
   }
@@ -96,7 +98,6 @@ const PermissionDialog: FC<Props> = ({
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'code', headerName: useLabel('url-c'), width: 150, type: 'string' },
     { field: 'descr', headerName: useLabel('desc'), width: 300, type: 'string' },
-    { field: 'crud', headerName: useLabel('crud'), width: 80, type: 'string' },
   ];
 
   return (
@@ -110,7 +111,7 @@ const PermissionDialog: FC<Props> = ({
         >
           <div className={'popup-dialog'}>
             <div className='dialog-color'>
-              <DialogTitle><LangLabel langkey='addperm' /></DialogTitle>
+              <DialogTitle><LangLabel langkey='addrole' /></DialogTitle>
             </div>
             <DialogContent>
               <div style={{ height: '600px' }} className='dialog-content'>
@@ -126,7 +127,7 @@ const PermissionDialog: FC<Props> = ({
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={updateEntityX} className='dialog-color dialog-button'><LangLabel langkey='addsels' /></Button>
+              <Button onClick={handleAddSelection} className='dialog-color dialog-button'><LangLabel langkey='addsels' /></Button>
               <Button onClick={handleClose} className='dialog-color'><LangLabel langkey='close' /></Button>
             </DialogActions>
           </div>
@@ -136,4 +137,4 @@ const PermissionDialog: FC<Props> = ({
   )
 }
 
-export default PermissionDialog
+export default RoleDialog
