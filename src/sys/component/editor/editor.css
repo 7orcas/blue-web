@@ -25,8 +25,9 @@
   background: white;
   border: 1px solid #f1f1f1;
 }
-#light .table-menu .table-menu-label {
+#light .table-menu .table-menu-tab {
   border: 1px solid #f1f1f1;
+  background-color: #808080;
 }
 #light .table-grid .MuiDataGrid-columnHeader {
   color: rgb(29, 28, 28) !important;
@@ -104,8 +105,11 @@
   background: #1e1e1e;
   border: 1px solid #cccccc;
 }
-#dark .table-menu .table-menu-label {
-  border: 1px solid #cccccc;
+#dark .table-menu .table-menu-tab {
+  border-top: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  background-color: #808080;
 }
 #dark .table-grid .MuiDataGrid-columnHeader {
   color: #cfcbcb !important;

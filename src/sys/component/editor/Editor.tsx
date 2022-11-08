@@ -73,6 +73,12 @@ import { BaseEntI } from '../../definition/interfaces'
   
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
+    // var idsx : GridSelectionModel = []
+    // ids?.forEach((id) => {
+    //   if (!editorConfig.editors.includes(typeof id === 'number'? id : parseInt(id))){
+    //     idsx.push(id)
+    //   }
+    // }) 
     onListSelectionSetEditors(editorConfig, setEditorConfig, ids, loadEntity)
   }
 
@@ -86,6 +92,18 @@ import { BaseEntI } from '../../definition/interfaces'
     }
   }
 
+  //Added to prevent Select All if none selected (https://github.com/mui/mui-x/issues/1904)
+  const selectAll = () : any => {
+    if (editorConfig.editors.length === 0) {
+      return {
+        "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer": {
+          display: "none"
+        }
+      }
+    }
+    return {}
+  }
+
   return (
     <div>
       <div className='table-grid'>
@@ -94,6 +112,7 @@ import { BaseEntI } from '../../definition/interfaces'
 // sx={{color: 'yellow'}} //text color
 // hideFooterPagination
 // hideFooter
+            sx={selectAll}
             rows={editorConfig.list}
             columns={listColumns}
             pageSize={25}

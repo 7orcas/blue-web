@@ -20,6 +20,10 @@ const apiGet = async (
   var detail = ''
 
   try {
+    if (typeof setSession !== 'undefined') {
+      setSession ({ type: SessionField.busy, payload: true })
+    }
+
     const response = await axios.get(`${ url }`)
     
     //Valid return object
@@ -44,7 +48,12 @@ console.log('SHOULD RELOGIN ' + err.response.status)
     }
   
     message = err.message
-  } 
+
+  } finally {
+    if (typeof setSession !== 'undefined') {
+      setSession ({ type: SessionField.busy, payload: false })
+    }
+  }
 
   var m = new Message()
   m.type = MessageType.error

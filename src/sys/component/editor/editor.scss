@@ -68,8 +68,9 @@
       border: 1px solid $light-button-color;
     }
     
-    .table-menu-label {
+    .table-menu-tab {
       border: 1px solid $light-button-color;
+      background-color: $light-table-menu-tab;
     }
   }
 
@@ -145,8 +146,11 @@
       border: 1px solid $dark-button-color;
     }
 
-    .table-menu-label {
-      border: 1px solid $dark-button-color;
+    .table-menu-tab {
+      border-top: 1px solid $dark-button-color;
+      border-right: 1px solid $dark-button-color;
+      border-left: 1px solid $dark-button-color;
+      background-color: $dark-table-menu-tab;
     }
   }
 

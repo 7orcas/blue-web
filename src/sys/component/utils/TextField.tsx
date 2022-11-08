@@ -13,7 +13,7 @@ import { useLabel, maxLengthText } from '../../component/editor/editorUtil'
 */
 
 interface Props {
-  type? : 'text' | 'number'
+  type? : 'text' | 'number' | 'password'
   label? : string | undefined
   entity : any
   field : string

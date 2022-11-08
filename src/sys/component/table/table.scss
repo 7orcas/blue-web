@@ -39,10 +39,17 @@
       min-height: 30px;
     }
 
-    .table-menu-label {
-      margin-top: 0px;
+    .table-menu-tab {
+      margin: 0px 20px 0px 5px;
       padding: 5px 10px 0px 10px;
-      border-radius: 5px;
+      border-radius: 5px 5px 0px 0px;
+      min-height: 35px;
+      display: flex;
+      cursor: pointer;      
+    }
+
+    .table-menu-tab-close {
+      margin: -7px -5px 0px 13px;
     }
   }
 

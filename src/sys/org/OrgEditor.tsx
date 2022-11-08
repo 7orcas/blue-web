@@ -11,6 +11,7 @@ import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../c
 import { GridColDef } from '@mui/x-data-grid';
 import { entRemoveClientFields } from '../definition/interfaces'
 import { EntityStatusType as Status } from "../definition/types"
+import Loading from '../component/utils/Loading'
 
 /*
   CRUD Editor for organisations
@@ -195,7 +196,9 @@ const OrgEditor = () => {
               updateEntity={updateEntity}
             />
           </div>
-          : <div>loading... </div>
+          : <div key={id}>
+            <Loading/>
+          </div>
       )}
       )}
     </div>

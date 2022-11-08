@@ -123,7 +123,7 @@ const RoleDetail : FC<Props> = ({
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu>
-            <div className='table-menu-item table-menu-label'>{entity.code}</div>
+            <div className='table-menu-tab'>{entity.code}</div>
             <Button onClick={handleDialog} langkey='addperm' className='table-menu-item' />
             <ButtonClose onClick={close} className='table-menu-right' />
           </TableMenu>

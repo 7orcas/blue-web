@@ -11,6 +11,7 @@ import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 import { entRemoveClientFields } from '../definition/interfaces'
 import { EntityStatusType as Status } from '../definition/types'
+import Loading from '../component/utils/Loading'
 
 
 /*
@@ -243,7 +244,9 @@ const RoleEditor = () => {
             />
           </div>
           //ToDo
-          : <div>problem</div>
+          : <div key={id}>
+            <Loading/>
+          </div>
       )}
       )}
     </div>

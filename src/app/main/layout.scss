@@ -3,11 +3,40 @@
 #light {
   background-color: $light-bg;
   color: $light-color;
+
+  .main-title {
+    color: $light-title-color;  
+    border: 1px solid $light-title-color;
+  }
+
+  .main-footer {
+    background-color: $light-footer-bg;
+    color: $light-footer-color;  
+  }
+
+  .busy-spinner {
+    color: black;  
+  }
 }
 
 #dark {
   background-color: $dark-bg;
   color: $dark-color;
+  
+  .main-title {
+    color: $dark-title-color;  
+    border: 1px solid $dark-title-color;
+  }
+
+  .main-footer {
+    background-color: $dark-footer-bg;
+    color: $dark-footer-color;  
+  }
+
+  .busy-spinner {
+    color: white;  
+    font-weight: bold;
+  }
 }
 
 .main-layout {
@@ -52,14 +81,14 @@
   }
 }
 
-#dark .main-title {
-  color: $dark-title-color;  
-  border: 1px solid $dark-title-color;
-}
-
-#light .main-title {
-  color: $light-title-color;  
-  border: 1px solid $light-title-color;
+.busy-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  width: 100px;
+  height: 100px;
 }
 
 .main-body {
@@ -83,12 +112,3 @@
   color: #3d3f4d;  
 }
 
-#light .main-footer {
-  background-color: $light-footer-bg;
-  color: $light-footer-color;  
-}
-
-#dark .main-footer {
-  background-color: $dark-footer-bg;
-  color: $dark-footer-color;  
-}

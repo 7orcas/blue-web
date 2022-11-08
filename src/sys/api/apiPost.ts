@@ -25,6 +25,10 @@ const apiPost = async (
   m.type = MessageType.error
 
   try {
+    if (typeof setSession !== 'undefined') {
+     setSession ({ type: SessionField.busy, payload: true })
+    }
+
     const response = await axios.post(`${ url }`, data)
     
     //Valid return object
@@ -64,7 +68,12 @@ const apiPost = async (
     }
   
     message = err.message
-  } 
+  
+  } finally {
+    if (typeof setSession !== 'undefined') {
+      setSession ({ type: SessionField.busy, payload: false })
+    }
+  }
 
   m.context = url
   m.message = message

@@ -22,6 +22,7 @@ export enum SessionField {
   tgTheme,
   messageDialog,
   changed,
+  busy,
 }
 
 export enum ThemeType {
@@ -43,6 +44,7 @@ class Session {
   theme : ThemeType = ThemeType.dark
   messageDialog : string = ''
   changed : boolean = false
+  busy: boolean = false
 }
 
 export default Session
@@ -88,7 +90,9 @@ export const sessionReducer = (session : Session, action : any) => {
     case SessionField.changed:
       return {...session, changed: action.payload}
   
-
+    case SessionField.busy:
+      return {...session, busy: action.payload}
+      
     default:
       throw new Error()
   }

@@ -12,7 +12,7 @@ interface Props {
   type? : 'button' | 'submit' | 'reset' | undefined
 }
 
-const Button : FC<Props> = ({ langkey, onClick, disabled = false, className = '', type }) => {
+const Button : FC<Props> = ({ langkey, onClick, disabled = false, className = '', type}) => {
   
   const { session } = useContext(AppContext) as AppContextI
 

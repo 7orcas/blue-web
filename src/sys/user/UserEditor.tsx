@@ -12,6 +12,7 @@ import { GridColDef } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 import { entRemoveClientFields } from '../definition/interfaces'
 import { EntityStatusType as Status } from '../definition/types'
+import Loading from '../component/utils/Loading'
 
 
 /*
@@ -37,17 +38,23 @@ const UserEditor = () => {
     }
   }
 
-  //Load full entity 
+  //Load full entity if required
   const loadEntityUser = async (id : number) => {
     if (edConf.entities.has(id)) {
       return edConf.entities.get(id)
     }
+    return loadEntityForceUser (id)
+  }
+
+  //Force Load of full entity (required after save)
+  const loadEntityForceUser = async (id : number) => {
     var ent = await loadUserEntity(id, setMessage, setSession)
     if (typeof ent !== 'undefined') {
       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, ent))})  
       return ent
     }
   }
+    
 
   //Create new entity
   const handleCreate = async () => {
@@ -61,7 +68,7 @@ const UserEditor = () => {
   //Commit CUD operations
   const handleCommitX = async() => {
     try {
-      
+
       if (containsInvalid(edConf.list, setMessage)) {
         return
       }
@@ -73,7 +80,7 @@ const UserEditor = () => {
 
         if (l._caEntityStatus === Status.changed 
           || l._caEntityStatus === Status.delete) {
-            
+
           var e = edConf.entities.get(l.id)
 
           var roles : UserRoleEntI[] = []
@@ -91,11 +98,14 @@ const UserEditor = () => {
       }
 
       var ids : number [] | undefined = await handleCommit(saveList, edConf, setEdConf, edConf.POST_URL, loadEntityUser, setMessage, setSession)
-console.log (ids)      
+      
+      //Clear entities and force reload
+      setEdConf ({type: ECF.entities, payload : new Map()})  
+      
       //Reselect editors
       if (ids !== undefined){
         const timer = setTimeout(() =>  {
-console.log('reselect')          
+          ids?.map((id) => loadEntityForceUser(id)) 
           setEdConf ({type: ECF.editors, payload : ids})
         }, 500)
           
@@ -202,7 +212,9 @@ console.log('reselect')
             />
           </div>
           //ToDo
-          : <div>problem</div>
+          : <div key={id}>
+              <Loading/>
+            </div>
       )}
       )}
     </div>

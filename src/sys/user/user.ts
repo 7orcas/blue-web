@@ -142,8 +142,10 @@ export const newUserEnt = async (
     
     if (typeof data !== 'undefined') {
       var ent : UserEntI = {} as UserEntI
-      for (const l of data) {
-        initEntBase(l, ent)
+      for (const lst of data) {
+        initEntBase(lst, ent)
+        ent.password = lst.password
+        ent.attempts = lst.attempts
         ent.roles = []
       }
       return ent

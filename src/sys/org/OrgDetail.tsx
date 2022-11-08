@@ -74,7 +74,7 @@ const OrgDetail : FC<Props> = ({
     <div className='editor'>
       <div className='menu-header'>
         <TableMenu>
-          <div className='table-menu-item table-menu-label'>{entity.code}</div>
+          <div className='table-menu-tab'>{entity.code}</div>
           <ButtonClose onClick={close} className='table-menu-right' />
         </TableMenu>
       </div>

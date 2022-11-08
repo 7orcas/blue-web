@@ -46,11 +46,17 @@ const UserDetail : FC<Props> = ({
   var roleEdConf : EditorConfig<UserRoleEntI, UserEntI> = new EditorConfig()
   const [roleConf, setRoleConf] = useReducer(roleConfRed, roleEdConf) 
   const [dialog, setDialog] = useState(false)
+  const [roles, setRoles] = useState(true)
   const config = configs.get(CONFIG)
 
   //Set the list from the entity permissions list
   const loadListRoles = () => {
-    setRoleConf ({type: ECF.list, payload : entity.roles})
+    if (roles) {
+      setRoleConf ({type: ECF.list, payload : entity.roles})
+    }
+    else {
+      
+    }
   }
 
   //Set Role Changes
@@ -104,6 +110,10 @@ const UserDetail : FC<Props> = ({
 
   //Process checkbox clicks
   const handleCheckboxClick = (id : number | undefined, field : string) => {
+    if (!roles) {
+      return;
+    }
+
     if (id !== undefined) {
       var ent : UserRoleEntI | null = getObjectById(Number(id), roleConf.list)
       if (ent !== null) {
@@ -112,6 +122,11 @@ const UserDetail : FC<Props> = ({
         updateRole (ent, field, !ent[fieldX])
       }
     }
+  }
+
+  const handleResetAttempts = () => {
+    entity.attempts = 0
+    updateEntity(entity) 
   }
 
   //Close this editor
@@ -124,12 +139,16 @@ const UserDetail : FC<Props> = ({
     setDialog(!dialog)
   }
 
+  const handleShowDisplay = () => {
+    setRoles(!roles)
+  }
+
   //List Columns
   const roleColumns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: 'code', headerName: useLabel('role'), width: 100, type: 'string' },
+    { field: 'code', headerName: useLabel(roles?'role':'url-c'), width: 100, type: 'string' },
     { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string' },
-    { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean', editable: true,
+    { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean', editable: roles,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.active}
@@ -137,7 +156,7 @@ const UserDetail : FC<Props> = ({
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 60, type: 'boolean', editable: true,
+    { field: 'delete', headerName: useLabel('delete'), width: 60, type: 'boolean', editable: roles, hide: !roles,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
@@ -158,8 +177,11 @@ const UserDetail : FC<Props> = ({
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu>
-            <div className='table-menu-item table-menu-label'>{entity.code}</div>
-            <ButtonClose onClick={close} className='table-menu-right' />
+            <div className='table-menu-tab' onClick={close}>
+              {entity.code}
+              <div className='table-menu-tab-close'>x</div>
+            </div>
+            <Button onClick={handleResetAttempts} langkey='resetAtt' className='table-menu-item' />
           </TableMenu>
         </div>
         <div className='editor-detail'>
@@ -169,6 +191,16 @@ const UserDetail : FC<Props> = ({
           <TextField
             field='code'
             label='userid'
+            config={config}
+            entity={entity}
+            updateEntity={updateEntity}
+            required={true}
+            theme={session.theme}
+          />
+          <TextField
+            field='password'
+            type='password'            
+            label='pw'
             config={config}
             entity={entity}
             updateEntity={updateEntity}
@@ -189,7 +221,8 @@ const UserDetail : FC<Props> = ({
           <div>
             <div className='menu-header'>
               <TableMenu>
-                <Button onClick={handleDialog} langkey='addrole' className='table-menu-item' />
+                <Button onClick={handleDialog} langkey='addrole' className='table-menu-item' disabled={!roles}/>
+                <Button onClick={handleShowDisplay} langkey={!roles?'showroles':'showperms'} className='table-menu-item' />
               </TableMenu>
             </div>
             <Editor 

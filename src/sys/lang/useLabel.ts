@@ -11,7 +11,7 @@ const useLabel = (langKey : string) => {
     return langKey + x  
   }
 
-  if (langKey === '') {
+  if (typeof langKey === 'undefined' || langKey === '') {
     return langKey
   }
 
