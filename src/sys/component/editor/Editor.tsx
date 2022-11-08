@@ -73,12 +73,6 @@ import { BaseEntI } from '../../definition/interfaces'
   
   //Set the list selections (to display editors)  
   const handleSelection = (ids : GridSelectionModel) => {
-    // var idsx : GridSelectionModel = []
-    // ids?.forEach((id) => {
-    //   if (!editorConfig.editors.includes(typeof id === 'number'? id : parseInt(id))){
-    //     idsx.push(id)
-    //   }
-    // }) 
     onListSelectionSetEditors(editorConfig, setEditorConfig, ids, loadEntity)
   }
 

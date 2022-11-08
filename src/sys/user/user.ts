@@ -3,6 +3,7 @@ import { EntityStatusType } from '../definition/types'
 import { EditorConfig } from '../component/editor/EditorConfig'
 import apiGet from '../api/apiGet'
 import Message from '../system/Message'
+import { PermissionListI } from "../role/role"
 
 /*
   User configurations.
@@ -25,6 +26,7 @@ export interface UserEntI extends BaseEntI {
   orgs: string
   attempts: number
   roles : UserRoleEntI[]
+  permissions : PermissionListI[]
 }
 
 export interface RoleListI extends BaseEntI {

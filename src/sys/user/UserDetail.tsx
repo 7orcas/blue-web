@@ -49,14 +49,16 @@ const UserDetail : FC<Props> = ({
   const [roles, setRoles] = useState(true)
   const config = configs.get(CONFIG)
 
-  //Set the list from the entity permissions list
+  //Set the list from the entity role list
   const loadListRoles = () => {
-    if (roles) {
-      setRoleConf ({type: ECF.list, payload : entity.roles})
-    }
-    else {
-      
-    }
+console.log('roles')    
+    setRoleConf ({type: ECF.list, payload : entity.roles})
+  }
+
+  //Set the list from the entity permissions list
+  const loadListPermissions = () => {
+console.log('perms')    
+    setRoleConf ({type: ECF.list, payload : entity.permissions})
   }
 
   //Set Role Changes
@@ -141,14 +143,20 @@ const UserDetail : FC<Props> = ({
 
   const handleShowDisplay = () => {
     setRoles(!roles)
+    if (roles) {
+      loadListRoles()
+    }
+    else {
+      loadListPermissions()
+    }
   }
 
-  //List Columns
+  //Role List Columns
   const roleColumns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: 'code', headerName: useLabel(roles?'role':'url-c'), width: 100, type: 'string' },
+    { field: 'code', headerName: useLabel('role'), width: 100, type: 'string' },
     { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string' },
-    { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean', editable: roles,
+    { field: 'active', headerName: useLabel('active'), width: 60, type: 'boolean', editable: true, 
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.active}
@@ -156,7 +164,7 @@ const UserDetail : FC<Props> = ({
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 60, type: 'boolean', editable: roles, hide: !roles,
+    { field: 'delete', headerName: useLabel('delete'), width: 60, type: 'boolean', editable: true,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
@@ -165,6 +173,14 @@ const UserDetail : FC<Props> = ({
       ),
     },
   ];
+
+  //Permission List Columns
+  const permColumns: GridColDef[] = [
+    { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
+    { field: 'code', headerName: useLabel('url-c'), width: 300, type: 'string' },
+    { field: 'crud', headerName: useLabel('crud'), width: 100, type: 'string' },
+  ];
+
 
   return (
     <div key={id} >
@@ -225,18 +241,34 @@ const UserDetail : FC<Props> = ({
                 <Button onClick={handleShowDisplay} langkey={!roles?'showroles':'showperms'} className='table-menu-item' />
               </TableMenu>
             </div>
-            <Editor 
-              style={{ height: '40vh', minWidth : 450, maxWidth : 450 }}
-              editorConfig={roleConf}
-              setEditorConfig={setRoleConf}
-              listColumns={roleColumns}
-              loadList={loadListRoles}
-              updateList={updateRole}
-              disableSelectionOnClick={true}
-              checkboxSelection={false}
-              useChangesPrompt={false}
-            >
-            </Editor>
+            {roles && 
+              <Editor 
+                style={{ height: '40vh', minWidth : 450, maxWidth : 450 }}
+                editorConfig={roleConf}
+                setEditorConfig={setRoleConf}
+                listColumns={roleColumns}
+                loadList={loadListRoles}
+                updateList={updateRole}
+                disableSelectionOnClick={true}
+                checkboxSelection={false}
+                useChangesPrompt={false}
+              >
+              </Editor>
+            }
+            {!roles && 
+              <Editor 
+                style={{ height: '40vh', minWidth : 450, maxWidth : 450 }}
+                editorConfig={roleConf}
+                setEditorConfig={setRoleConf}
+                listColumns={permColumns}
+                loadList={loadListPermissions}
+                updateList={updateRole}
+                disableSelectionOnClick={true}
+                checkboxSelection={false}
+                useChangesPrompt={false}
+              >
+              </Editor>
+            }
           </div>
         </div>
       </div>
