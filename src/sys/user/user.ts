@@ -3,7 +3,7 @@ import { EntityStatusType } from '../definition/types'
 import { EditorConfig } from '../component/editor/EditorConfig'
 import apiGet from '../api/apiGet'
 import Message from '../system/Message'
-import { PermissionListI } from "../role/role"
+import { PermissionListI } from '../role/role'
 
 /*
   User configurations.
@@ -102,6 +102,7 @@ export const loadUserEntity = async (
       ent.password = data.password
       ent.orgs = data.orgs
       appendRoles(data.roles, ent)
+      appendPermissions(data.permissions, ent)
       initEntBaseOV(ent)
       return ent
     }
@@ -198,6 +199,18 @@ export const appendRoles = (roles : any, ent: UserEntI) => {
   ent.roles.map((p) => p._caEntityStatus = EntityStatusType.valid)
   for (var j=0;j<ent.roles.length;j++) {
     var p = ent.roles[j]
+    initEntBase(p, p)
+    initEntBaseOV(p)
+    p._caParent = ent
+  }
+}
+
+//Append user-permissions (derived from roles)
+export const appendPermissions = (permissions : any, ent: UserEntI) => {
+  ent.permissions = permissions !== 'undefined'? permissions : []
+  ent.permissions.map((p) => p._caEntityStatus = EntityStatusType.valid)
+  for (var j=0;j<ent.permissions.length;j++) {
+    var p = ent.permissions[j]
     initEntBase(p, p)
     initEntBaseOV(p)
     p._caParent = ent

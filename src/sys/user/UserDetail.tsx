@@ -4,10 +4,11 @@ import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
 import RoleDialog from './RoleDialog'
 import Button from '../component/utils/Button'
-import ButtonClose from '../component/utils/ButtonClose'
+import EntityInfo from '../component/utils/EntityInfo'
 import TextField from '../component/utils/TextField'
 import { BaseEntI } from '../definition/interfaces'
 import { CONFIG, UserListI, UserEntI, UserRoleEntI, RoleListI, newUserRoleEnt } from './user'
+import { PermissionListI } from '../role/role'
 import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor, formatTs } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as roleConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { EntityStatusType as Status } from '../definition/types'
@@ -45,20 +46,21 @@ const UserDetail : FC<Props> = ({
   //State 
   var roleEdConf : EditorConfig<UserRoleEntI, UserEntI> = new EditorConfig()
   const [roleConf, setRoleConf] = useReducer(roleConfRed, roleEdConf) 
+  var permEdConf : EditorConfig<PermissionListI, UserEntI> = new EditorConfig()
+  const [permConf, setPermConf] = useReducer(roleConfRed, permEdConf) 
+
   const [dialog, setDialog] = useState(false)
   const [roles, setRoles] = useState(true)
   const config = configs.get(CONFIG)
 
   //Set the list from the entity role list
   const loadListRoles = () => {
-console.log('roles')    
     setRoleConf ({type: ECF.list, payload : entity.roles})
   }
 
   //Set the list from the entity permissions list
   const loadListPermissions = () => {
-console.log('perms')    
-    setRoleConf ({type: ECF.list, payload : entity.permissions})
+    setPermConf ({type: ECF.list, payload : entity.permissions})
   }
 
   //Set Role Changes
@@ -143,12 +145,12 @@ console.log('perms')
 
   const handleShowDisplay = () => {
     setRoles(!roles)
-    if (roles) {
-      loadListRoles()
-    }
-    else {
-      loadListPermissions()
-    }
+    // if (roles) {
+    //   loadListRoles()
+    // }
+    // else {
+    //   loadListPermissions()
+    // }
   }
 
   //Role List Columns
@@ -201,9 +203,9 @@ console.log('perms')
           </TableMenu>
         </div>
         <div className='editor-detail'>
-
-          <p>id:{entity.id} updated:{formatTs(entity.updated)}</p>
-          
+          <EntityInfo
+            entity={entity}
+          />
           <TextField
             field='code'
             label='userid'
@@ -258,8 +260,8 @@ console.log('perms')
             {!roles && 
               <Editor 
                 style={{ height: '40vh', minWidth : 450, maxWidth : 450 }}
-                editorConfig={roleConf}
-                setEditorConfig={setRoleConf}
+                editorConfig={permConf}
+                setEditorConfig={setPermConf}
                 listColumns={permColumns}
                 loadList={loadListPermissions}
                 updateList={updateRole}

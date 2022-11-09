@@ -25,6 +25,7 @@ import { BaseEntI } from '../../definition/interfaces'
     disableSelectionOnClick? : boolean
     checkboxSelection? : boolean
     useChangesPrompt?: boolean
+    rowsPerPage?: number
     children: any
   }
     
@@ -39,6 +40,7 @@ import { BaseEntI } from '../../definition/interfaces'
         disableSelectionOnClick=false,
         checkboxSelection=true,
         useChangesPrompt=true,
+        rowsPerPage=10,
         children }) => {
   
   const { session, setSession, setMessage, setTitle, configs, setConfigs } = useContext(AppContext) as AppContextI
@@ -109,8 +111,8 @@ import { BaseEntI } from '../../definition/interfaces'
             sx={selectAll}
             rows={editorConfig.list}
             columns={listColumns}
-            pageSize={25}
-            rowsPerPageOptions={[25]}
+            pageSize={rowsPerPage}
+            rowsPerPageOptions={[rowsPerPage]}
             checkboxSelection={checkboxSelection}
             selectionModel={editorConfig.editors}
             onSelectionModelChange={handleSelection}
@@ -120,6 +122,8 @@ import { BaseEntI } from '../../definition/interfaces'
             getCellClassName={(params: GridCellParams<number>) => {
               return 'table-cell';
             }}
+            hideFooter={editorConfig.list.length<rowsPerPage}
+            hideFooterSelectedRowCount
           />
         </div>
       </div>

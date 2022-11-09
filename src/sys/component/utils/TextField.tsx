@@ -77,6 +77,7 @@ const TextField : FC<Props> = ({
 
   return (
     <MuiTextField
+      className='text-field'
       error={required && !isValid}
       type={type}
       inputProps={inputProps}
@@ -85,9 +86,6 @@ const TextField : FC<Props> = ({
       onBlur={handleBlur}
       label={labelX}
       required={required}
-      InputLabelProps={{
-        style: { color: theme === ThemeType.dark? '#cfcbcb' : '#3d3f4d' },
-      }}
       InputProps={{
         readOnly: readonly,
         disableUnderline : readonly

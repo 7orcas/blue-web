@@ -44,6 +44,9 @@
 #light .table-grid .table-grid-valid-true {
   color: rgb(29, 28, 28) !important;
 }
+#light .text-field .MuiFormLabel-root {
+  color: rgb(29, 28, 28);
+}
 #light .table-grid-status-1 {
   background-color: rgb(93, 117, 94) !important;
   color: white !important;
@@ -75,6 +78,10 @@
 .editor-detail input {
   color: rgb(29, 28, 28);
   border: 1px solid #a6a8b3;
+}
+.editor-detail .editor-info-line {
+  font-size: small;
+  text-align: right;
 }
 
 #dark .MuiSvgIcon-root {
@@ -152,6 +159,9 @@
 }
 #dark .table-grid .table-grid-status-0 {
   color: #cfcbcb !important;
+}
+#dark .text-field .MuiFormLabel-root {
+  color: #cfcbcb;
 }
 
 .editor-container {

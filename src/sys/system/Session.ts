@@ -23,6 +23,7 @@ export enum SessionField {
   messageDialog,
   changed,
   busy,
+  devAdmin,
 }
 
 export enum ThemeType {
@@ -45,6 +46,7 @@ class Session {
   messageDialog : string = ''
   changed : boolean = false
   busy: boolean = false
+  devAdmin: boolean = true
 }
 
 export default Session
@@ -92,7 +94,11 @@ export const sessionReducer = (session : Session, action : any) => {
   
     case SessionField.busy:
       return {...session, busy: action.payload}
-      
+
+    case SessionField.devAdmin:
+      return {...session, devAdmin: action.payload}
+  
+
     default:
       throw new Error()
   }

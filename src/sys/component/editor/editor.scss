@@ -94,6 +94,12 @@
     }
   }
 
+  .text-field {
+    .MuiFormLabel-root {
+      color: $light-color;
+    }
+  }
+
   @include status;
 
 }
@@ -104,6 +110,11 @@
   input {
     color: $light-color;
     border: 1px solid $light-border-color;
+  }
+
+  .editor-info-line {
+    font-size: small;
+    text-align: right;
   }
 }
 
@@ -177,9 +188,13 @@
     .table-grid-status-0 {
       color: $dark-color !important;  
     }
-
   }
-  
+
+  .text-field {
+    .MuiFormLabel-root {
+      color: $dark-color;
+    }
+  }
 }
 
 .editor-container {
