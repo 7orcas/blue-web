@@ -77,7 +77,7 @@ import { BaseEntI } from '../../definition/interfaces'
   const handleSelection = (ids : GridSelectionModel) => {
     onListSelectionSetEditors(editorConfig, setEditorConfig, ids, loadEntity)
   }
-
+  
   //Process cell editing (if used)
   const handleRowEditCommit = (params : GridCellEditCommitParams) => {
     if (updateList !== null) {
@@ -99,6 +99,15 @@ import { BaseEntI } from '../../definition/interfaces'
     }
     return {}
   }
+
+  const headerClass = () => {
+    listColumns.forEach((c) => {
+      if (typeof c.headerClassName === 'undefined'){
+        c.headerClassName = 'editor-table-header';
+      }
+    })
+  }
+  headerClass()
 
   return (
     <div>

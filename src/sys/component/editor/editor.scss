@@ -106,7 +106,10 @@
 
 .editor-detail {
   border: 1px solid $light-border-color;
-  
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+
   input {
     color: $light-color;
     border: 1px solid $light-border-color;
@@ -115,6 +118,15 @@
   .editor-info-line {
     font-size: small;
     text-align: right;
+    margin: 0px 5px 5px 0px;
+  }
+
+  .editor-block {
+
+  }
+
+  .editor-table {
+    margin-top: auto;
   }
 }
 
@@ -190,10 +202,18 @@
     }
   }
 
+  .editor-table-header {
+    background-color: red;
+  }
+  
   .text-field {
     .MuiFormLabel-root {
       color: $dark-color;
     }
+  }
+
+  .editor-info-line {
+    color: $dark-color-light;
   }
 }
 

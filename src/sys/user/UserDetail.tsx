@@ -206,37 +206,37 @@ const UserDetail : FC<Props> = ({
           <EntityInfo
             entity={entity}
           />
-          <TextField
-            field='code'
-            label='userid'
-            config={config}
-            entity={entity}
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-          />
-          <TextField
-            field='password'
-            type='password'            
-            label='pw'
-            config={config}
-            entity={entity}
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-          />
-          <TextField
-            field='orgs'
-            config={config}
-            entity={entity}
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-          />
+          <div className='editor-block'>
+            <TextField
+              field='code'
+              label='userid'
+              config={config}
+              entity={entity}
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+            />
+            <TextField
+              field='password'
+              type='password'            
+              label='pw'
+              config={config}
+              entity={entity}
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+            />
+            <TextField
+              field='orgs'
+              config={config}
+              entity={entity}
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+            />
+          </div>
 
-          <p></p>
-
-          <div>
+          <div className='editor-table'>
             <div className='menu-header'>
               <TableMenu>
                 <Button onClick={handleDialog} langkey='addrole' className='table-menu-item' disabled={!roles}/>
