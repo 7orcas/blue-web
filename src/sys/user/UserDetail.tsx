@@ -13,7 +13,8 @@ import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor,
 import { EditorConfig, editorConfigReducer as roleConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { EntityStatusType as Status } from '../definition/types'
 import { GridColDef } from '@mui/x-data-grid'
-import { Checkbox } from '@mui/material'
+import { Checkbox, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 /*
   CRUD Editor for user-role
@@ -145,12 +146,6 @@ const UserDetail : FC<Props> = ({
 
   const handleShowDisplay = () => {
     setRoles(!roles)
-    // if (roles) {
-    //   loadListRoles()
-    // }
-    // else {
-    //   loadListPermissions()
-    // }
   }
 
   //Role List Columns
@@ -235,6 +230,22 @@ const UserDetail : FC<Props> = ({
               theme={session.theme}
             />
           </div>
+
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Configuration</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                malesuada lacus ex, sit amet blandit leo lobortis eget.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
 
           <div className='editor-table'>
             <div className='menu-header'>

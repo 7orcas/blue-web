@@ -90,7 +90,7 @@ const TextField : FC<Props> = ({
         readOnly: readonly,
         disableUnderline : readonly
       }}
-      variant='filled'
+      variant='filled' //'filled' | 'outlined'* | 'standard'
     />
   )
 }

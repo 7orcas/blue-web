@@ -5,6 +5,7 @@ import loadLabels from '../lang/loadLabels'
 import Session, { SessionField, sessionReducer } from './Session'
 import Message from './Message'
 import { ConfigI } from '../definition/interfaces';
+import apiPut from '../api/apiPutUserConfig'
 
 /*
   Application state object
@@ -66,6 +67,11 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
     }
     initialise()
   },[])
+
+  useEffect(() => {
+console.log('useEffect ' + session.theme)
+    apiPut('theme', session.theme.toString())
+  },[session.theme])
 
   const appValue: AppContextI = {
     session: session,

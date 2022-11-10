@@ -27,8 +27,8 @@ export enum SessionField {
 }
 
 export enum ThemeType {
-  light,
-  dark,
+  light = 0,
+  dark = 1,
 }
 
 //Store user session variables

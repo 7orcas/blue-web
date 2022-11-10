@@ -76,9 +76,11 @@
 
   .table-grid {
 
+    .MuiDataGrid-columnHeaders {
+      background-color: $light-table-header;
+    }
     .MuiDataGrid-columnHeader {
       color: $light-color !important;  
-    // font-weight: bold; doesn't work
     }
     .MuiSvgIcon-root {
       color: $light-color !important;
@@ -122,7 +124,9 @@
   }
 
   .editor-block {
-
+    .text-field {
+      margin-right: 5px;
+    }
   }
 
   .editor-table {
@@ -142,7 +146,7 @@
   
     input {
       color: $dark-color;
-      border: 1px solid $dark-border-color;
+      // border: 1px solid $dark-border-color;
     }
 
     legend span {
@@ -179,6 +183,9 @@
 
   .table-grid {
 
+    .MuiDataGrid-columnHeaders {
+      background-color: $dark-table-header;
+    }
     .MuiDataGrid-columnHeader {
       color: $dark-color !important;  
     }
@@ -202,10 +209,6 @@
     }
   }
 
-  .editor-table-header {
-    background-color: red;
-  }
-  
   .text-field {
     .MuiFormLabel-root {
       color: $dark-color;

@@ -29,6 +29,9 @@
   border: 1px solid #f1f1f1;
   background-color: #808080;
 }
+#light .table-grid .MuiDataGrid-columnHeaders {
+  background-color: #dbd8d8;
+}
 #light .table-grid .MuiDataGrid-columnHeader {
   color: rgb(29, 28, 28) !important;
 }
@@ -87,6 +90,9 @@
   text-align: right;
   margin: 0px 5px 5px 0px;
 }
+.editor-detail .editor-block .text-field {
+  margin-right: 5px;
+}
 .editor-detail .editor-table {
   margin-top: auto;
 }
@@ -99,7 +105,6 @@
 }
 #dark .editor-detail input {
   color: #cfcbcb;
-  border: 1px solid #cfcbcb;
 }
 #dark .editor-detail legend span {
   color: #cfcbcb;
@@ -124,6 +129,9 @@
   border-right: 1px solid #cccccc;
   border-left: 1px solid #cccccc;
   background-color: #808080;
+}
+#dark .table-grid .MuiDataGrid-columnHeaders {
+  background-color: #2d2d2d;
 }
 #dark .table-grid .MuiDataGrid-columnHeader {
   color: #cfcbcb !important;
@@ -166,9 +174,6 @@
 }
 #dark .table-grid .table-grid-status-0 {
   color: #cfcbcb !important;
-}
-#dark .editor-table-header {
-  background-color: red;
 }
 #dark .text-field .MuiFormLabel-root {
   color: #cfcbcb;

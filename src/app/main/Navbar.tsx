@@ -8,10 +8,7 @@ import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { SessionField, ThemeType } from '../../sys/system/Session'
 import MenuItemFactory, { MenuItem, MenuItemType } from '../../sys/menu/MenuItemFactory'
 import Menu from "../../sys/menu/Menu"
-import { 
-  Menu as MenuS, 
-  MenuItem as MenuItemS,
-  MenuButton } from '@szhsin/react-menu';
+import { Menu as MenuS, MenuButton } from '@szhsin/react-menu';
 
 /*
   Application main menu
@@ -63,6 +60,11 @@ const Navbar = () => {
   sub2.menu.push(f.item('machines', '/Test3'))
   sub2.menu.push(f.item('shifts', '/Test3'))
 
+  //Separate theme icon  
+  var themeX = f.button('', () => {
+    setSession ({type: SessionField.tgTheme})},
+    false)
+
   //Separate admin icon
   var admin = new MenuItem(9999)
   admin.label = 'admin'
@@ -71,6 +73,7 @@ const Navbar = () => {
   admin.menu.push(f.item('passchg', '/Test3'))
   admin.menu.push(f.div())
   admin.menu.push(f.item('labeladmin', '/labels'))
+
   if (containsRole('LangEdit')) {
     var editLabel = f.checkbox('editLabels', 
     () => {setSession ({type: SessionField.editLabels})},
@@ -83,13 +86,6 @@ const Navbar = () => {
   admin.menu.push(f.item('roleadmin', '/roleadmin'))
   admin.menu.push(f.item('permadmin', '/permadmin'))
   admin.menu.push(f.item('orgadmin', '/orgadmin'))
-
-
-  //Separate theme icon  
-  var themeX = f.button('', 
-    () => {setSession ({type: SessionField.tgTheme})},
-    false)
-
 
 
   const setSelection = (item : MenuItem) => {

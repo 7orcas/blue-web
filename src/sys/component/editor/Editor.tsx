@@ -100,15 +100,6 @@ import { BaseEntI } from '../../definition/interfaces'
     return {}
   }
 
-  const headerClass = () => {
-    listColumns.forEach((c) => {
-      if (typeof c.headerClassName === 'undefined'){
-        c.headerClassName = 'editor-table-header';
-      }
-    })
-  }
-  headerClass()
-
   return (
     <div>
       <div className='table-grid'>
