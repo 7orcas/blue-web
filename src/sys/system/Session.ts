@@ -72,7 +72,7 @@ export const sessionReducer = (session : Session, action : any) => {
       return {...session, orgNr: action.payload}
 
     case SessionField.tgTheme:
-      return {...session, theme: session.theme === ThemeType.light ? ThemeType.dark : ThemeType.light}
+      return {...session, theme: action.payload}
     
     case SessionField.roles:
       return {...session, roles: action.payload}

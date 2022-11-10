@@ -37,6 +37,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const [session, setSession] = useReducer(sessionReducer, new Session ());
   const [message, setMessage] = useState(new Message());
   const [configs, setConfigs] = useState(new Map());
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('appname');
 
   // Load app defaults
@@ -47,30 +48,41 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
     const initialise = async () => {
       try {
-
         const response = await axios.get(params.init + '?SessionID=' + params.sid)
+        var login = response.data.data
 
-        setSession ({ type: SessionField.userid, payload: response.data.data.userid })
-        setSession ({ type: SessionField.lang, payload: response.data.data.lang })
-        setSession ({ type: SessionField.orgNr, payload: response.data.data.orgNr })
+        setSession ({ type: SessionField.userid, payload: login.userid })
+        setSession ({ type: SessionField.lang, payload: login.lang })
+        setSession ({ type: SessionField.orgNr, payload: login.orgNr })
 
-        var roles = response.data.data.roles.split(',')
+        var roles = login.roles.split(',')
         setSession ({ type: SessionField.roles, payload: roles })
+        
+        if (typeof login.theme !== 'undefined') {
+          setSession ({ type: SessionField.tgTheme, payload: login.theme })  
+        }
 
         const l = await loadLabels('', setMessage, setSession)
         setSession ({ type: SessionField.labels, payload: l })
         
       } catch (err : any) {
         console.log(err.message)
+
       } finally {
+        const timer = setTimeout(() =>  {
+          setLoading(false)
+        }, 500)
+        return () => clearTimeout(timer)   
       }
     }
     initialise()
   },[])
 
   useEffect(() => {
+    if (!loading) {
 console.log('useEffect ' + session.theme)
-    apiPut('theme', session.theme.toString())
+      apiPut('theme', session.theme.toString())
+    }
   },[session.theme])
 
   const appValue: AppContextI = {

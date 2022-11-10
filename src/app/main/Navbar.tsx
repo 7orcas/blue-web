@@ -62,7 +62,7 @@ const Navbar = () => {
 
   //Separate theme icon  
   var themeX = f.button('', () => {
-    setSession ({type: SessionField.tgTheme})},
+    setSession ({type: SessionField.tgTheme, payload : session.theme === ThemeType.light ? ThemeType.dark : ThemeType.light})},
     false)
 
   //Separate admin icon
