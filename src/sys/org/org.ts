@@ -17,6 +17,7 @@ export interface OrgListI extends BaseEntI {
 
 export interface OrgEntI extends BaseEntI {
   dvalue: boolean
+  loginAttempts: number
 }
 
 export const CONFIG = 'system.org.ent.EntOrg'

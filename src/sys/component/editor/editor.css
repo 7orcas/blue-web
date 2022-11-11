@@ -50,6 +50,9 @@
 #light .text-field .MuiFormLabel-root {
   color: rgb(29, 28, 28);
 }
+#light .editor-info-line {
+  color: #7b7c85;
+}
 #light .table-grid-status-1 {
   background-color: rgb(93, 117, 94) !important;
   color: white !important;

@@ -1,7 +1,7 @@
 import { useContext, useReducer, FC, useState } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
-import TableMenu from '../component/table/TableMenu'
+import TableMenu, { TableMenuTab } from '../component/table/TableMenu'
 import RoleDialog from './RoleDialog'
 import Button from '../component/utils/Button'
 import EntityInfo from '../component/utils/EntityInfo'
@@ -190,11 +190,12 @@ const UserDetail : FC<Props> = ({
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu>
-            <div className='table-menu-tab' onClick={close}>
-              {entity.code}
-              <div className='table-menu-tab-close'>x</div>
-            </div>
-            <Button onClick={handleResetAttempts} langkey='resetAtt' className='table-menu-item' />
+            <TableMenuTab
+              code={entity.code}
+              close={close}
+            >
+              <Button onClick={handleResetAttempts} langkey='resetAtt' className='table-menu-item' />
+            </TableMenuTab>
           </TableMenu>
         </div>
         <div className='editor-detail'>

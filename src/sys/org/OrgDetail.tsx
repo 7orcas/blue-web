@@ -1,14 +1,16 @@
 import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
+import { useLabel, loadConfiguration, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
 import { CONFIG, OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
-import TableMenu from '../component/table/TableMenu'
+import TableMenu,  { TableMenuTab } from '../component/table/TableMenu'
 import ButtonClose from '../component/utils/ButtonClose'
 import LangLabel from '../lang/LangLabel';
-import { Checkbox } from '@mui/material'
 import TextField from '../component/utils/TextField'
+import EntityInfo from '../component/utils/EntityInfo'
+import { Checkbox, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 /*
   Show organisational detail
@@ -17,7 +19,6 @@ import TextField from '../component/utils/TextField'
   Created 13.09.22
   @author John Stewart
 */
-
 interface Props {
   editorConfig : EditorConfig<BaseEntI, BaseEntI>
   setEditorConfig : any
@@ -63,45 +64,67 @@ const OrgDetail : FC<Props> = ({
     closeEditor(editorConfig, setEditorConfig, id)
   }
 
-  const title = () => {
-    if (typeof entity !== 'undefined') {
-      return entity.code
-    }
-    return '?'
-  }
-
   return (
     <div className='editor'>
       <div className='menu-header'>
-        <TableMenu>
-          <div className='table-menu-tab'>{entity.code}</div>
-          <ButtonClose onClick={close} className='table-menu-right' />
-        </TableMenu>
+        <TableMenuTab
+          code={entity.code}
+          close={close}
+        />
       </div>
       <div key={id} className='editor-detail'>
-        {typeof entity !== 'undefined' &&
         <>
-          <p>id:{entity.id} updated:{formatTs(entity.updated)}</p>
-          <TextField
-            type='number'
-            label='orgnr-s'
-            inputProps={{ maxLength: 5 }}
+          <EntityInfo
             entity={entity}
-            field='orgNr'
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-            readonly={entity.id > 0}
           />
-          <TextField
-            label='code'
-            inputProps={{ maxLength: maxLength('code') }}
-            entity={entity}
-            field='code'
-            updateEntity={updateEntity}
-            required={true}
-            theme={session.theme}
-          />
+          <div className='editor-block'>
+            <TextField
+              type='number'
+              label='orgnr-s'
+              inputProps={{ maxLength: 5 }}
+              entity={entity}
+              field='orgNr'
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+              readonly={entity.id > 0}
+            />
+            <TextField
+              label='code'
+              inputProps={{ maxLength: maxLength('code') }}
+              entity={entity}
+              field='code'
+              updateEntity={updateEntity}
+              required={true}
+              theme={session.theme}
+            />
+          </div>
+
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>{useLabel('login')}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                <TextField
+                  type='number'
+                  label='orgnr-s'
+                  inputProps={{ maxLength: 5 }}
+                  entity={entity}
+                  field='orgNr'
+                  updateEntity={updateEntity}
+                  required={true}
+                  theme={session.theme}
+                  readonly={entity.id > 0}
+                />
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
             {/* <div> 
               <LangLabel langkey='dvalue'/>
               <Checkbox
@@ -119,7 +142,7 @@ const OrgDetail : FC<Props> = ({
               />
             </div> */}
           </>
-        }
+        
       </div>
     </div>
   )

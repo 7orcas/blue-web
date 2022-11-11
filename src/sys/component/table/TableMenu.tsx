@@ -12,19 +12,20 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 /*
   Display a specific table menu
 
+  Created Oct '22
   [Licence]
   @author John Stewart
  */
 
 
-interface Props {
+interface TableMenuProps {
   exportExcelUrl?: string | undefined
   uploadExcelUrl?: string | undefined
   uploadExcelLangKey?: string | undefined
   children? : any
 }
 
-const TableMenu : FC<Props> = ({ 
+const TableMenu : FC<TableMenuProps> = ({ 
   exportExcelUrl = undefined, 
   uploadExcelUrl = undefined, 
   uploadExcelLangKey = undefined, 
@@ -86,3 +87,40 @@ const TableMenu : FC<Props> = ({
 
 export default TableMenu
   
+interface TableMenuTabProps {
+  code: string
+  close?: any
+  children?: any
+}
+
+export const TableMenuTab : FC<TableMenuTabProps> = ({ 
+  code, 
+  close,
+  children
+  }) => {
+
+  //Is Close action
+  const closeAction = () => {
+    return typeof close !== 'undefined'
+  }
+
+  //File the Close action
+  const closeX = () => {
+    if (typeof close !== 'undefined') {
+      close();
+    }
+  }
+
+  return (
+    <TableMenu>
+      <div className='table-menu-tab' onClick={closeX}>
+        {code}
+        {closeAction() && <div className='table-menu-tab-close'>x</div>}
+      </div>
+      {children}
+    </TableMenu>
+  )
+}
+
+
+

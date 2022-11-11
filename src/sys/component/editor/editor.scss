@@ -102,6 +102,10 @@
     }
   }
 
+  .editor-info-line {
+    color: $light-color-light;
+  }
+
   @include status;
 
 }
