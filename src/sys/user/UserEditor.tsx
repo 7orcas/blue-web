@@ -8,7 +8,7 @@ import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
 import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
-import { GridColDef } from '@mui/x-data-grid'
+import { GridColDef, GridCellParams } from '@mui/x-data-grid'
 import { Checkbox } from '@mui/material'
 import { entRemoveClientFields } from '../definition/interfaces'
 import { EntityStatusType as Status } from '../definition/types'
@@ -154,7 +154,15 @@ const UserEditor = () => {
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'code', headerName: useLabel('user'), width: 300, type: 'string' },
-    { field: 'attempts', headerName: useLabel('attempts'), type: 'number', width: 70, editable: true, },
+    { field: 'attempts', headerName: useLabel('attempts'), type: 'number', width: 70, editable: true, 
+      cellClassName: (params: GridCellParams<number>) => {
+        
+        var lst : UserListI | null = getObjectById(Number(params.id), edConf.list)
+        if (lst !== null && lst.maxAttemptsExceeded) {
+          return 'table-cell-highlight';  
+        }
+        return '';
+        }},
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
       renderCell: (params) => (
         <Checkbox

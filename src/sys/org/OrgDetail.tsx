@@ -86,7 +86,6 @@ const OrgDetail : FC<Props> = ({
               field='orgNr'
               updateEntity={updateEntity}
               required={true}
-              theme={session.theme}
               readonly={entity.id > 0}
             />
             <TextField
@@ -96,7 +95,6 @@ const OrgDetail : FC<Props> = ({
               field='code'
               updateEntity={updateEntity}
               required={true}
-              theme={session.theme}
             />
           </div>
 
@@ -112,14 +110,12 @@ const OrgDetail : FC<Props> = ({
               <Typography>
                 <TextField
                   type='number'
-                  label='orgnr-s'
+                  label='maxLAttemp'
                   inputProps={{ maxLength: 5 }}
                   entity={entity}
-                  field='orgNr'
+                  field='maxLoginAttempts'
                   updateEntity={updateEntity}
                   required={true}
-                  theme={session.theme}
-                  readonly={entity.id > 0}
                 />
               </Typography>
             </AccordionDetails>

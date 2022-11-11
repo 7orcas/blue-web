@@ -94,6 +94,9 @@
     .table-grid-valid-true {
       color: $light-color !important;
     }
+    .table-cell-highlight {
+      background-color: $light-table-cell-highlight;
+    }
   }
 
   .text-field {
@@ -101,6 +104,7 @@
       color: $light-color;
     }
   }
+
 
   .editor-info-line {
     color: $light-color-light;
@@ -210,6 +214,10 @@
 
     .table-grid-status-0 {
       color: $dark-color !important;  
+    }
+
+    .table-cell-highlight {
+      background-color: $dark-table-cell-highlight;
     }
   }
 

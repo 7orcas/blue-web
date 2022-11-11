@@ -210,7 +210,6 @@ const UserDetail : FC<Props> = ({
               entity={entity}
               updateEntity={updateEntity}
               required={true}
-              theme={session.theme}
             />
             <TextField
               field='password'
@@ -220,7 +219,6 @@ const UserDetail : FC<Props> = ({
               entity={entity}
               updateEntity={updateEntity}
               required={true}
-              theme={session.theme}
             />
             <TextField
               field='orgs'
@@ -228,7 +226,6 @@ const UserDetail : FC<Props> = ({
               entity={entity}
               updateEntity={updateEntity}
               required={true}
-              theme={session.theme}
             />
           </div>
 

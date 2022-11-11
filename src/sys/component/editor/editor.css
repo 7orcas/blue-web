@@ -47,6 +47,9 @@
 #light .table-grid .table-grid-valid-true {
   color: rgb(29, 28, 28) !important;
 }
+#light .table-grid .table-cell-highlight {
+  background-color: #ff8484;
+}
 #light .text-field .MuiFormLabel-root {
   color: rgb(29, 28, 28);
 }
@@ -177,6 +180,9 @@
 }
 #dark .table-grid .table-grid-status-0 {
   color: #cfcbcb !important;
+}
+#dark .table-grid .table-cell-highlight {
+  background-color: #742a2a;
 }
 #dark .text-field .MuiFormLabel-root {
   color: #cfcbcb;

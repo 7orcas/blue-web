@@ -17,7 +17,7 @@ export interface OrgListI extends BaseEntI {
 
 export interface OrgEntI extends BaseEntI {
   dvalue: boolean
-  loginAttempts: number
+  maxLoginAttempts: number
 }
 
 export const CONFIG = 'system.org.ent.EntOrg'
@@ -69,6 +69,7 @@ export const loadOrgEnt = async (
     initEntBase (d, org)
 
     org.dvalue = d.dvalue
+    org.maxLoginAttempts = d.maxLoginAttempts
 
     initEntBaseOV (org)
     return org

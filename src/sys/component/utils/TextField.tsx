@@ -1,4 +1,5 @@
-import { useState, useEffect, FC } from 'react'
+import { useState, useEffect, FC, useContext } from 'react'
+import AppContext, { AppContextI } from '../../system/AppContext'
 import { TextField as MuiTextField } from '@mui/material';
 import { ThemeType } from '../../system/Session';
 import { ConfigI } from '../../definition/interfaces'
@@ -20,7 +21,6 @@ interface Props {
   inputProps? : object | undefined
   config? : ConfigI | undefined
   updateEntity : (entity : any) => void
-  theme: ThemeType
   required? : boolean
   readonly? : boolean
 }
@@ -34,10 +34,10 @@ const TextField : FC<Props> = ({
       inputProps, 
       config,
       updateEntity, 
-      theme, 
       required=false, 
       readonly=false }) => {
   
+  const { session } = useContext(AppContext) as AppContextI
   const [value, setValue] = useState (type==='text'?'':0)
 
   //Initialise the field value state

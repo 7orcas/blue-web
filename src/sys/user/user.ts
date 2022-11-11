@@ -19,12 +19,12 @@ import { PermissionListI } from '../role/role'
 
 export interface UserListI extends BaseEntI {
   attempts: number
+  maxAttemptsExceeded : boolean
 }
 
-export interface UserEntI extends BaseEntI {
+export interface UserEntI extends UserListI {
   password: string
   orgs: string
-  attempts: number
   roles : UserRoleEntI[]
   permissions : PermissionListI[]
 }
@@ -74,10 +74,11 @@ export const loadUserList = async (
     if (typeof data !== 'undefined') {
       var list : Array<UserListI> = []
 
-      for (const l of data) {
+      for (const lst of data) {
         var ent : UserListI = {} as UserListI  
-        initListBase(l, ent)
-        ent.attempts = l.attempts
+        initListBase(lst, ent)
+        ent.attempts = lst.attempts
+        ent.maxAttemptsExceeded = lst.maxAttemptsExceeded
         list.push (ent)
       }
       return list
@@ -99,6 +100,7 @@ export const loadUserEntity = async (
       var ent : UserEntI = {} as UserEntI  
       initEntBase(data, ent)
       ent.attempts = data.attempts
+      ent.maxAttemptsExceeded = data.maxAttemptsExceeded
       ent.password = data.password
       ent.orgs = data.orgs
       appendRoles(data.roles, ent)
