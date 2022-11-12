@@ -37,11 +37,11 @@ const LabelsEditor = () => {
 
   const columns = [
     { name: 'id', header : 'ID', type: 'number', defaultWidth: 60, editable: false },
-    { name: 'org', header : 'Org', type: 'number', defaultWidth: 60, editable: false },
+    { name: 'orgNr', header : 'Org', type: 'number', defaultWidth: 60, editable: false },
     { name: 'key', header : 'Label Key', defaultFlex: 0, xdefaultLocked: 'start', editable: false },
     { name: 'label', header : 'Label: ' + session.lang, defaultFlex: 1, xdefaultLocked: 'end' },
   ];
-  const columnOrder = ['id', 'org', 'key', 'label']
+  const columnOrder = ['id', 'orgNr', 'key', 'label']
   
   const defaultFilterValue = [
     { name: 'key', type: 'string', operator: 'contains', value: '' },

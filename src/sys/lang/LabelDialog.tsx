@@ -1,7 +1,7 @@
 import { FC, useState, useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionField } from '../system/Session'
-import { LabelI } from './loadLabels'
+import loadLabels from '../lang/loadLabels'
 import apiGet from '../api/apiGet'
 import apiPost from '../api/apiPost'
 import { Button, TextField } from '@mui/material';
@@ -53,27 +53,30 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
     const put = async () => {
       await apiPost('lang/label', labels, setMessage, setSession)
 
-      //Get label for current org
-      let l = {} as LabelI;
-      for (var i=0; i<labels.length; i++) {
-        const x = labels[i]
-        if (x.orgNr === session.orgNr) {
-          l = {id: x.id, orgNr: x.orgNr, key: x.langKey, label : x.code}
-          break
-        }
-      }
+      const l = await loadLabels('', setMessage, setSession)
+      setSession ({ type: SessionField.labels, payload: l })
+
+      // //Get label for current org
+      // let l = {} as LabelI;
+      // for (var i=0; i<labels.length; i++) {
+      //   const x = labels[i]
+      //   if (x.orgNr === session.orgNr) {
+      //     l = {id: x.id, orgNr: x.orgNr, key: x.langKey, label : x.code}
+      //     break
+      //   }
+      // }
       
-      //Update current labels
-      let array : Array<LabelI> = []
-      for (i=0; i<session.labels.length; i++) {
-        if (session.labels[i].key === l.key) {
-          array.push(l)
-        }
-        else{
-          array.push(session.labels[i])
-        }
-      }
-      setSession ({type: SessionField.labels, payload: array})
+      // //Update current labels
+      // let array : Array<LabelI> = []
+      // for (i=0; i<session.labels.length; i++) {
+      //   if (session.labels[i].key === l.key) {
+      //     array.push(l)
+      //   }
+      //   else{
+      //     array.push(session.labels[i])
+      //   }
+      // }
+      // setSession ({type: SessionField.labels, payload: array})
 
       setOpen(false);
     }
@@ -137,8 +140,8 @@ const LabelDialogX : FC<LabelDialogXProps> = ({ onClose, onCommit, selectedValue
         <DialogContent>
           <div className='lang-dialog-content'>
             <DialogContentText>
-              LangKey: {selectedValue}
-              ID: 34
+              <div>LangKey: {selectedValue}</div>
+              <div>ID: 34</div>
             </DialogContentText>
           </div>
           {labels.map((l,i) => {return(
