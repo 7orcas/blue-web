@@ -9,8 +9,7 @@ import ButtonClose from '../component/utils/ButtonClose'
 import LangLabel from '../lang/LangLabel';
 import TextField from '../component/utils/TextField'
 import EntityInfo from '../component/utils/EntityInfo'
-import { Checkbox, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '../component/utils/Accordion'
 
 /*
   Show organisational detail
@@ -98,28 +97,24 @@ const OrgDetail : FC<Props> = ({
             />
           </div>
 
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>{useLabel('login')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                <TextField
-                  type='number'
-                  label='maxLAttemp'
-                  inputProps={{ maxLength: 5 }}
-                  entity={entity}
-                  field='maxLoginAttempts'
-                  updateEntity={updateEntity}
-                  required={true}
-                />
-              </Typography>
-            </AccordionDetails>
+          <div className='editor-block'>
+          <Accordion
+            langkey='login'
+          >
+            <TextField
+              type='number'
+              label='maxLAttemp'
+              inputProps={{ maxLength: 5 }}
+              entity={entity}
+              field='maxLoginAttempts'
+              updateEntity={updateEntity}
+              required={true}
+            />
           </Accordion>
+          </div>
+
+
+          
 
             {/* <div> 
               <LangLabel langkey='dvalue'/>

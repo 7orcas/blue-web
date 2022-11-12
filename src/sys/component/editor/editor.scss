@@ -128,14 +128,25 @@
   .editor-info-line {
     font-size: small;
     text-align: right;
-    margin: 0px 5px 5px 0px;
+    margin: 0px 5px 0px 0px;
   }
 
   .editor-block {
+    margin-top: 10px;
+
     .text-field {
       margin-right: 5px;
     }
+    
+    .accordion {
+      border-radius: 0px;
+  
+    }
+    .Mui-expanded {
+      border-radius: 5px !important;
+    }
   }
+
 
   .editor-table {
     margin-top: auto;
@@ -159,6 +170,16 @@
 
     legend span {
       color: $dark-color;
+    }
+
+    .accordion {
+      color: $dark-color;
+      background: $dark-bg;
+      border-bottom: 1px solid $dark-border-color;
+    }
+
+    .editor-block > .Mui-expanded {
+      border: 1px solid $dark-border-color !important;
     }
   }
 

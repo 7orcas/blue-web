@@ -3,7 +3,7 @@ import AppContext, { AppContextI } from '../../system/AppContext'
 import { TextField as MuiTextField } from '@mui/material';
 import { ThemeType } from '../../system/Session';
 import { ConfigI } from '../../definition/interfaces'
-import { useLabel, maxLengthText } from '../../component/editor/editorUtil'
+import { useLabel, maxLengthText, formatTs } from '../../component/editor/editorUtil'
 
 /*
   Manage TextField input
@@ -14,13 +14,13 @@ import { useLabel, maxLengthText } from '../../component/editor/editorUtil'
 */
 
 interface Props {
-  type? : 'text' | 'number' | 'password'
+  type? : 'text' | 'number' | 'password' | 'timestamp'
   label? : string | undefined
   entity : any
   field : string
   inputProps? : object | undefined
   config? : ConfigI | undefined
-  updateEntity : (entity : any) => void
+  updateEntity? : (entity : any) => void
   required? : boolean
   readonly? : boolean
 }
@@ -44,7 +44,12 @@ const TextField : FC<Props> = ({
   useEffect(() => {
     const init = () => {
       if (typeof entity !== 'undefined'){
-        setValue(entity[field])
+        if (type === 'timestamp') {
+          setValue(formatTs(entity[field]))
+        }
+        else {
+          setValue(entity[field])
+        }
       }
     }
     init()
@@ -60,7 +65,9 @@ const TextField : FC<Props> = ({
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     entity[field] = event.target.value;
-    updateEntity(entity)
+    if (typeof updateEntity !== 'undefined') {
+      updateEntity(entity)
+    }
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
@@ -79,7 +86,7 @@ const TextField : FC<Props> = ({
     <MuiTextField
       className='text-field'
       error={required && !isValid}
-      type={type}
+      type={type === 'timestamp'? 'text' : type}
       inputProps={inputProps}
       value={value}
       onChange={handleChange}

@@ -13,8 +13,7 @@ import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor,
 import { EditorConfig, editorConfigReducer as roleConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { EntityStatusType as Status } from '../definition/types'
 import { GridColDef } from '@mui/x-data-grid'
-import { Checkbox, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Checkbox } from '@mui/material'
 
 /*
   CRUD Editor for user-role
@@ -82,8 +81,9 @@ const UserDetail : FC<Props> = ({
     var tempId = editorConfig.tempId;
 
     entity.roles.forEach((p : UserRoleEntI) => p._caParent = null)
-    
+    entity.permissions.forEach((p : PermissionListI) => p._caParent = null)
     var entityX = JSON.parse(JSON.stringify(entity));
+
     for (var i=0;i<list.length;i++) {
       var found = false
       
@@ -99,6 +99,7 @@ const UserDetail : FC<Props> = ({
       }
         
       entityX.roles.forEach((p : UserRoleEntI) => p._caParent = entityX)
+      entityX.permissions.forEach((p : PermissionListI) => p._caParent = entityX)
       setEditorConfig ({type: ECF.tempId, payload : tempId})
       setEditorConfig ({type: ECF.entities, payload : new Map(editorConfig.entities.set(entityX.id, entityX))})
       updateEntity(entityX)
@@ -227,23 +228,15 @@ const UserDetail : FC<Props> = ({
               updateEntity={updateEntity}
               required={true}
             />
+            <TextField
+              field='lastLogin'
+              type='timestamp'
+              config={config}
+              entity={entity}
+              readonly={true}
+            />
           </div>
-
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Configuration</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                malesuada lacus ex, sit amet blandit leo lobortis eget.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+         
 
           <div className='editor-table'>
             <div className='menu-header'>

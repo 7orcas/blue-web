@@ -94,10 +94,19 @@
 .editor-detail .editor-info-line {
   font-size: small;
   text-align: right;
-  margin: 0px 5px 5px 0px;
+  margin: 0px 5px 0px 0px;
+}
+.editor-detail .editor-block {
+  margin-top: 10px;
 }
 .editor-detail .editor-block .text-field {
   margin-right: 5px;
+}
+.editor-detail .editor-block .accordion {
+  border-radius: 0px;
+}
+.editor-detail .editor-block .Mui-expanded {
+  border-radius: 5px !important;
 }
 .editor-detail .editor-table {
   margin-top: auto;
@@ -114,6 +123,14 @@
 }
 #dark .editor-detail legend span {
   color: #cfcbcb;
+}
+#dark .editor-detail .accordion {
+  color: #cfcbcb;
+  background: #1e1e1e;
+  border-bottom: 1px solid #cfcbcb;
+}
+#dark .editor-detail .editor-block > .Mui-expanded {
+  border: 1px solid #cfcbcb !important;
 }
 #dark .table-menu button {
   color: #cccccc;
