@@ -70,7 +70,7 @@ const Navbar = () => {
   admin.label = 'admin'
   admin.link = '/Test3'
   admin.menu.push(f.item('logout', '/Test3'))
-  admin.menu.push(f.item('passchg', '/Test3'))
+  admin.menu.push(f.item('passchg', '/passchg'))
   admin.menu.push(f.div())
   admin.menu.push(f.item('labeladmin', '/labels'))
 

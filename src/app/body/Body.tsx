@@ -10,6 +10,7 @@ import Login, {LoginSuccess} from '../../sys/login/Login'
 import Test1 from './Test1'
 import Test2 from './Test2'
 import Test3 from './Test3'
+import ChangePW from '../../sys/user/ChangePW';
 
 const Body = () => {
 
@@ -34,6 +35,7 @@ const Body = () => {
         <Route path="permadmin" element={<PermissionEditor />} />
         <Route path="roleadmin" element={<RoleEditor />} />
         <Route path="useradmin" element={<UserEditor />} />
+        <Route path="passchg" element={<ChangePW />} />
         <Route path="test2" element={<Test2 />} />
         <Route path="test3" element={<Test3 />} />
         <Route path="*"

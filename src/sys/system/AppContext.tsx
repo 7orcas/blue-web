@@ -1,4 +1,5 @@
 import { FC, createContext, useEffect, useState, useReducer } from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from '../api/apiAxios'
 import UrlSearchParams from '../api/urlSearchParams'
 import loadLabels from '../lang/loadLabels'
@@ -40,6 +41,8 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('appname');
 
+  const navigate = useNavigate();
+
   // Load app defaults
   useEffect(() => {
 
@@ -65,6 +68,13 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         const l = await loadLabels('', setMessage, setSession)
         setSession ({ type: SessionField.labels, payload: l })
         
+        if (typeof login.changePW !== 'undefined' && login.changePW === true) {
+          const timer = setTimeout(() =>  {
+            navigate("/passchg")
+          }, 500)
+          return () => clearTimeout(timer)   
+        }
+
       } catch (err : any) {
         console.log(err.message)
 
@@ -80,7 +90,6 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (!loading) {
-console.log('useEffect ' + session.theme)
       apiPut('theme', session.theme.toString())
     }
   },[session.theme])

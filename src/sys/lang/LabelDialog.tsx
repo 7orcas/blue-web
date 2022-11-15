@@ -24,7 +24,7 @@ interface LangLabelI {
 
 const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
-  const { session, setSession, setMessage } = useContext(AppContext) as AppContextI
+  const { setSession, setMessage } = useContext(AppContext) as AppContextI
   
   const [open, setOpen] = useState(false);
   const [labels, setlabels] = useState<LangLabelI[]>([]);
@@ -39,7 +39,7 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
             labels.push ({id : l.id, langKey : l.langKey, idLangKey : l.idLangKey, code : l.code, orgNr : l.orgNr, active : l.active})
         }
         setlabels(labels)
-        setOpen(true);
+        setOpen(true)
         
       } catch (err : any) {
         console.log(err.message)
@@ -55,36 +55,13 @@ const LabelDialog : FC<LabelDialogProps> = ({ langkey }) => {
 
       const l = await loadLabels('', setMessage, setSession)
       setSession ({ type: SessionField.labels, payload: l })
-
-      // //Get label for current org
-      // let l = {} as LabelI;
-      // for (var i=0; i<labels.length; i++) {
-      //   const x = labels[i]
-      //   if (x.orgNr === session.orgNr) {
-      //     l = {id: x.id, orgNr: x.orgNr, key: x.langKey, label : x.code}
-      //     break
-      //   }
-      // }
-      
-      // //Update current labels
-      // let array : Array<LabelI> = []
-      // for (i=0; i<session.labels.length; i++) {
-      //   if (session.labels[i].key === l.key) {
-      //     array.push(l)
-      //   }
-      //   else{
-      //     array.push(session.labels[i])
-      //   }
-      // }
-      // setSession ({type: SessionField.labels, payload: array})
-
-      setOpen(false);
+      setOpen(false)
     }
     put()
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen(false)
   };
 
   return (
