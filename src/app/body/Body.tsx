@@ -7,10 +7,10 @@ import PermissionEditor from '../../sys/role/PermissionEditor';
 import RoleEditor from '../../sys/role/RoleEditor';
 import UserEditor from '../../sys/user/UserEditor';
 import Login, {LoginSuccess} from '../../sys/login/Login'
-import Test1 from './Test1'
 import Test2 from './Test2'
 import Test3 from './Test3'
 import ChangePW from '../../sys/user/ChangePW';
+import Home from './Home';
 
 const Body = () => {
 
@@ -27,7 +27,7 @@ const Body = () => {
   return (
     <div className='main-body'>
       <Routes>
-        <Route path="/" element={<Test1 />} />
+        <Route path="/" element={<Home />} />
         <Route path="relogin" element={<Login />} />
         <Route path="reloginok" element={<LoginSuccess />} />
         <Route path="labels" element={<LabelsEditor />} />

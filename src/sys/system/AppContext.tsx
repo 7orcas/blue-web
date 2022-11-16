@@ -68,12 +68,15 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         const l = await loadLabels('', setMessage, setSession)
         setSession ({ type: SessionField.labels, payload: l })
         
+        var gotopage = '/'
         if (typeof login.changePW !== 'undefined' && login.changePW === true) {
-          const timer = setTimeout(() =>  {
-            navigate("/passchg")
-          }, 500)
-          return () => clearTimeout(timer)   
+          gotopage = '/passchg'
         }
+        
+        const timer = setTimeout(() =>  {
+          navigate(gotopage)
+        }, 500)
+        return () => clearTimeout(timer)   
 
       } catch (err : any) {
         console.log(err.message)

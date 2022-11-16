@@ -53,6 +53,13 @@
 #light .text-field .MuiFormLabel-root {
   color: rgb(29, 28, 28);
 }
+#light .editor-detail {
+  border: 1px solid #a6a8b3;
+}
+#light .editor-detail input {
+  color: rgb(29, 28, 28);
+  border: 1px solid #a6a8b3;
+}
 #light .editor-info-line {
   color: #7b7c85;
 }
@@ -81,37 +88,6 @@
   color: white !important;
 }
 
-.editor-detail {
-  border: 1px solid #a6a8b3;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-}
-.editor-detail input {
-  color: rgb(29, 28, 28);
-  border: 1px solid #a6a8b3;
-}
-.editor-detail .editor-info-line {
-  font-size: small;
-  text-align: right;
-  margin: 0px 5px 0px 0px;
-}
-.editor-detail .editor-block {
-  margin-top: 10px;
-}
-.editor-detail .editor-block .text-field {
-  margin-right: 5px;
-}
-.editor-detail .editor-block .accordion {
-  border-radius: 0px;
-}
-.editor-detail .editor-block .Mui-expanded {
-  border-radius: 5px !important;
-}
-.editor-detail .editor-table {
-  margin-top: auto;
-}
-
 #dark .MuiSvgIcon-root {
   color: #cfcbcb !important;
 }
@@ -120,6 +96,7 @@
 }
 #dark .editor-detail input {
   color: #cfcbcb;
+  border: 1px solid #cfcbcb;
 }
 #dark .editor-detail legend span {
   color: #cfcbcb;
@@ -216,6 +193,9 @@
   margin: 0px 20px 0px 20px;
   border-radius: 5px;
 }
+.editor .editor-no-border {
+  border: none !important;
+}
 
 .editor-menu {
   display: flex;
@@ -233,6 +213,33 @@
   height: 80vh;
   padding: 5px;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.editor-detail .editor-info-line {
+  font-size: small;
+  text-align: right;
+  margin: 0px 5px 0px 0px;
+}
+.editor-detail .editor-block {
+  margin-top: 10px;
+}
+.editor-detail .editor-block .text-field {
+  margin-right: 5px;
+}
+.editor-detail .editor-block .password-field {
+  width: 300px;
+  margin-bottom: 10px;
+}
+.editor-detail .editor-block .accordion {
+  border-radius: 0px;
+}
+.editor-detail .editor-block .Mui-expanded {
+  border-radius: 5px !important;
+}
+.editor-detail .editor-table {
+  margin-top: auto;
 }
 
 MuiDataGrid-viewport, .MuiDataGrid-row, .MuiDataGrid-renderingZone {

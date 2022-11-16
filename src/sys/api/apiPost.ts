@@ -16,7 +16,9 @@ const apiPost = async (
       data : any, 
       setMessage : (m : Message) => void,
       // eslint-disable-next-line no-empty-pattern
-      setSession? : ({}) => void) => {
+      setSession? : ({}) => void,
+      put? : boolean
+      ) => {
 
   var message = ''
   var detail = ''
@@ -29,8 +31,14 @@ const apiPost = async (
      setSession ({ type: SessionField.busy, payload: true })
     }
 
-    const response = await axios.post(`${ url }`, data)
-    
+    var response = null
+    if (typeof put !== 'undefined' && put === true) {
+      response = await axios.put(`${ url }`, data)
+    }
+    else {
+      response = await axios.post(`${ url }`, data)
+    }
+
     //Valid return object
     if (response.data.returnCode === JsonResponseI.ok) {
       return response.data

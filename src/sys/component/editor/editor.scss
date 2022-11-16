@@ -105,7 +105,15 @@
     }
   }
 
-
+  .editor-detail {
+    border: 1px solid $light-border-color;
+   
+    input {
+      color: $light-color;
+      border: 1px solid $light-border-color;
+    }
+  }  
+  
   .editor-info-line {
     color: $light-color-light;
   }
@@ -113,46 +121,6 @@
   @include status;
 
 }
-
-.editor-detail {
-  border: 1px solid $light-border-color;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-
-  input {
-    color: $light-color;
-    border: 1px solid $light-border-color;
-  }
-
-  .editor-info-line {
-    font-size: small;
-    text-align: right;
-    margin: 0px 5px 0px 0px;
-  }
-
-  .editor-block {
-    margin-top: 10px;
-
-    .text-field {
-      margin-right: 5px;
-    }
-    
-    .accordion {
-      border-radius: 0px;
-  
-    }
-    .Mui-expanded {
-      border-radius: 5px !important;
-    }
-  }
-
-
-  .editor-table {
-    margin-top: auto;
-  }
-}
-
 
 #dark {
   
@@ -162,10 +130,10 @@
   
   .editor-detail {
     border: 1px solid $dark-border-color;
-  
+   
     input {
       color: $dark-color;
-      // border: 1px solid $dark-border-color;
+      border: 1px solid $dark-border-color;
     }
 
     legend span {
@@ -260,6 +228,10 @@
 .editor {
   margin: 0px 20px 0px 20px;
   border-radius: 5px;
+
+  .editor-no-border {
+    border: none !important;
+  }
 }
 
 .editor-menu {
@@ -278,7 +250,42 @@
   height: 80vh;
   padding: 5px;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+
+  .editor-info-line {
+    font-size: small;
+    text-align: right;
+    margin: 0px 5px 0px 0px;
+  }
+
+  .editor-block {
+    margin-top: 10px;
+
+    .text-field {
+      margin-right: 5px;
+    }
+    .password-field {
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    
+    .accordion {
+      border-radius: 0px;
+  
+    }
+    .Mui-expanded {
+      border-radius: 5px !important;
+    }
+  }
+
+
+  .editor-table {
+    margin-top: auto;
+  }
 }
+
 
 //Work around from https://github.com/mui/mui-x/issues/417
 //to allow dynamic row height of data grid

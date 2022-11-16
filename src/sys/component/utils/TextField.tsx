@@ -16,6 +16,7 @@ import { useLabel, maxLengthText, formatTs } from '../../component/editor/editor
 interface Props {
   type? : 'text' | 'number' | 'password' | 'timestamp'
   label? : string | undefined
+  className? : string
   entity : any
   field : string
   inputProps? : object | undefined
@@ -23,19 +24,22 @@ interface Props {
   updateEntity? : (entity : any) => void
   required? : boolean
   readonly? : boolean
+  changeOnBlur? : boolean
 }
   
 
 const TextField : FC<Props> = ({ 
       type='text', 
       label, 
+      className='text-field',
       entity, 
       field, 
       inputProps, 
       config,
       updateEntity, 
       required=false, 
-      readonly=false }) => {
+      readonly=false,
+      changeOnBlur=true }) => {
   
   const { session } = useContext(AppContext) as AppContextI
   const [value, setValue] = useState (type==='text'?'':0)
@@ -63,14 +67,20 @@ const TextField : FC<Props> = ({
     inputProps={ maxLength: maxLengthText(config, field) }
   }
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    entity[field] = event.target.value;
+  const update = (value : any) => {
+    entity[field] = value;
     if (typeof updateEntity !== 'undefined') {
       updateEntity(entity)
     }
   };
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    update(event.target.value);
+  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
+    if (changeOnBlur === false) {
+      update(event.target.value);
+    }
   };
 
   const labelX = useLabel(label)
@@ -84,7 +94,7 @@ const TextField : FC<Props> = ({
 
   return (
     <MuiTextField
-      className='text-field'
+      className={className}
       error={required && !isValid}
       type={type === 'timestamp'? 'text' : type}
       inputProps={inputProps}
