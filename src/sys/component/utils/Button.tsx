@@ -1,6 +1,6 @@
 import { FC, useContext } from 'react'
 import AppContext, { AppContextI } from '../../system/AppContext'
-import { isCreate, isRead, isUpdate } from '../../system/Permission' 
+import { isCreate, isUpdate } from '../../system/Permission' 
 import useLabel from '../../lang/useLabel'
 import LabelDialog from '../../lang/LabelDialog'
 import ButtonM from '@mui/material/Button';
@@ -11,7 +11,7 @@ interface Props {
   disabled? : boolean
   className? : string
   type? : 'button' | 'save' | 'new' | 'submit' | 'reset'
-  permission? : string
+  url? : string
 }
 
 const Button : FC<Props> = ({ 
@@ -20,7 +20,7 @@ const Button : FC<Props> = ({
       disabled = false, 
       className = '', 
       type = 'button',
-      permission
+      url
     }) => {
   
   const { session } = useContext(AppContext) as AppContextI
@@ -31,17 +31,11 @@ const Button : FC<Props> = ({
   if (type === 'save') type = 'button'
   if (type === 'new') type = 'button'
   
-  const typeX = () : string => {
-    if (type === 'save') return 'button'
-    if (type === 'new') return 'button'
-    return type
-  }
-
   const disabledX = () : boolean => {
     if (disabled) return true
-    if (typeof permission === 'undefined') return false
-    if (saveB && !isUpdate(session, permission)) return true
-    if (newB && !isCreate(session, permission)) return true
+    if (typeof url === 'undefined') return false
+    if (saveB && !isUpdate(session, url)) return true
+    if (newB && !isCreate(session, url)) return true
     return false
   }
 

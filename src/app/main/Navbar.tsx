@@ -73,14 +73,14 @@ const Navbar = () => {
     admin.menu.push(f.div())
     admin.menu.push(f.item('labeladmin', '/labels'))
   }
-  if (isUpdate(session, 'lang')) {
+  // if (isUpdate(session, 'lang')) {
     var editLabel = f.checkbox('editLabels', 
     () => {setSession ({type: SessionField.editLabels})},
     session.editLabels
     )
     admin.menu.push(editLabel)
     admin.menu.push(f.div())
-  }
+  // }
   if (isRead(session, 'user')) admin.menu.push(f.item('useradmin', '/useradmin'))
   if (isRead(session, 'role')) admin.menu.push(f.item('roleadmin', '/roleadmin'))
   if (isRead(session, 'permission')) admin.menu.push(f.item('permadmin', '/permadmin'))

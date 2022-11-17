@@ -139,6 +139,7 @@ export const updateBaseList = <L extends BaseEntI, E extends BaseEntI>(
     setEdConf ({type: ECF.list, payload : newList})
     
     //Set changed (eg to activate the Commit button)
+    setSession ({type: SessionField.changed, payload : false})
     for (i=0;i<newList.length;i++){
       if (newList[i]._caEntityStatus === Status.changed 
         || newList[i]._caEntityStatus === Status.delete) {
