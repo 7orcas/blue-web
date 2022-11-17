@@ -32,7 +32,9 @@ const Test1 = () => {
       <p>Initialise Url: {session.params.init}</p>
       <p>Session ID: {session.params.sid}</p>
       <p>Lang: {session.lang}</p>
-      <p>Roles: {session.roles.map(r => r + ' ')}</p>
+      {/* <p>Permissions: 
+        {session.permissions.forEach((v:string,k:string) => {return (k + '=' + v)})
+      }</p> */}
     </div>
   )
 }

@@ -58,8 +58,12 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         setSession ({ type: SessionField.lang, payload: login.lang })
         setSession ({ type: SessionField.orgNr, payload: login.orgNr })
 
-        var roles = login.roles.split(',')
-        setSession ({ type: SessionField.roles, payload: roles })
+        var perms = new Map()
+        for (var i=0;i<login.permissions.length;i++) {
+          perms.set(login.permissions[i].url, login.permissions[i].crud)
+        }
+console.log(perms) 
+        setSession ({ type: SessionField.permissions, payload: perms })
         
         if (typeof login.theme !== 'undefined') {
           setSession ({ type: SessionField.tgTheme, payload: login.theme })  

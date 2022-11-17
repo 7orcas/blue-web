@@ -17,7 +17,7 @@ export enum SessionField {
   lang,
   labels,
   editLabels,
-  roles,
+  permissions,
   debugMessage,
   tgTheme,
   messageDialog,
@@ -40,7 +40,7 @@ class Session {
   lang : string = ''
   labels : LabelI[] = []
   editLabels : boolean = false
-  roles : string[] = []
+  permissions : Map<string,string> = new Map<string,string>()
   debugMessage: string = ''
   theme : ThemeType = ThemeType.dark
   messageDialog : string = ''
@@ -74,8 +74,8 @@ export const sessionReducer = (session : Session, action : any) => {
     case SessionField.tgTheme:
       return {...session, theme: action.payload}
     
-    case SessionField.roles:
-      return {...session, roles: action.payload}
+    case SessionField.permissions:
+      return {...session, permissions: action.payload}
 
     case SessionField.debugMessage:
       return {...session, debugMessage: action.payload}

@@ -210,8 +210,8 @@ const RoleEditor = () => {
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-            <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-            <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+            <Button type='save' permission='role' onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
+            <Button type='new' permission='role' onClick={handleCreate} langkey='new' className='table-menu-item' />
           </TableMenu>
         </div>
         <div className='editor-left'>

@@ -6,6 +6,7 @@ import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons'
 import { useContext } from 'react'
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { SessionField, ThemeType } from '../../sys/system/Session'
+import { isRead, isUpdate } from '../../sys/system/Permission' 
 import MenuItemFactory, { MenuItem, MenuItemType } from '../../sys/menu/MenuItemFactory'
 import Menu from "../../sys/menu/Menu"
 import { Menu as MenuS, MenuButton } from '@szhsin/react-menu';
@@ -23,19 +24,17 @@ const Navbar = () => {
   const { session, setSession } = useContext(AppContext) as AppContextI
 
   const f = new MenuItemFactory ()
-  
-  const containsRole = (role : string) : boolean => {
-    return session.roles.includes(role)
-  }
-
+ 
   //Top Level
-  f.main('useradmin', '/useradmin')
-  f.main('roleadmin', '/roleadmin')
-  f.main('permadmin', '/permadmin')
-  f.main('orgadmin', '/orgadmin')
-  f.main('labeladmin', '/labels')
+  if (isRead(session, 'user')) f.main('useradmin', '/useradmin')
+  if (isRead(session, 'role')) f.main('roleadmin', '/roleadmin')
+  if (isRead(session, 'permission')) f.main('permadmin', '/permadmin')
+  if (isRead(session, 'org')) f.main('orgadmin', '/orgadmin')
+  if (isRead(session, 'lang')) f.main('labeladmin', '/labels')
+
   f.main('planmat', '/')
   
+  //delete this
   f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', 
     () => {setSession ({type: SessionField.editLabels})},
     true
@@ -45,9 +44,7 @@ const Navbar = () => {
   f.main('simus', '/Test2')
   var sub1 = f.sub('mastdat')
 
-  if (containsRole('Fix')) {
-    f.main('fixes', '/Test3')
-  }
+  f.main('fixes', '/Test3')
   
   //Sub menus
   sub1.menu.push(f.item('styles', '/Test3'))
@@ -71,10 +68,12 @@ const Navbar = () => {
   admin.link = '/Test3'
   admin.menu.push(f.item('logout', '/Test3'))
   admin.menu.push(f.item('passchg', '/passchg'))
-  admin.menu.push(f.div())
-  admin.menu.push(f.item('labeladmin', '/labels'))
-
-  if (containsRole('LangEdit')) {
+  
+  if (isRead(session, 'lang')) {
+    admin.menu.push(f.div())
+    admin.menu.push(f.item('labeladmin', '/labels'))
+  }
+  if (isUpdate(session, 'lang')) {
     var editLabel = f.checkbox('editLabels', 
     () => {setSession ({type: SessionField.editLabels})},
     session.editLabels
@@ -82,11 +81,10 @@ const Navbar = () => {
     admin.menu.push(editLabel)
     admin.menu.push(f.div())
   }
-  admin.menu.push(f.item('useradmin', '/useradmin'))
-  admin.menu.push(f.item('roleadmin', '/roleadmin'))
-  admin.menu.push(f.item('permadmin', '/permadmin'))
-  admin.menu.push(f.item('orgadmin', '/orgadmin'))
-
+  if (isRead(session, 'user')) admin.menu.push(f.item('useradmin', '/useradmin'))
+  if (isRead(session, 'role')) admin.menu.push(f.item('roleadmin', '/roleadmin'))
+  if (isRead(session, 'permission')) admin.menu.push(f.item('permadmin', '/permadmin'))
+  if (isRead(session, 'org')) admin.menu.push(f.item('orgadmin', '/orgadmin'))
 
   const setSelection = (item : MenuItem) => {
 
