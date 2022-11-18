@@ -16,7 +16,6 @@ Created 17.11.22
 //Return is the user has Read permission
 export const isCreate = (session : any, url : string) : boolean => {
   var rtn = is(session, url, 'C')
-console.log ('isCreate ' + url + '=' + rtn)  
   return rtn
 }
 
@@ -26,7 +25,6 @@ export const isRead = (session : any, url : string) : boolean => {
 
 export const isUpdate = (session : any, url : string) : boolean => {
   var rtn = is(session, url, 'U')
-console.log ('isUpdate ' + url + '=' + rtn)  
   return rtn
 }
 

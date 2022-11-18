@@ -14,10 +14,11 @@ export enum SessionField {
   userid,
   params,
   orgNr,
-  lang,
+  lang, //client language to use
   labels,
   editLabels,
-  permissions,
+  permissions, //user permission list
+  permission, //current permission in use set from main menu selection
   debugMessage,
   tgTheme,
   messageDialog,
@@ -41,6 +42,7 @@ class Session {
   labels : LabelI[] = []
   editLabels : boolean = false
   permissions : Map<string,string> = new Map<string,string>()
+  permission : string | null = null
   debugMessage: string = ''
   theme : ThemeType = ThemeType.dark
   messageDialog : string = ''
@@ -77,6 +79,9 @@ export const sessionReducer = (session : Session, action : any) => {
     case SessionField.permissions:
       return {...session, permissions: action.payload}
 
+    case SessionField.permission:
+        return {...session, permission: action.payload}
+  
     case SessionField.debugMessage:
       return {...session, debugMessage: action.payload}
     

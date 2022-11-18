@@ -1,3 +1,5 @@
+import { isRead } from '../../sys/system/Permission' 
+
 /*
   Convience class to create menu item wrapper objects
   Only top level menu items are added to the items array
@@ -25,16 +27,23 @@ export class MenuItem {
   type : MenuItemType = MenuItemType.main
   link : string = ''
   label : string = ''
+  permission : string | null = ''
   menu : any [] = []
   action : any
   checked : boolean = false
   addToMenu? : boolean = false
 
-  constructor (key : number) {
+  constructor (key : number, permission : string | null) {
     this.key = key
+    this.permission = permission
   }
 }
   
+//Check is user has
+const is = (session : any, perm : string | null) => {
+  if (perm === null) return true
+  return isRead(session, perm)
+}
 
 export default class MenuItemFactory {
 
@@ -42,9 +51,11 @@ export default class MenuItemFactory {
   items : Array<MenuItem> = []
   key : number = 0
 
+
   //Top level item
-  main = (label : string, link : string) : MenuItem => {
-    var i = new MenuItem(this.key++)
+  main = (session : any, label : string, link : string, permission : string | null) : MenuItem | null => {
+    if (!is(session, permission)) return null
+    var i = new MenuItem(this.key++, permission)
     i.type = MenuItemType.main
     i.link = link
     i.label = label
@@ -52,15 +63,17 @@ export default class MenuItemFactory {
     return i
   }
   
-  mainRight = (label : string, link : string) : MenuItem => {
-    var i = this.main(label, link)
-    i.type = MenuItemType.main_right
+  mainRight = (session : any, label : string, link : string, permission : string | null) : MenuItem | null => {
+    var i = this.main(session, label, link, permission)
+    if (i !== null) {
+      i.type = MenuItemType.main_right
+    } 
     return i
   }
 
-  //Top level item
-  sub = (label : string) => {
-    var i = new MenuItem(this.key++)
+  //Top level sub menu
+  mainSub = (label : string) : MenuItem => {
+    var i = new MenuItem(this.key++, null)
     i.type = MenuItemType.sub
     i.label = label
     this.items.push(i)
@@ -68,8 +81,9 @@ export default class MenuItemFactory {
   }
   
   //(Can be a) top level item
-  button = (label : string, action : any, addToMenu : boolean) => {
-    var i = new MenuItem(this.key++)
+  button = (session : any, label : string, action : any, addToMenu : boolean, permission : string | null) : MenuItem | null => {
+    if (!is(session, permission)) return null
+    var i = new MenuItem(this.key++, permission)
     i.type = MenuItemType.button
     i.label = label
     i.action = action
@@ -79,49 +93,59 @@ export default class MenuItemFactory {
     return i
   }
 
-  item = (label : string, link : string) => {
-    var i = new MenuItem(this.key++)
-    i.type = MenuItemType.item
-    i.link = link
-    i.label = label
+  //Add a sub menu item
+  subItem = (sub : MenuItem, session : any, label : string, link : string, permission : string | null) : MenuItem | null => {
+    if (!is(session, permission)) return null
+    var i = new MenuItem(this.key++, permission)
+    if (i !== null) {
+      i.type = MenuItemType.item
+      i.link = link
+      i.label = label
+      sub.menu.push(i)
+    }
     return i
   }
 
-
-  checkbox = (label : string, action : any, checked : boolean) => {
-    var i = new MenuItem(this.key++)
+  checkbox = (sub : MenuItem, session : any, label : string, action : any, checked : boolean, permission : string | null) : MenuItem | null => {
+    if (!is(session, permission)) return null
+    var i = new MenuItem(this.key++, permission)
     i.type = MenuItemType.checkbox
     i.label = label
     i.action = action
     i.checked = checked
+    sub.menu.push(i)
     return i
   }
 
-  action = (label : string, action : any) => {
-    var i = new MenuItem(this.key++)
+  action = (label : string, action : any, permission : string | null) => {
+    var i = new MenuItem(this.key++, permission)
     i.type = MenuItemType.action
     i.label = label
     i.action = action
     return i
   }
 
-  subx = (label : string) => {
-    var i = new MenuItem(this.key++)
+  //Create a sub menu off a sub menu
+  subSub = (sub : MenuItem, label : string) => {
+    var i = new MenuItem(this.key++, null)
     i.type = MenuItemType.subx
     i.label = label
+    sub.menu.push(i)
     return i
   }
 
-  head = (label : string) => {
-    var i = new MenuItem(this.key++)
+  head = (sub : MenuItem, label : string) => {
+    var i = new MenuItem(this.key++, null)
     i.type = MenuItemType.head
     i.label = label
+    sub.menu.push(i)
     return i
   }
 
-  div = () => {
-    var i = new MenuItem(this.key++)
+  div = (sub : MenuItem) => {
+    var i = new MenuItem(this.key++, null)
     i.type = MenuItemType.div
+    sub.menu.push(i)
     return i
   }
   

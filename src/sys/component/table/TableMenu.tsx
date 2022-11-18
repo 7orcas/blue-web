@@ -36,13 +36,13 @@ const TableMenu : FC<TableMenuProps> = ({
 
   //Table Menu
   const f = new MenuItemFactory ()
-  var tableMenu = new MenuItem(9999)
+  var tableMenu = new MenuItem(9999, null)
 
   //Export to excel option
   var downloadX = f.action(
     useLabel('expExcel'), 
-    () => download(exportExcelUrl !== undefined? exportExcelUrl : '')
-  )
+    () => download(exportExcelUrl !== undefined? exportExcelUrl : ''),
+    null)
   if (exportExcelUrl !== undefined) {
     tableMenu.menu.push(downloadX)
   }
@@ -50,8 +50,8 @@ const TableMenu : FC<TableMenuProps> = ({
   //Upload from excel option
   var uploadX = f.action(
     useLabel(uploadExcelLangKey !== undefined? uploadExcelLangKey : 'fileup'), 
-    () => setOpenUpload(!openUpload)
-  )
+    () => setOpenUpload(!openUpload),
+    null)
   if (uploadExcelUrl !== undefined) {
     tableMenu.menu.push(uploadX)
   }

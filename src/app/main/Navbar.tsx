@@ -14,7 +14,8 @@ import { Menu as MenuS, MenuButton } from '@szhsin/react-menu';
 /*
   Application main menu
   Creates the menu dynamically
-  User roles are checked to determine if a menu item is displayed
+  User permissions are checked to determine if a menu item is displayed
+  A permission check can be disabled by passing in null
 
   [Licence]
   @author John Stewart
@@ -25,69 +26,74 @@ const Navbar = () => {
 
   const f = new MenuItemFactory ()
  
-  //Top Level
-  if (isRead(session, 'user')) f.main('useradmin', '/useradmin')
-  if (isRead(session, 'role')) f.main('roleadmin', '/roleadmin')
-  if (isRead(session, 'permission')) f.main('permadmin', '/permadmin')
-  if (isRead(session, 'org')) f.main('orgadmin', '/orgadmin')
-  if (isRead(session, 'lang')) f.main('labeladmin', '/labels')
+  //Top Level  (label, link, permission)
+  f.main(session, 'useradmin', '/useradmin', 'user')
+  f.main(session, 'roleadmin', '/roleadmin', 'role')
+  f.main(session, 'permadmin', '/permadmin', 'permission')
+  f.main(session, 'orgadmin', '/orgadmin', 'org')
+  f.main(session, 'labeladmin', '/labels', 'lang')
 
-  f.main('planmat', '/')
+  f.main(session, 'planmat', '/', null)
   
-  //delete this
-  f.button(session.editLabels? 'editLabels|-STOP' : 'editLabels', 
+  //TESTING delete this
+  f.button(session,
+    session.editLabels? 'editLabels|-STOP' : 'editLabels', 
     () => {setSession ({type: SessionField.editLabels})},
-    true
-  )
+    true,
+    null)
 
-
-  f.main('simus', '/Test2')
-  var sub1 = f.sub('mastdat')
-
-  f.main('fixes', '/Test3')
+  f.main(session, 'simus', '/Test2', null)
+  f.main(session, 'fixes', '/Test3', null)
   
   //Sub menus
-  sub1.menu.push(f.item('styles', '/Test3'))
-  sub1.menu.push(f.item('molds', '/Test3'))
-  sub1.menu.push(f.div())
-  var sub2 = f.subx('xxx')
-  sub1.menu.push(sub2)
+  var sub1 = f.mainSub('mastdat')
+  f.subItem(sub1, session, 'styles', '/Test3', null)
+  f.subItem(sub1, session, 'molds', '/Test3', null)
+  f.div(sub1)
+  
+  var sub2 = f.subSub(sub1, 'xxx')
+  f.head(sub2, 'headX')
+  f.subItem(sub1, session, 'machines', '/Test3', null)
+  f.subItem(sub1, session, 'shifts', '/Test3', null)
 
-  sub2.menu.push(f.head('headX'))
-  sub2.menu.push(f.item('machines', '/Test3'))
-  sub2.menu.push(f.item('shifts', '/Test3'))
 
   //Separate theme icon  
-  var themeX = f.button('', () => {
+  var themeX = f.button(session,
+    '', () => {
     setSession ({type: SessionField.tgTheme, payload : session.theme === ThemeType.light ? ThemeType.dark : ThemeType.light})},
-    false)
+    false,
+    null)
 
   //Separate admin icon
-  var admin = new MenuItem(9999)
+  var admin = new MenuItem(9999, null)
   admin.label = 'admin'
   admin.link = '/Test3'
-  admin.menu.push(f.item('logout', '/Test3'))
-  admin.menu.push(f.item('passchg', '/passchg'))
+  f.subItem(admin, session, 'logout', '/Test3', null)
+  f.subItem(admin, session, 'passchg', '/passchg', null)
   
   if (isRead(session, 'lang')) {
-    admin.menu.push(f.div())
-    admin.menu.push(f.item('labeladmin', '/labels'))
+    f.div(admin)
+    f.subItem(admin, session, 'labeladmin', '/labels', 'lang')
   }
-  // if (isUpdate(session, 'lang')) {
-    var editLabel = f.checkbox('editLabels', 
-    () => {setSession ({type: SessionField.editLabels})},
-    session.editLabels
-    )
-    admin.menu.push(editLabel)
-    admin.menu.push(f.div())
-  // }
-  if (isRead(session, 'user')) admin.menu.push(f.item('useradmin', '/useradmin'))
-  if (isRead(session, 'role')) admin.menu.push(f.item('roleadmin', '/roleadmin'))
-  if (isRead(session, 'permission')) admin.menu.push(f.item('permadmin', '/permadmin'))
-  if (isRead(session, 'org')) admin.menu.push(f.item('orgadmin', '/orgadmin'))
+
+  //Show individual label link
+  if (isUpdate(session, 'lang')) {
+    f.checkbox(admin,
+      session,
+      'editLabels', 
+      () => {setSession ({type: SessionField.editLabels})},
+      session.editLabels,
+      'lang')
+    f.div(admin)
+  }
+
+  f.subItem(admin, session, 'useradmin', '/useradmin', 'user')
+  f.subItem(admin, session, 'roleadmin', '/roleadmin', 'role')
+  f.subItem(admin, session, 'permadmin', '/permadmin', 'permission')
+  f.subItem(admin, session, 'orgadmin', '/orgadmin', 'org')
 
   const setSelection = (item : MenuItem) => {
-
+console.log('selection')
     if (session.changed) {
       return
     }
@@ -97,6 +103,7 @@ const Navbar = () => {
       || item.type === MenuItemType.button) {
       item.action()
     }
+    setSession ({type: SessionField.permission, payload: item.permission})
     setSession ({type: SessionField.debugMessage, payload: item.label})
   }
 
@@ -108,10 +115,10 @@ const Navbar = () => {
 
       {/* Admin menu option */}
       <div className='menu-item menu-item-right'>
-        <Menu key={998} item={themeX} setSelection={setSelection}>
+        {themeX !== null && <Menu key={998} item={themeX} setSelection={setSelection}>
           <FontAwesomeIcon icon={session.theme === ThemeType.dark? faSun : faMoon } />
-        </Menu>
-          <div className='last-menut-item'>
+        </Menu>}
+        <div className='last-menut-item'>
           <MenuS
             menuButton={<MenuButton><FontAwesomeIcon icon={faBars} /></MenuButton>} transition
             >
@@ -119,7 +126,7 @@ const Navbar = () => {
               <Menu key={i.key} item={i} setSelection={setSelection}/>
             ))}
           </MenuS>
-          </div>
+        </div>
       </div>
     </nav>
   )
