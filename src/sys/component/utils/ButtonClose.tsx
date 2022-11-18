@@ -1,6 +1,13 @@
 import { FC } from 'react'
 import ButtonM from '@mui/material/Button';
 
+/*
+  Close editor button
+
+  [Licence]
+  Created 01.11.22
+  @author John Stewart
+ */
 interface Props {
   onClick : any,
   disabled? : boolean

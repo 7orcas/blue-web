@@ -4,7 +4,8 @@ import { editorConfigRole, RoleEntI, PermissionListI, loadRoleList, newRoleEnt, 
 import Editor from '../component/editor/Editor'
 import RoleDetail from './RoleDetail'
 import TableMenu from '../component/table/TableMenu'
-import Button from '../component/utils/Button'
+import ButtonNew from '../component/utils/ButtonNew'
+import ButtonSave from '../component/utils/ButtonSave'
 import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
@@ -210,8 +211,8 @@ const RoleEditor = () => {
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-            <Button type='save' url='role' onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-            <Button type='new' url='role' onClick={handleCreate} langkey='new' className='table-menu-item' />
+            <ButtonSave onClick={handleCommitX} className='table-menu-item'/>
+            <ButtonNew onClick={handleCreate} className='table-menu-item' />
           </TableMenu>
         </div>
         <div className='editor-left'>
