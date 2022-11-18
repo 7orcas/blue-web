@@ -27,6 +27,7 @@ interface Props {
   entity : RoleEntI
   updateList: (entity : RoleEntI, field : string, value : any) => void
   updateEntity : (id : number, list : PermissionListI[]) => void
+  editable : boolean
 }
   
 const RoleDetail : FC<Props> = ({ 
@@ -35,7 +36,8 @@ const RoleDetail : FC<Props> = ({
       id, 
       entity, 
       updateList,
-      updateEntity}) => {
+      updateEntity,
+      editable}) => {
   
   const { setSession } = useContext(AppContext) as AppContextI
    
@@ -94,19 +96,21 @@ const RoleDetail : FC<Props> = ({
     { field: 'code', headerName: useLabel('url-c'), width: 100, type: 'string' },
     { field: 'descr', headerName: useLabel('desc'), width: 150, type: 'string' },
     { field: 'crud', headerName: useLabel('crud'), width: 60, type: 'string' },
-    { field: 'active', headerName: useLabel('active'), width: 50, type: 'boolean', editable: true,
+    { field: 'active', headerName: useLabel('active'), width: 50, type: 'boolean', editable: editable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.active}
           onChange={() => handleCheckboxClick(params.row.id, 'active')}
+          disabled={!editable}
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 50, type: 'boolean', editable: true,
+    { field: 'delete', headerName: useLabel('delete'), width: 50, type: 'boolean', editable: editable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
           onChange={() => handleCheckboxClick(params.row.id, 'delete')}
+          disabled={!editable}
         />
       ),
     },

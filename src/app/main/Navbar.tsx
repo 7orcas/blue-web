@@ -93,7 +93,6 @@ const Navbar = () => {
   f.subItem(admin, session, 'orgadmin', '/orgadmin', 'org')
 
   const setSelection = (item : MenuItem) => {
-console.log('selection')
     if (session.changed) {
       return
     }

@@ -5,7 +5,9 @@ import { editorConfigUser, UserListI, UserEntI, UserRoleEntI, loadUserList, load
 import Editor from '../component/editor/Editor'
 import UserDetail from './UserDetail'
 import TableMenu from '../component/table/TableMenu'
-import Button from '../component/utils/Button'
+import ButtonNew from '../component/utils/ButtonNew'
+import ButtonSave from '../component/utils/ButtonSave'
+import { isUpdate, isDelete } from '../system/Permission'
 import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef, GridCellParams } from '@mui/x-data-grid'
@@ -151,10 +153,12 @@ const UserEditor = () => {
   }
 
   //List Columns
+  var editable = isUpdate(session, session.permission)
+  var deleteable = isDelete(session, session.permission)
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'code', headerName: useLabel('user'), width: 300, type: 'string' },
-    { field: 'attempts', headerName: useLabel('attempts'), type: 'number', width: 70, editable: true, 
+    { field: 'attempts', headerName: useLabel('attempts'), type: 'number', width: 70, editable: editable, 
       cellClassName: (params: GridCellParams<number>) => {
         
         var lst : UserListI | null = getObjectById(Number(params.id), edConf.list)
@@ -163,19 +167,21 @@ const UserEditor = () => {
         }
         return '';
         }},
-    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
+    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: editable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.active}
           onChange={() => handleCheckboxClick(params.row.id, 'active')}
+          disabled={!editable}
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: false,
+    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: deleteable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
           onChange={() => handleCheckboxClick(params.row.id, 'delete')}
+          disabled={!deleteable}
         />
       ),
     },
@@ -186,8 +192,8 @@ const UserEditor = () => {
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-            <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-            <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+            <ButtonSave onClick={handleCommitX} />
+            <ButtonNew onClick={handleCreate} />
           </TableMenu>
         </div>
         <div className='editor-left'>
@@ -217,6 +223,7 @@ const UserEditor = () => {
               entity={e}
               updateList={updateList}
               updateEntity={updateEntity}
+              editable={editable}
             />
           </div>
           //ToDo

@@ -2,7 +2,9 @@ import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
-import Button from '../component/utils/Button'
+import ButtonNew from '../component/utils/ButtonNew'
+import ButtonSave from '../component/utils/ButtonSave'
+import { isUpdate, isDelete } from '../system/Permission'
 import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { editorConfigPermission, PermissionListI, loadPermissionList, newPermissionList } from './role'
@@ -91,25 +93,29 @@ const PermissionEditor = () => {
   }
 
   //List Columns
+  var editable = isUpdate(session, session.permission)
+  var deleteable = isDelete(session, session.permission)
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
-    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 80, editable: true, },
-    { field: 'code', headerName: useLabel('url-c'), width: 150, type: 'string', editable: true, },
-    { field: 'descr', headerName: useLabel('desc'), width: 300, type: 'string', editable: true, },
-    { field: 'crud', headerName: useLabel('crud'), width: 80, type: 'string', editable: true,},
-    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
+    { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 80, editable: editable, },
+    { field: 'code', headerName: useLabel('url-c'), width: 150, type: 'string', editable: editable, },
+    { field: 'descr', headerName: useLabel('desc'), width: 300, type: 'string', editable: editable, },
+    { field: 'crud', headerName: useLabel('crud'), width: 80, type: 'string', editable: editable,},
+    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: editable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.active}
           onChange={() => handleCheckboxClick(params.row.id, 'active')}
+          disabled={!editable}
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: true,
+    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: deleteable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
           onChange={() => handleCheckboxClick(params.row.id, 'delete')}
+          disabled={!deleteable}
         />
       ),
     },
@@ -119,8 +125,8 @@ const PermissionEditor = () => {
     <div className='editor'>
       <div className='menu-header'>
         <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-          <Button onClick={handleCommitX} langkey='save' className='table-menu-item' disabled={!session.changed}/>
-          <Button onClick={handleCreate} langkey='new' className='table-menu-item' />
+          <ButtonSave onClick={handleCommitX} />
+          <ButtonNew onClick={handleCreate} />
         </TableMenu>
       </div>
       <Editor 

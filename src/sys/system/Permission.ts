@@ -1,41 +1,38 @@
 
 /*
 Determine user permissions
+If permission == null then always return true, ie its ignored
 
 Created 17.11.22
 [Licence]
 @author John Stewart
 */
 
-//URL - Permission DELETE
-// export interface UrlCrudI {
-//   url: string
-//   crud : string
-// }
 
 //Return is the user has Read permission
-export const isCreate = (session : any, url : string) : boolean => {
-  var rtn = is(session, url, 'C')
+export const isCreate = (session : any, permission : string | null) : boolean => {
+  var rtn = is(session, permission, 'C')
   return rtn
 }
 
-export const isRead = (session : any, url : string) : boolean => {
-  return is(session, url, 'R')
+export const isRead = (session : any, permission : string | null) : boolean => {
+  return is(session, permission, 'R')
 }
 
-export const isUpdate = (session : any, url : string) : boolean => {
-  var rtn = is(session, url, 'U')
+export const isUpdate = (session : any, permission : string | null) : boolean => {
+  var rtn = is(session, permission, 'U')
   return rtn
 }
 
-export const isDelete = (session : any, url : string) : boolean => {
-  return is(session, url, 'D')
+export const isDelete = (session : any, permission : string | null) : boolean => {
+  return is(session, permission, 'D')
 }
 
-const is = (session : any, url : string, action : string) : boolean => {
+const is = (session : any, permission : string | null, action : string) : boolean => {
+  if (permission === null) return true
   if (typeof session.permissions === 'undefined') return false
   var map : Map<string,string> = session.permissions
-  var crud : string | undefined = map.get(url)
+  var crud : string | undefined = map.get(permission)
   if (typeof crud === 'undefined') return false
   if (crud === '*') return true
   if (crud.indexOf(action) !== -1) return true

@@ -23,7 +23,7 @@ const ButtonSave : FC<Props> = ({
       langkey = 'save', 
       onClick, 
       disabled = false, 
-      className = '', 
+      className = 'table-menu-item', 
       permission
     }) => {
   

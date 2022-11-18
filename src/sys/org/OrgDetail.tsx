@@ -24,6 +24,7 @@ interface Props {
   id : number
   entity : OrgEntI
   updateEntity : any
+  editable : boolean
 }
   
 const OrgDetail : FC<Props> = ({ 
@@ -31,7 +32,9 @@ const OrgDetail : FC<Props> = ({
       setEditorConfig,
       id, 
       entity, 
-      updateEntity}) => {
+      updateEntity,
+      editable
+    }) => {
         
   const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
         

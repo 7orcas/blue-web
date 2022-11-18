@@ -6,6 +6,7 @@ import RoleDetail from './RoleDetail'
 import TableMenu from '../component/table/TableMenu'
 import ButtonNew from '../component/utils/ButtonNew'
 import ButtonSave from '../component/utils/ButtonSave'
+import { isUpdate, isDelete } from '../system/Permission'
 import { useLabel, updateBaseEntity, updateBaseList, getObjectById, handleCommit, containsInvalid } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { GridColDef } from '@mui/x-data-grid'
@@ -181,26 +182,30 @@ const RoleEditor = () => {
       }
     }
   }
-
+  
   //List Columns
+  var editable = isUpdate(session, session.permission)
+  var deleteable = isDelete(session, session.permission)
   const columns: GridColDef[] = [
     { field: 'id', headerName: useLabel('id'), type: 'number', width: 50, hide: true },
     { field: 'orgNr', headerName: useLabel('orgnr-s'), type: 'number', width: 50 },
-    { field: 'code', headerName: useLabel('role'), width: 100, type: 'string', editable: true, },
-    { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: true, },
-    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: true,
+    { field: 'code', headerName: useLabel('role'), width: 100, type: 'string', editable: editable, },
+    { field: 'descr', headerName: useLabel('desc'), width: 200, type: 'string', editable: editable, },
+    { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: editable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.active}
           onChange={() => handleCheckboxClick(params.row.id, 'active')}
+          disabled={!editable}
         />
       ),
     },
-    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: true,
+    { field: 'delete', headerName: useLabel('delete'), width: 80, type: 'boolean', editable: deleteable,
       renderCell: (params) => (
         <Checkbox
           checked={params.row?.delete}
           onChange={() => handleCheckboxClick(params.row.id, 'delete')}
+          disabled={!deleteable}
         />
       ),
     },
@@ -211,8 +216,8 @@ const RoleEditor = () => {
       <div className='editor'>
         <div className='menu-header'>
           <TableMenu exportExcelUrl={edConf.EXCEL_URL}>
-            <ButtonSave onClick={handleCommitX} className='table-menu-item'/>
-            <ButtonNew onClick={handleCreate} className='table-menu-item' />
+            <ButtonSave onClick={handleCommitX} />
+            <ButtonNew onClick={handleCreate}  />
           </TableMenu>
         </div>
         <div className='editor-left'>
@@ -242,6 +247,7 @@ const RoleEditor = () => {
               entity={e}
               updateList={updateList}
               updateEntity={updateEntityPermissions}
+              editable={editable}
             />
           </div>
           //ToDo
