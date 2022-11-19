@@ -1,12 +1,10 @@
 import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { useLabel, loadConfiguration, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
+import { loadConfiguration, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
 import { CONFIG, OrgEntI } from './org'
 import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
-import TableMenu,  { TableMenuTab } from '../component/table/TableMenu'
-import ButtonClose from '../component/utils/ButtonClose'
-import LangLabel from '../lang/LangLabel';
+import { TableMenuTab } from '../component/table/TableMenu'
 import TextField from '../component/utils/TextField'
 import EntityInfo from '../component/utils/EntityInfo'
 import Accordion from '../component/utils/Accordion'
@@ -36,7 +34,7 @@ const OrgDetail : FC<Props> = ({
       editable
     }) => {
         
-  const { session, setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
+  const { setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
         
   //Load entity configurations
   const loadConfigurationX = useCallback(() => {
@@ -88,7 +86,7 @@ const OrgDetail : FC<Props> = ({
               field='orgNr'
               updateEntity={updateEntity}
               required={true}
-              readonly={entity.id > 0}
+              readonly={entity.id > 0 || !editable}
             />
             <TextField
               label='code'
@@ -97,6 +95,7 @@ const OrgDetail : FC<Props> = ({
               field='code'
               updateEntity={updateEntity}
               required={true}
+              readonly={!editable}
             />
           </div>
 
@@ -112,6 +111,7 @@ const OrgDetail : FC<Props> = ({
               field='maxLoginAttempts'
               updateEntity={updateEntity}
               required={true}
+              readonly={!editable}
             />
           </Accordion>
           </div>
