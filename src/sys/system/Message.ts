@@ -16,7 +16,8 @@ export enum MessageType {
   message,
   detail,
   commitError,
-  unsaved
+  unsaved,
+  logout
 }
 
 export interface CommitErrorI extends BaseEntI {

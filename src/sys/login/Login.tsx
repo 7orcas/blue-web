@@ -1,5 +1,5 @@
 import './login.css'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AppContext, { AppContextI } from '../system/AppContext'
 import { SessionField } from '../system/Session'
@@ -8,14 +8,28 @@ import useLabel from '../lang/useLabel'
 import login from './login'
 import Button from '../component/utils/Button';
 import { JsonResponseI } from '../definition/types';
+import logout from './logout';
+import { MessageType } from '../system/Message';
 
+/*
+  RE-Login
+
+  [Licence]
+  Created 21.11.22
+  @author John Stewart
+ */
 const Login = () => {
 
-  const { session, setSession } = useContext(AppContext) as AppContextI
+  const { session, setSession, setTitle, message } = useContext(AppContext) as AppContextI
   
   const [pw, setPw] = useState ('')
   const [err, setErr] = useState ('')
   
+ //Initial load 
+  useEffect(() => {
+    setTitle('appname')
+   },[])
+
   const setPwX = (txt : string) => {
     setPw(txt)
   }
@@ -31,13 +45,12 @@ const Login = () => {
       return;
     }
 
-    const attempt = { u: session.userid, p : pw, o : session.orgNr, l : session.lang };
+    const attempt = { u: session.username, p : pw, o : session.orgNr, l : session.lang };
     var rc = await login (attempt, setErr)
     if (rc === JsonResponseI.ok) {
       setSession ({ type: SessionField.loggedIn, payload: true })
       navigate("reloginok");
     }
-
   }
 
   const errMessage = (err : any) => {
@@ -47,20 +60,32 @@ const Login = () => {
     return ''
   }
 
+  const logoutMessage = () => {
+    if (message.type === MessageType.logout) {
+      return message.message
+    }
+    return ''
+  }
+
   return (
     <div className='relogin'>
+      <section>
+        <div className='logout-message'>
+          {logoutMessage()}
+        </div>
+      </section>
       <section className='relogin-title'>
         <LangLabel langkey='loginTR' />
       </section>
       <section>
         <form onSubmit={(e) => e.preventDefault()}>
           <div>
-            <LangLabel langkey='userid' className='relogin-label'/>
+            <LangLabel langkey='username' className='relogin-label'/>
             <input 
               className='field'
               onSubmit={(e) => e.preventDefault()}
               type='text'
-              value={session.userid}
+              value={session.username}
               readOnly
             />
           </div>
@@ -100,6 +125,19 @@ export const LoginSuccess = () => {
     <div className='login-success'>
       <LangLabel langkey='welcback' />
     </div>
+  )
+}
+
+export const Logout = () => {
+
+  const { setSession, setMessage } = useContext(AppContext) as AppContextI
+  
+  useEffect(() => {
+    logout(setSession, setMessage)
+  },[])
+
+  return (
+    <div className='logout'></div>
   )
 }
 

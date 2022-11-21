@@ -210,7 +210,7 @@ const UserDetail : FC<Props> = ({
           <div className='editor-block'>
             <TextField
               field='code'
-              label='userid'
+              label='username'
               config={config}
               entity={entity}
               updateEntity={updateEntity}

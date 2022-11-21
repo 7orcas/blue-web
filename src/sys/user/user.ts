@@ -19,6 +19,7 @@ import { PermissionListI } from '../role/role'
 
 export interface UserListI extends BaseEntI {
   attempts: number
+  loggedIn : boolean
   maxAttemptsExceeded : boolean
   lastLogin: string
 }
@@ -79,6 +80,7 @@ export const loadUserList = async (
         var ent : UserListI = {} as UserListI  
         initListBase(lst, ent)
         ent.attempts = lst.attempts
+        ent.loggedIn = lst.loggedIn
         ent.maxAttemptsExceeded = lst.maxAttemptsExceeded
         ent.lastLogin = lst.lastLogin
         list.push (ent)

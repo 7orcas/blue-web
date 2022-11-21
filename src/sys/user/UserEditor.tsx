@@ -167,6 +167,15 @@ const UserEditor = () => {
         }
         return '';
         }},
+    { field: 'loggedIn', headerName: useLabel('loggedIn'), width: 80, type: 'boolean', editable: false,
+      renderCell: (params) => (
+        <Checkbox
+          checked={params.row?.loggedIn}
+          onChange={() => handleCheckboxClick(params.row.id, 'loggedIn')}
+          disabled={true}
+        />
+      ),
+    },
     { field: 'active', headerName: useLabel('active'), width: 80, type: 'boolean', editable: editable,
       renderCell: (params) => (
         <Checkbox
@@ -198,7 +207,7 @@ const UserEditor = () => {
         </div>
         <div className='editor-left'>
           <Editor 
-            style={{ height: '80vh', minWidth : 600, maxWidth : 600 }}
+            style={{ height: '80vh', minWidth : 670, maxWidth : 670 }}
             editorConfig={edConf}
             setEditorConfig={setEdConf}
             listColumns={columns}

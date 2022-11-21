@@ -6,7 +6,7 @@ import OrgEditor from '../../sys/org/OrgEditor'
 import PermissionEditor from '../../sys/role/PermissionEditor';
 import RoleEditor from '../../sys/role/RoleEditor';
 import UserEditor from '../../sys/user/UserEditor';
-import Login, {LoginSuccess} from '../../sys/login/Login'
+import Login, {LoginSuccess, Logout} from '../../sys/login/Login'
 import Test2 from './Test2'
 import Test3 from './Test3'
 import ChangePW from '../../sys/user/ChangePW';
@@ -30,6 +30,7 @@ const Body = () => {
         <Route path="/" element={<Home />} />
         <Route path="relogin" element={<Login />} />
         <Route path="reloginok" element={<LoginSuccess />} />
+        <Route path="logout" element={<Logout />} />
         <Route path="labels" element={<LabelsEditor />} />
         <Route path="orgadmin" element={<OrgEditor />} />
         <Route path="permadmin" element={<PermissionEditor />} />
@@ -38,13 +39,7 @@ const Body = () => {
         <Route path="passchg" element={<ChangePW />} />
         <Route path="test2" element={<Test2 />} />
         <Route path="test3" element={<Test3 />} />
-        <Route path="*"
-          element={
-            <main style={{ padding: "1rem" }}>
-              <p>Body: There's nothing here!</p>
-            </main>
-          }
-        />
+        <Route path="*" />
       </Routes>
     </div>
   )

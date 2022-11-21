@@ -11,7 +11,7 @@ import { LabelI } from '../lang/loadLabels'
 //Used in the setSession and reducer functions
 export enum SessionField {
   loggedIn,
-  userid,
+  username,
   params,
   orgNr,
   lang, //client language to use
@@ -35,7 +35,7 @@ export enum ThemeType {
 //Store user session variables
 class Session {
   loggedIn : boolean = true
-  userid : string = ''
+  username : string = ''
   params : UrlSearchParams = new UrlSearchParams()
   orgNr : number = 0
   lang : string = ''
@@ -61,8 +61,8 @@ export const sessionReducer = (session : Session, action : any) => {
     case SessionField.loggedIn:
       return {...session, loggedIn: action.payload}
 
-    case SessionField.userid:
-      return {...session, userid: action.payload}
+    case SessionField.username:
+      return {...session, username: action.payload}
 
     case SessionField.params:
       return {...session, params: action.payload}

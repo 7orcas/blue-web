@@ -26,7 +26,7 @@ const Test1 = () => {
           <a href='http://localhost:8080/blue-web-login/?u=js@7orcas.com&p=123&org=t'>{useLabel('login')}</a>
         </h1>
       </div>
-      <p>Userid: {session.userid}</p>
+      <p>Userid: {session.username}</p>
       <p>Org: {session.orgNr}</p>
       <p>Base Url: {session.params.baseUrl}</p>
       <p>Initialise Url: {session.params.init}</p>

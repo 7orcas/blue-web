@@ -68,7 +68,7 @@ const Navbar = () => {
   var admin = new MenuItem(9999, null)
   admin.label = 'admin'
   admin.link = '/Test3'
-  f.subItem(admin, session, 'logout', '/Test3', null)
+  f.subItem(admin, session, 'logout', '/logout', null)
   f.subItem(admin, session, 'passchg', '/passchg', null)
   
   if (isRead(session, 'lang')) {
