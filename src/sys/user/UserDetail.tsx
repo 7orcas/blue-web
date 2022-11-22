@@ -137,6 +137,10 @@ const UserDetail : FC<Props> = ({
     updateEntity(entity) 
   }
 
+  const handleLogout = () => {
+    
+  }
+
   //Close this editor
   const close = () => {
     closeEditor(editorConfig, setEditorConfig, id)
@@ -200,6 +204,7 @@ const UserDetail : FC<Props> = ({
               close={close}
             >
               <Button onClick={handleResetAttempts} langkey='resetAtt' className='table-menu-item' />
+              <Button onClick={handleLogout} langkey='logout' className='table-menu-item' disabled={!entity.loggedIn} />
             </TableMenuTab>
           </TableMenu>
         </div>

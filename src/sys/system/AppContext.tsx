@@ -57,6 +57,7 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
         setSession ({ type: SessionField.username, payload: login.username })
         setSession ({ type: SessionField.lang, payload: login.lang })
         setSession ({ type: SessionField.orgNr, payload: login.orgNr })
+        setSession ({ type: SessionField.devAdmin, payload: login.devAdmin })
 
         var perms = new Map()
         for (var i=0;i<login.permissions.length;i++) {

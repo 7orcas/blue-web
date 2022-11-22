@@ -106,6 +106,7 @@ export const loadUserEntity = async (
       ent.attempts = data.attempts
       ent.maxAttemptsExceeded = data.maxAttemptsExceeded
       ent.lastLogin = data.lastLogin
+      ent.loggedIn = data.loggedIn
       ent.password = data.password
       ent.orgs = data.orgs
       appendRoles(data.roles, ent)

@@ -48,7 +48,7 @@ class Session {
   messageDialog : string = ''
   changed : boolean = false
   busy: boolean = false
-  devAdmin: boolean = true
+  devAdmin: boolean | null = null
 }
 
 export default Session

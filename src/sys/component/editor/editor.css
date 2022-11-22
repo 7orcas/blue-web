@@ -242,6 +242,13 @@
   margin-top: auto;
 }
 
+.table-menu button {
+  white-space: nowrap;
+}
+.table-menu .table-menu-tab {
+  white-space: nowrap;
+}
+
 MuiDataGrid-viewport, .MuiDataGrid-row, .MuiDataGrid-renderingZone {
   max-height: -webkit-fit-content !important;
   max-height: -moz-fit-content !important;
