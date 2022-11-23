@@ -91,6 +91,10 @@ const Navbar = () => {
   f.subItem(admin, session, 'roleadmin', '/roleadmin', 'role')
   f.subItem(admin, session, 'permadmin', '/permadmin', 'permission')
   f.subItem(admin, session, 'orgadmin', '/orgadmin', 'org')
+  if (isRead(session, 'logins')) {
+    f.div(admin)
+    f.subItem(admin, session, 'logins', '/logins', 'logins')
+  }
 
   const setSelection = (item : MenuItem) => {
     if (session.changed) {
