@@ -43,6 +43,8 @@ const Body = () => {
         <Route path="test3" element={<Test3 />} />
         <Route path="*" />
       </Routes>
+      <>
+      </>
     </div>
   )
 }

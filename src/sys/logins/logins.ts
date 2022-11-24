@@ -17,7 +17,9 @@ import Message from '../system/Message'
 
 export interface LoginsListI extends BaseEntI {
   clientNr : number 
-  //id: userid
+  userId : number
+  created: string
+  //lastActivity : updated
   //username : code
   //sessionId : descr
 }
@@ -41,13 +43,17 @@ export const loadLoginList = async (
     if (typeof data !== 'undefined') {
       var list : Array<LoginsListI> = []
 
-      for (const lst of data) {
+      for (var i=0;i<data.length;i++) {
+        var lst = data[i]
         var ent : LoginsListI = {} as LoginsListI  
         initListBase(lst, ent)
-        ent.id = lst.userid
+        ent.id = i
+        ent.userId = lst.userId
         ent.code = lst.username
         ent.descr = lst.sessionId
         ent.clientNr = lst.clientNr
+        ent.created = lst.created
+        ent.updated = lst.lastActivity
         list.push (ent)
         
         initEntBaseOV(ent)

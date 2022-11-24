@@ -43,4 +43,8 @@
   margin-left: auto;
   margin-top: 47px;
   z-index: 1;
+}
+
+.menu-header-spacer {
+  min-height: 35px;
 }/*# sourceMappingURL=table.css.map */

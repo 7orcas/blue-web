@@ -25,6 +25,7 @@ interface Props {
   required? : boolean
   readonly? : boolean
   changeOnBlur? : boolean
+  style? : any
 }
   
 
@@ -39,7 +40,9 @@ const TextField : FC<Props> = ({
       updateEntity, 
       required=false, 
       readonly=false,
-      changeOnBlur=true }) => {
+      changeOnBlur=true,
+      style,
+     }) => {
   
   const { session } = useContext(AppContext) as AppContextI
   const [value, setValue] = useState (type==='text'?'':0)
@@ -65,6 +68,10 @@ const TextField : FC<Props> = ({
 
   if (typeof inputProps === 'undefined') {
     inputProps={ maxLength: maxLengthText(config, field) }
+  }
+
+  if (typeof style === 'undefined') {
+    style = {}
   }
 
   const update = (value : any) => {
@@ -108,6 +115,7 @@ const TextField : FC<Props> = ({
         disableUnderline : readonly
       }}
       variant='filled' //'filled' | 'outlined'* | 'standard'
+      style={style}
     />
   )
 }
