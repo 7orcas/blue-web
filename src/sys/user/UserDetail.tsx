@@ -7,7 +7,7 @@ import Button from '../component/utils/Button'
 import EntityInfo from '../component/utils/EntityInfo'
 import TextField from '../component/utils/TextField'
 import { BaseEntI } from '../definition/interfaces'
-import { CONFIG, UserListI, UserEntI, UserRoleEntI, RoleListI, newUserRoleEnt } from './user'
+import { CONFIG, UserListI, UserEntI, UserRoleEntI, RoleListI, newUserRoleEnt, logoutUser } from './user'
 import { PermissionListI } from '../role/role'
 import { useLabel, getObjectById, updateBaseList, updateBaseEntity, closeEditor } from '../component/editor/editorUtil'
 import { EditorConfig, editorConfigReducer as roleConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
@@ -43,7 +43,7 @@ const UserDetail : FC<Props> = ({
       editable
     }) => {
   
-  const { session, setSession, configs } = useContext(AppContext) as AppContextI
+  const { setSession, setMessage, configs } = useContext(AppContext) as AppContextI
   
   //State 
   var roleEdConf : EditorConfig<UserRoleEntI, UserEntI> = new EditorConfig()
@@ -138,7 +138,7 @@ const UserDetail : FC<Props> = ({
   }
 
   const handleLogout = () => {
-    
+    logoutUser(entity.id, setMessage)
   }
 
   //Close this editor

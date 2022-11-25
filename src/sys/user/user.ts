@@ -2,8 +2,9 @@ import { BaseEntI, initListBase, initEntBase, initParent, initEntBaseOV } from "
 import { EntityStatusType } from '../definition/types'
 import { EditorConfig } from '../component/editor/EditorConfig'
 import apiGet from '../api/apiGet'
-import Message from '../system/Message'
+import Message, { MessageType } from '../system/Message'
 import { PermissionListI } from '../role/role'
+import apiPut from '../api/apiPut'
 
 /*
   User configurations.
@@ -162,6 +163,27 @@ export const newUserEnt = async (
       return ent
     }
 
+  } catch (err : any) {
+    console.log (err)
+  }
+}
+
+//Log a user out
+export const logoutUser = async (
+  id : number,
+  setMessage : (m : Message) => void, 
+  // eslint-disable-next-line no-empty-pattern
+  setSession? : ({}) => void) => {
+
+  try {
+    var value = {id : id}
+    const data = await apiPut('user/logout', value, setMessage, setSession)
+    if (typeof data !== 'undefined') {
+      var m = new Message()
+      m.type = MessageType.message
+      m.message = data.data
+      setMessage(m)
+    }
   } catch (err : any) {
     console.log (err)
   }
