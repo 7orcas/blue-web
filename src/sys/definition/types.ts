@@ -16,6 +16,7 @@ export enum JsonResponseI {
   commitErrors = -3,
   noChange = 1,
   uploaded = 3,
+  loginRedirect = 4
 }
 
 export enum EntityStatusType {

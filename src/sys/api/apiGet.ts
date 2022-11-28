@@ -26,6 +26,15 @@ const apiGet = async (
 
     const response = await axios.get(`${ url }`)
     
+    //Need to relogin
+    if (response.data.returnCode === JsonResponseI.loginRedirect) {
+      if (typeof setSession !== 'undefined') {
+        setSession ({ type: SessionField.changed, payload: false })
+        setSession ({ type: SessionField.loggedIn, payload: false })
+      }
+      return;
+    }
+
     //Valid return object
     if (response.data.returnCode === JsonResponseI.ok) {
       return response.data.data

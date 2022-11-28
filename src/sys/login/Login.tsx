@@ -45,7 +45,12 @@ const Login = () => {
       return;
     }
 
-    const attempt = { u: session.username, p : pw, o : session.orgNr, l : session.lang };
+    const attempt = { 
+      u: session.username, 
+      p : pw, 
+      o : session.orgNr, 
+      l : session.lang,
+      cn : session.params.clientNr };
     var rc = await login (attempt, setErr)
     if (rc === JsonResponseI.ok) {
       setSession ({ type: SessionField.loggedIn, payload: true })

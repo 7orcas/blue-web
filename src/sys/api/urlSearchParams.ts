@@ -3,6 +3,7 @@ class UrlSearchParams {
   uploadUrl : string = ''
   init : string = ''
   sid : string = ''
+  clientNr : number = -1
   
   constructor() {
     const url = new URL (window.location.href)
@@ -10,6 +11,7 @@ class UrlSearchParams {
     this.uploadUrl = this.getParamString(url.searchParams.get("upload"))
     this.init = this.getParamString(url.searchParams.get("init"))
     this.sid = this.getParamString(url.searchParams.get("sid"))
+    this.clientNr = this.getParamInteger(url.searchParams.get("cn"))
   }
 
   getParamString (p : string | null) : string {
@@ -27,6 +29,7 @@ class UrlSearchParams {
       if (this.uploadUrl === null || this.uploadUrl.length === 0) return false
       if (this.init === null || this.init.length === 0) return false
       if (this.sid === null || this.sid.length === 0) return false
+      if (this.clientNr === null) return false
       return true
   }
 }
