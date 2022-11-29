@@ -16,10 +16,11 @@ const logout = async (setSession : any, setMessage : any) => {
     
     var m = new Message()
     m.type = MessageType.logout
-    m.message = data.data
+    m.message = 'logoutm'
     setMessage(m)
 
-    setSession ({type: SessionField.loggedIn, payload : false})
+    //return is encoded with either redirect or logged out
+    setSession ({type: SessionField.loginStatus, payload : data.data})
     return data.data
   }
 }

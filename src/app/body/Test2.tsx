@@ -11,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
+import { JsonResponseI } from '../../sys/definition/types';
 
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
@@ -71,8 +72,9 @@ const Test2 = () => {
     setOpen(true);
   };
 
+  //does this work?
   const handleClickLogin = () => {
-    setSession ({ type: SessionField.loggedIn, payload: false })
+    setSession ({ type: SessionField.loginStatus, payload: JsonResponseI.loggedIn })
   };
 
   const handleClose = (value: string) => {

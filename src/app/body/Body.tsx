@@ -12,24 +12,41 @@ import Test2 from './Test2'
 import Test3 from './Test3'
 import ChangePW from '../../sys/user/ChangePW'
 import Home from './Home'
+import NotAuthorised from '../../sys/component/utils/NotAuthorised'
+import { JsonResponseI } from '../../sys/definition/types'
 
+/*
+  Main Body
+  All routes are managed here
+
+  [Licence]
+  Created 1/9/22
+  @author John Stewart
+ */
 const Body = () => {
 
   const { session } = useContext(AppContext) as AppContextI
   let navigate = useNavigate()
 
-  //Watch 401s - ie session expired
+  //Watch for exceptions
   useEffect(() => {
-    if (!session.loggedIn) {
+    if (session.loginStatus === JsonResponseI.loginRedirect) {
       navigate("relogin")
     }
-  },[session.loggedIn, navigate])
+    else if (session.loginStatus === JsonResponseI.loggedOut) {
+      navigate("loggedout")
+    }
+    else if (session.notAuthorised) {
+      navigate("notauth")
+    }
+  },[session.loginStatus, session.notAuthorised, navigate])
 
   return (
     <div className='main-body'>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="relogin" element={<Login />} />
+        <Route path="loggedout" element={<Logout />} />
         <Route path="reloginok" element={<LoginSuccess />} />
         <Route path="logout" element={<Logout />} />
         <Route path="labels" element={<LabelsEditor />} />
@@ -39,6 +56,7 @@ const Body = () => {
         <Route path="useradmin" element={<UserEditor />} />
         <Route path="logins" element={<LoginsEditor />} />
         <Route path="passchg" element={<ChangePW />} />
+        <Route path="notauth" element={<NotAuthorised />} />
         <Route path="test2" element={<Test2 />} />
         <Route path="test3" element={<Test3 />} />
         <Route path="*" />

@@ -1,7 +1,7 @@
 import axios from './apiAxios'
 import { SessionField } from '../system/Session'
 import Message, { MessageType } from '../system/Message'
-import { JsonResponseI } from '../definition/types';
+import { JsonResponseI } from '../definition/types'
 
 /*
   Generic GET method to contact the server
@@ -25,18 +25,29 @@ const apiGet = async (
     }
 
     const response = await axios.get(`${ url }`)
+    const rtn = response.data.returnCode
     
-    //Need to relogin
-    if (response.data.returnCode === JsonResponseI.loginRedirect) {
+    //Timed-out, maybe be able to relogin
+    if (rtn === JsonResponseI.loggedOut
+        || rtn === JsonResponseI.loginRedirect) {
       if (typeof setSession !== 'undefined') {
         setSession ({ type: SessionField.changed, payload: false })
-        setSession ({ type: SessionField.loggedIn, payload: false })
+        setSession ({ type: SessionField.loginStatus, payload: rtn })
+      }
+      return;
+    }
+
+    //User not authorised (ie no permission)
+    if (rtn === JsonResponseI.notAuthorised) {
+      if (typeof setSession !== 'undefined') {
+        setSession ({ type: SessionField.changed, payload: false })
+        setSession ({ type: SessionField.notAuthorised, payload: true })
       }
       return;
     }
 
     //Valid return object
-    if (response.data.returnCode === JsonResponseI.ok) {
+    if (rtn === JsonResponseI.ok) {
       return response.data.data
     }
 
@@ -48,10 +59,8 @@ const apiGet = async (
     //UNAUTHORIZED / NO CONTENT, eg timed out
     if (err.response.status === 401 
       || err.response.status === 204) { 
-      
-console.log('SHOULD RELOGIN ' + err.response.status)        
       if (typeof setSession !== 'undefined') {
-        setSession ({ type: SessionField.loggedIn, payload: false })
+        setSession ({ type: SessionField.loginStatus, payload: JsonResponseI.loggedOut })
       }
       return;
     }

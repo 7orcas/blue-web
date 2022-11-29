@@ -12,7 +12,7 @@ import logout from './logout';
 import { MessageType } from '../system/Message';
 
 /*
-  RE-Login
+  Logout and re-Login
 
   [Licence]
   Created 21.11.22
@@ -53,7 +53,7 @@ const Login = () => {
       cn : session.params.clientNr };
     var rc = await login (attempt, setErr)
     if (rc === JsonResponseI.ok) {
-      setSession ({ type: SessionField.loggedIn, payload: true })
+      setSession ({ type: SessionField.loginStatus, payload: JsonResponseI.loggedIn })
       navigate("reloginok");
     }
   }
@@ -65,20 +65,8 @@ const Login = () => {
     return ''
   }
 
-  const logoutMessage = () => {
-    if (message.type === MessageType.logout) {
-      return message.message
-    }
-    return ''
-  }
-
   return (
     <div className='relogin'>
-      <section>
-        <div className='logout-message'>
-          {logoutMessage()}
-        </div>
-      </section>
       <section className='relogin-title'>
         <LangLabel langkey='loginTR' />
       </section>
@@ -142,7 +130,9 @@ export const Logout = () => {
   },[])
 
   return (
-    <div className='logout'></div>
+    <section className='loggedout-title'>
+        <LangLabel langkey='logoutm' />
+    </section>
   )
 }
 

@@ -3,6 +3,7 @@ import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import LangLabel from '../../sys/lang/LangLabel'
 import useLabel from '../../sys/lang/useLabel'
 import Navbar from './Navbar'
+import { JsonResponseI } from '../../sys/definition/types'
 
 const Header = () => {
 
@@ -15,7 +16,7 @@ const Header = () => {
 
   return (
     <div className='main-header'>
-      {session.loggedIn && <Navbar />}
+      {session.loginStatus === JsonResponseI.loggedIn && <Navbar />}
       <div className='main-subheader'>
         <LangLabel langkey={title} className='main-title'/>
       </div>

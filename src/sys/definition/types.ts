@@ -14,9 +14,12 @@ export enum JsonResponseI {
   error = -1,
   invalid = -2,
   commitErrors = -3,
+  notAuthorised = -4,
   noChange = 1,
   uploaded = 3,
-  loginRedirect = 4
+  loggedIn = 0, //dummy, not actually returned
+  loginRedirect = 4,
+  loggedOut = 5
 }
 
 export enum EntityStatusType {

@@ -1,11 +1,8 @@
 import { useContext, useReducer } from 'react'
-import { useNavigate } from "react-router-dom";
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import TableMenu from '../component/table/TableMenu'
 import Button from '../component/utils/Button'
-import ButtonSave from '../component/utils/ButtonSave'
-import { isUpdate, isDelete } from '../system/Permission'
 import { useLabel, formatTs } from '../component/editor/editorUtil'
 import { editorConfigReducer as edConfRed, EditorConfigField as ECF } from '../component/editor/EditorConfig'
 import { editorConfigLogins, loadLoginList } from './logins'
@@ -34,7 +31,6 @@ const CacheEditor = () => {
   }
 
   //Reload page
-  const navigate = useNavigate();
   const refreshPage = () => {
     // navigate(0)
     loadListLogin()

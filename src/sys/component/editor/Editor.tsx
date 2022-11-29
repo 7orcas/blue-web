@@ -100,9 +100,13 @@ import { BaseEntI } from '../../definition/interfaces'
     return {}
   }
 
+  const showGrid = () : boolean => {
+    return typeof editorConfig.list !== 'undefined'
+  }
+
   return (
     <div>
-      <div className='table-grid'>
+      {showGrid() && <div className='table-grid'>
         <div style={style}>
           <DataGrid
 // sx={{color: 'yellow'}} //text color
@@ -126,7 +130,7 @@ import { BaseEntI } from '../../definition/interfaces'
             hideFooterSelectedRowCount
           />
         </div>
-      </div>
+      </div>}
       {children}
     </div>
   )

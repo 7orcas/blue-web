@@ -14,6 +14,11 @@
   border-color: $dark-color;
 }
 
+.loggedout-title {
+  font-size: 1.5em;
+  font-family: $title-font-family, sans-serif;
+}
+
 .relogin-title {
   margin-bottom: 30px;
   font-size: 1.5em;

@@ -1,5 +1,6 @@
 import UrlSearchParams from '../api/urlSearchParams'
 import { LabelI } from '../lang/loadLabels'
+import { JsonResponseI } from '../definition/types'
 
 /*
  Class to store session variables
@@ -10,7 +11,8 @@ import { LabelI } from '../lang/loadLabels'
 
 //Used in the setSession and reducer functions
 export enum SessionField {
-  loggedIn,
+  loginStatus,
+  notAuthorised,
   username,
   params,
   orgNr,
@@ -34,7 +36,8 @@ export enum ThemeType {
 
 //Store user session variables
 class Session {
-  loggedIn : boolean = true
+  loginStatus : number = JsonResponseI.loggedIn
+  notAuthorised : boolean = false
   username : string = ''
   params : UrlSearchParams = new UrlSearchParams()
   orgNr : number = 0
@@ -58,9 +61,12 @@ export default Session
 export const sessionReducer = (session : Session, action : any) => {
   switch (action.type) {
 
-    case SessionField.loggedIn:
-      return {...session, loggedIn: action.payload}
+    case SessionField.loginStatus:
+      return {...session, loginStatus: action.payload}
 
+    case SessionField.notAuthorised:
+        return {...session, notAuthorised: action.payload}
+  
     case SessionField.username:
       return {...session, username: action.payload}
 

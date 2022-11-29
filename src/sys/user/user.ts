@@ -181,7 +181,7 @@ export const logoutUser = async (
     if (typeof data !== 'undefined') {
       var m = new Message()
       m.type = MessageType.message
-      m.message = data.data
+      m.message = 'logouts'
       setMessage(m)
     }
   } catch (err : any) {

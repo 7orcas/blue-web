@@ -39,22 +39,34 @@ const apiPost = async (
       response = await axios.post(`${ url }`, data)
     }
 
-    //Need to relogin
-    if (response.data.returnCode === JsonResponseI.loginRedirect) {
+    const rtn = response.data.returnCode
+
+    //Timed-out, maybe be able to relogin
+    if (rtn === JsonResponseI.loggedOut
+      || rtn === JsonResponseI.loginRedirect) {
+    if (typeof setSession !== 'undefined') {
+      setSession ({ type: SessionField.changed, payload: false })
+      setSession ({ type: SessionField.loginStatus, payload: rtn })
+    }
+    return;
+  }
+
+    //User not authorised (ie no permission)
+    if (rtn === JsonResponseI.notAuthorised) {
       if (typeof setSession !== 'undefined') {
         setSession ({ type: SessionField.changed, payload: false })
-        setSession ({ type: SessionField.loggedIn, payload: false })
+        setSession ({ type: SessionField.notAuthorised, payload: true })
       }
       return;
     }
 
     //Valid return object
-    if (response.data.returnCode === JsonResponseI.ok) {
+    if (rtn === JsonResponseI.ok) {
       return response.data
     }
 
     //Save Errors (from server validation)
-    if (response.data.returnCode === JsonResponseI.commitErrors) {
+    if (rtn === JsonResponseI.commitErrors) {
       var errors : Array<CommitErrorI> = []
       for (const e of response.data.data.errors) {
         var ent : CommitErrorI = {} as CommitErrorI  
@@ -79,7 +91,7 @@ const apiPost = async (
     //UNAUTHORIZED, ie logged out
     if (err.response.status === 401) {
       if (typeof setSession !== 'undefined') {
-        setSession ({ type: SessionField.loggedIn, payload: false })
+        setSession ({ type: SessionField.loginStatus, payload: JsonResponseI.loggedOut })
       }
       return;
     }
