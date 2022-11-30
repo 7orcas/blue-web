@@ -11,6 +11,11 @@
   border-color: #cfcbcb;
 }
 
+.loggedout-title {
+  font-size: 1.5em;
+  font-family: "Sarabun", sans-serif;
+}
+
 .relogin-title {
   margin-bottom: 30px;
   font-size: 1.5em;

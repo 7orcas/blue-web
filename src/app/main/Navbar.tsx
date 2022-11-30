@@ -91,11 +91,11 @@ const Navbar = () => {
   f.subItem(admin, session, 'roleadmin', '/roleadmin', 'role')
   f.subItem(admin, session, 'permadmin', '/permadmin', 'permission')
   f.subItem(admin, session, 'orgadmin', '/orgadmin', 'org')
-  if (isRead(session, 'logins')) {
+  if (isRead(session, 'listcache')) {
     f.div(admin)
-    f.subItem(admin, session, 'logins', '/logins', 'logins')
+    f.subItem(admin, session, 'logins', '/logins', 'listcache')
   }
-
+  
   const setSelection = (item : MenuItem) => {
     if (session.changed) {
       return
@@ -118,6 +118,7 @@ const Navbar = () => {
 
       {/* Admin menu option */}
       <div className='menu-item menu-item-right'>
+        <div className='menu-item-username'>{session.username}</div>
         {themeX !== null && <Menu key={998} item={themeX} setSelection={setSelection}>
           <FontAwesomeIcon icon={session.theme === ThemeType.dark? faSun : faMoon } />
         </Menu>}

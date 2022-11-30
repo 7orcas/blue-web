@@ -29,6 +29,7 @@ export enum SessionField {
   devAdmin,
 }
 
+//Defined also in Java ApplicationI
 export enum ThemeType {
   light = 0,
   dark = 1,

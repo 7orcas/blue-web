@@ -26,6 +26,9 @@
 .menu-item-right .last-menut-item button {
   margin-right: 20px;
 }
+.menu-item-right .menu-item-username {
+  margin-right: 20px;
+}
 
 .menu-item-unchecked li {
   padding-left: 1.3em;
@@ -40,6 +43,9 @@
 }
 #light .menu-item button:hover {
   background-color: rgb(0, 94, 184);
+}
+#light .menu-item-username {
+  color: #f1f1f1;
 }
 #light .szh-menu {
   background-color: #3d3f4d;

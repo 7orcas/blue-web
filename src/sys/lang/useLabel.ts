@@ -2,6 +2,13 @@ import { useContext } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import { LangLabelAppend } from '../definition/interfaces'
 
+/*
+  Return the label value for a labelKey
+
+  [Licence]
+  Created July '22
+  @author John Stewart
+*/
 const useLabel = (langKey : string) => {
 
   const { session } = useContext(AppContext) as AppContextI

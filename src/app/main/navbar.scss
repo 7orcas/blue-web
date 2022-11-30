@@ -35,6 +35,10 @@
   .last-menut-item button {
     margin-right: 20px;
   }
+
+  .menu-item-username {
+    margin-right: 20px;
+  }
 }
 
 .menu-item-unchecked li {
@@ -51,6 +55,9 @@
   }
   .menu-item button:hover{
     background-color: $light-navbar-item-bg-hover;
+  }
+  .menu-item-username {
+    color: $light-navbar-item-color;
   }
   .szh-menu {
     background-color: $light-navbar-bg;

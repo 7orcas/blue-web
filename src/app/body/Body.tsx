@@ -59,10 +59,8 @@ const Body = () => {
         <Route path="notauth" element={<NotAuthorised />} />
         <Route path="test2" element={<Test2 />} />
         <Route path="test3" element={<Test3 />} />
-        <Route path="*" />
+        <Route path="*" element={<Home />} />
       </Routes>
-      <>
-      </>
     </div>
   )
 }

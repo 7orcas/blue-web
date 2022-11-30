@@ -5,7 +5,8 @@
   color: $light-color;
 
   .main-title {
-    color: $light-title-color;  
+    background-color: $light-navbar-bg;
+    color: $light-navbar-item-color;  
     border: 1px solid $light-title-color;
   }
 
@@ -24,6 +25,7 @@
   color: $dark-color;
   
   .main-title {
+    background-color: $dark-navbar-bg;
     color: $dark-title-color;  
     border: 1px solid $dark-title-color;
   }

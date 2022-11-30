@@ -3,7 +3,8 @@
   color: rgb(29, 28, 28);
 }
 #light .main-title {
-  color: rgb(29, 28, 28);
+  background-color: #3d3f4d;
+  color: #f1f1f1;
   border: 1px solid rgb(29, 28, 28);
 }
 #light .main-footer {
@@ -19,6 +20,7 @@
   color: #cfcbcb;
 }
 #dark .main-title {
+  background-color: #4b4a4a;
   color: #c1bebe;
   border: 1px solid #c1bebe;
 }

@@ -23,6 +23,8 @@ interface Props {
   entity : OrgEntI
   updateEntity : any
   editable : boolean
+  handleExpand : any
+  expand: boolean
 }
   
 const OrgDetail : FC<Props> = ({ 
@@ -31,11 +33,14 @@ const OrgDetail : FC<Props> = ({
       id, 
       entity, 
       updateEntity,
-      editable
+      editable,
+      handleExpand,
+      expand
     }) => {
         
   const { setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
-        
+  
+
   //Load entity configurations
   const loadConfigurationX = useCallback(() => {
     return loadConfiguration(
@@ -79,7 +84,7 @@ const OrgDetail : FC<Props> = ({
           />
           <div className='editor-block'>
             <TextField
-              type='number'
+              type='int'
               label='orgnr-s'
               inputProps={{ maxLength: 5 }}
               entity={entity}
@@ -100,11 +105,13 @@ const OrgDetail : FC<Props> = ({
           </div>
 
           <div className='editor-block'>
-          <Accordion
+          <Accordion 
             langkey='login'
-          >
+            handleExpand={handleExpand}
+            expand={expand}
+            >
             <TextField
-              type='number'
+              type='int'
               label='maxLAttemp'
               inputProps={{ maxLength: 5 }}
               entity={entity}

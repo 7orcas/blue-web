@@ -5,10 +5,19 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface Props {
   langkey : string,
+  handleExpand : any,
+  expand: boolean,
   children : any
 }
 
-const Accordion : FC<Props> = ({ langkey, children}) => {
+/*
+  Display an accordion
+
+  [Licence]
+  Created 01.10.22
+  @author John Stewart
+*/
+const Accordion : FC<Props> = ({ langkey, handleExpand, expand, children}) => {
   
   return (
     <AccordionMui
@@ -17,16 +26,22 @@ const Accordion : FC<Props> = ({ langkey, children}) => {
       TransitionProps={{
         timeout: 0
       }}
-    >
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
+      expanded={expand}
       >
-        <Typography>{useLabel(langkey)}</Typography>
-      </AccordionSummary>
+        <div onClick={() => handleExpand()}>
+          <AccordionSummary
+            // expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            expandIcon={
+              <ExpandMoreIcon style={{ cursor: 'pointer' }}/>
+              }
+          >
+            <Typography>{useLabel(langkey)}</Typography>
+          </AccordionSummary>
+      </div>
       <AccordionDetails>
-        <Typography>
+        <Typography component={'span'}>
           {children}
         </Typography>
       </AccordionDetails>

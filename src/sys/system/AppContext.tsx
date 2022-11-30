@@ -61,7 +61,11 @@ export const AppContextProvider: FC<Props> = ({ children }) => {
 
         var perms = new Map()
         for (var i=0;i<login.permissions.length;i++) {
-          perms.set(login.permissions[i].perm, login.permissions[i].crud)
+          var perm : string = login.permissions[i].perm
+          if (perm.startsWith('*/')) {
+            perm = perm.substring(2)
+          }
+          perms.set(perm, login.permissions[i].crud)
         }
         setSession ({ type: SessionField.permissions, payload: perms })
         

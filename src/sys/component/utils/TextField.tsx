@@ -1,7 +1,5 @@
-import { useState, useEffect, FC, useContext } from 'react'
-import AppContext, { AppContextI } from '../../system/AppContext'
+import { useState, useEffect, FC } from 'react'
 import { TextField as MuiTextField } from '@mui/material';
-import { ThemeType } from '../../system/Session';
 import { ConfigI } from '../../definition/interfaces'
 import { useLabel, maxLengthText, formatTs } from '../../component/editor/editorUtil'
 
@@ -14,7 +12,7 @@ import { useLabel, maxLengthText, formatTs } from '../../component/editor/editor
 */
 
 interface Props {
-  type? : 'text' | 'number' | 'password' | 'timestamp'
+  type? : 'text' | 'int' | 'float' | 'password' | 'timestamp'
   label? : string | undefined
   className? : string
   entity : any
@@ -44,7 +42,6 @@ const TextField : FC<Props> = ({
       style,
      }) => {
   
-  const { session } = useContext(AppContext) as AppContextI
   const [value, setValue] = useState (type==='text'?'':0)
 
   //Initialise the field value state
@@ -60,7 +57,7 @@ const TextField : FC<Props> = ({
       }
     }
     init()
-  },[entity, field])
+  },[entity, field, type])
 
   if (typeof label === 'undefined') {
     label = field
@@ -79,16 +76,27 @@ const TextField : FC<Props> = ({
     if (typeof updateEntity !== 'undefined') {
       updateEntity(entity)
     }
-  };
+  }
+  
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    update(event.target.value);
-  };
+    var v : any = event.target.value
+    switch (type){
+      case 'int': 
+        v = parseInt(v)
+        break
+      case 'float':
+        v = parseFloat(v)
+        break
+    }
+    update(v);
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
     if (changeOnBlur === false) {
       update(event.target.value);
     }
-  };
+  }
 
   const labelX = useLabel(label)
 
@@ -99,16 +107,22 @@ const TextField : FC<Props> = ({
     return true
   }
 
+  const typex = () => {
+    if (type === 'timestamp') return 'text'
+    if (type === 'int' || type === 'float') return 'number'
+    return type
+  }
+
   return (
     <MuiTextField
       className={className}
+      label={labelX}
       error={required && !isValid}
-      type={type === 'timestamp'? 'text' : type}
+      type={typex()}
       inputProps={inputProps}
       value={value}
       onChange={handleChange}
       onBlur={handleBlur}
-      label={labelX}
       required={required}
       InputProps={{
         readOnly: readonly,
