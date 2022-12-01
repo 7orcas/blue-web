@@ -70,6 +70,10 @@ const Navbar = () => {
   admin.link = '/Test3'
   f.subItem(admin, session, 'logout', '/logout', null)
   f.subItem(admin, session, 'passchg', '/passchg', null)
+
+  if (session.params.adminLoggedIn || session.devAdmin) {
+    f.subItem(admin, session, 'loginconf', '/loginconf', null)
+  }
   
   if (isRead(session, 'lang')) {
     f.div(admin)

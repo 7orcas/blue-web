@@ -29,7 +29,7 @@ export const isDelete = (session : any, permission : string | null) : boolean =>
 }
 
 const is = (session : any, permission : string | null, action : string) : boolean => {
-  if (permission === null || session.devAdmin === true) return true
+  if (permission === null || session.devAdmin) return true
   if (typeof session.permissions === 'undefined') return false
   var map : Map<string,string> = session.permissions
   var crud : string | undefined = map.get(permission)

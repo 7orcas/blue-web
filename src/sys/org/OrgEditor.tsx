@@ -1,4 +1,4 @@
-import { useState, useContext, useReducer } from 'react'
+import { useContext, useReducer } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
 import Editor from '../component/editor/Editor'
 import OrgDetail from './OrgDetail'
@@ -30,8 +30,7 @@ const OrgEditor = () => {
   
   //State 
   const [edConf, setEdConf] = useReducer(edConfRed, editorConfig()) 
-  const [expand, setExpand] = useState(false);      
-
+  
   //Load list records
   const loadListOrg = async() => {
     var list = await loadOrgList(setMessage, setSession)
@@ -45,10 +44,6 @@ const OrgEditor = () => {
       setEdConf ({type: ECF.entities, payload : new Map(edConf.entities.set(id, entity))})
       return entity
     }
-  }
-
-  const handleExpand = () => {
-    setExpand(!expand)
   }
 
   //Create new entity
@@ -207,8 +202,6 @@ const OrgEditor = () => {
               entity={e}
               updateEntity={updateEntity}
               editable={editable}     
-handleExpand={handleExpand}
-expand={expand}        
             />
           </div>
           : <div key={id}>

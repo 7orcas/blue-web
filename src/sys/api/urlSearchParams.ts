@@ -4,6 +4,7 @@ class UrlSearchParams {
   init : string = ''
   sid : string = ''
   clientNr : number = -1
+  adminLoggedIn : boolean = false
   
   constructor() {
     const url = new URL (window.location.href)
@@ -12,6 +13,7 @@ class UrlSearchParams {
     this.init = this.getParamString(url.searchParams.get("init"))
     this.sid = this.getParamString(url.searchParams.get("sid"))
     this.clientNr = this.getParamInteger(url.searchParams.get("cn"))
+    this.adminLoggedIn = this.getParamBoolean(url.searchParams.get("ali"))
   }
 
   getParamString (p : string | null) : string {
@@ -22,6 +24,11 @@ class UrlSearchParams {
   getParamInteger (p : string | null) : number {
     if (p !== null) return parseInt(p)
     return -1
+  }
+
+  getParamBoolean (p : string | null) : boolean {
+    if (p !== null && p === 'true') return true
+    return false
   }
 
   isValid = () => {

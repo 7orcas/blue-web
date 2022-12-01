@@ -7,6 +7,7 @@ import PermissionEditor from '../../sys/role/PermissionEditor'
 import RoleEditor from '../../sys/role/RoleEditor'
 import UserEditor from '../../sys/user/UserEditor'
 import LoginsEditor from '../../sys/logins/LoginsEditor'
+import LoginConfig from '../../sys/login/LoginConfig'
 import Login, {LoginSuccess, Logout} from '../../sys/login/Login'
 import Test2 from './Test2'
 import Test3 from './Test3'
@@ -31,35 +32,36 @@ const Body = () => {
   //Watch for exceptions
   useEffect(() => {
     if (session.loginStatus === JsonResponseI.loginRedirect) {
-      navigate("relogin")
+      navigate('relogin')
     }
     else if (session.loginStatus === JsonResponseI.loggedOut) {
-      navigate("loggedout")
+      navigate('loggedout')
     }
     else if (session.notAuthorised) {
-      navigate("notauth")
+      navigate('notauth')
     }
   },[session.loginStatus, session.notAuthorised, navigate])
 
   return (
     <div className='main-body'>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="relogin" element={<Login />} />
-        <Route path="loggedout" element={<Logout />} />
-        <Route path="reloginok" element={<LoginSuccess />} />
-        <Route path="logout" element={<Logout />} />
-        <Route path="labels" element={<LabelsEditor />} />
-        <Route path="orgadmin" element={<OrgEditor />} />
-        <Route path="permadmin" element={<PermissionEditor />} />
-        <Route path="roleadmin" element={<RoleEditor />} />
-        <Route path="useradmin" element={<UserEditor />} />
-        <Route path="logins" element={<LoginsEditor />} />
-        <Route path="passchg" element={<ChangePW />} />
-        <Route path="notauth" element={<NotAuthorised />} />
-        <Route path="test2" element={<Test2 />} />
-        <Route path="test3" element={<Test3 />} />
-        <Route path="*" element={<Home />} />
+        <Route path='/' element={<Home />} />
+        <Route path='relogin' element={<Login />} />
+        <Route path='loggedout' element={<Logout />} />
+        <Route path='reloginok' element={<LoginSuccess />} />
+        <Route path='logout' element={<Logout />} />
+        <Route path='labels' element={<LabelsEditor />} />
+        <Route path='orgadmin' element={<OrgEditor />} />
+        <Route path='permadmin' element={<PermissionEditor />} />
+        <Route path='roleadmin' element={<RoleEditor />} />
+        <Route path='useradmin' element={<UserEditor />} />
+        <Route path='logins' element={<LoginsEditor />} />
+        <Route path='loginconf' element={<LoginConfig />} />
+        <Route path='passchg' element={<ChangePW />} />
+        <Route path='notauth' element={<NotAuthorised />} />
+        <Route path='test2' element={<Test2 />} />
+        <Route path='test3' element={<Test3 />} />
+        <Route path='*' element={<Home />} />
       </Routes>
     </div>
   )

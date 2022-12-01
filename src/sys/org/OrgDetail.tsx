@@ -1,8 +1,8 @@
 import { useContext, useEffect, FC, useCallback } from 'react'
 import AppContext, { AppContextI } from '../system/AppContext'
-import { loadConfiguration, closeEditor, formatTs, maxLengthText } from '../component/editor/editorUtil'
+import { loadConfiguration, closeEditor, maxLengthText } from '../component/editor/editorUtil'
 import { CONFIG, OrgEntI } from './org'
-import { EditorConfig, EditorConfigField as ECF } from '../component/editor/EditorConfig'
+import { EditorConfig } from '../component/editor/EditorConfig'
 import { BaseEntI } from '../definition/interfaces'
 import { TableMenuTab } from '../component/table/TableMenu'
 import TextField from '../component/utils/TextField'
@@ -23,8 +23,6 @@ interface Props {
   entity : OrgEntI
   updateEntity : any
   editable : boolean
-  handleExpand : any
-  expand: boolean
 }
   
 const OrgDetail : FC<Props> = ({ 
@@ -33,9 +31,7 @@ const OrgDetail : FC<Props> = ({
       id, 
       entity, 
       updateEntity,
-      editable,
-      handleExpand,
-      expand
+      editable
     }) => {
         
   const { setSession, setMessage, configs, setConfigs } = useContext(AppContext) as AppContextI
@@ -107,8 +103,7 @@ const OrgDetail : FC<Props> = ({
           <div className='editor-block'>
           <Accordion 
             langkey='login'
-            handleExpand={handleExpand}
-            expand={expand}
+            componentId={'OrgDetail-l' + entity.id}
             >
             <TextField
               type='int'
