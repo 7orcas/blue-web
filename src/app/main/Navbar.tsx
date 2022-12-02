@@ -26,6 +26,19 @@ const Navbar = () => {
 
   const f = new MenuItemFactory ()
  
+  //Sub menus
+  var sub1 = f.mainSub('mastdat')
+  f.subItem(sub1, session, 'reftype1', '/reftype1', null)
+  f.subItem(sub1, session, 'styles', '/Test3', null)
+  f.subItem(sub1, session, 'molds', '/Test3', null)
+  f.div(sub1)
+
+  var sub2 = f.subSub(sub1, 'xxx')
+  f.head(sub2, 'headX')
+  f.subItem(sub1, session, 'machines', '/Test3', null)
+  f.subItem(sub1, session, 'shifts', '/Test3', null)
+
+
   //Top Level  (label, link, permission)
   f.main(session, 'useradmin', '/useradmin', 'user')
   f.main(session, 'roleadmin', '/roleadmin', 'role')
@@ -45,17 +58,6 @@ const Navbar = () => {
   f.main(session, 'simus', '/Test2', null)
   f.main(session, 'fixes', '/Test3', null)
   
-  //Sub menus
-  var sub1 = f.mainSub('mastdat')
-  f.subItem(sub1, session, 'styles', '/Test3', null)
-  f.subItem(sub1, session, 'molds', '/Test3', null)
-  f.div(sub1)
-  
-  var sub2 = f.subSub(sub1, 'xxx')
-  f.head(sub2, 'headX')
-  f.subItem(sub1, session, 'machines', '/Test3', null)
-  f.subItem(sub1, session, 'shifts', '/Test3', null)
-
 
   //Separate theme icon  
   var themeX = f.button(session,
