@@ -6,7 +6,7 @@ import Moment from 'moment';
 import Message, { MessageType } from '../../system/Message'
 import { EditorConfig, EditorConfigField as ECF } from './EditorConfig'
 import { EntityStatusType as Status } from '../../definition/types'
-import { BaseEntI, entBaseOV, ConfigI, TS_FORMAT, TS_DISPLAY } from '../../definition/interfaces'
+import { BaseEntI, BaseEntRefI, entBaseOV, ConfigI, entRemoveClientFields, TS_FORMAT, TS_DISPLAY } from '../../definition/interfaces'
 import { GridSelectionModel } from '@mui/x-data-grid'
 
 /*
@@ -65,6 +65,16 @@ export const updateBaseEntity = (entity : BaseEntI, field : string, value : any)
     case 'delete': entity.delete = value; break
   }
 }
+
+//Set Base Reference Field
+export const updateBaseEntityRef = (entity : BaseEntRefI, field : string, value : any) => {
+  updateBaseEntity (entity, field, value)
+  switch (field) {
+    case 'sort': entity.sort = value; break
+    case 'dvalue': entity.dvalue = value; break
+  }
+}
+
 
 //Text field max length
 export const maxLengthText = (config: ConfigI | undefined, field : string) => {
@@ -199,6 +209,23 @@ export const containsInvalid = <L extends BaseEntI>(
     }
   }
   return false
+}
+
+//Add updates to list
+export const addUpdates = <L extends BaseEntI, E extends BaseEntI>(
+      entList : E[],
+      edConf : EditorConfig<L, E>) => {
+  
+  for (var i=0;i<edConf.list.length;i++){
+    if (edConf.list[i]._caEntityStatus === Status.changed 
+      || edConf.list[i]._caEntityStatus === Status.delete) {
+      var e = edConf.entities.get(edConf.list[i].id)
+      if (e !== null && e !== undefined) {
+        e = entRemoveClientFields(e)
+        entList.push(e)
+      }
+    }
+  }
 }
 
 //Commit updates, reload entity list, return reselected list ids 

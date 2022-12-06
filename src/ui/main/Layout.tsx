@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import AppContext, { AppContextI } from '../../sys/system/AppContext'
 import { ThemeType } from '../../sys/system/Session'
 import Header from './Header'
-import Body from '../body/Body'
+import Router from '../router/Router'
 import Footer from './Footer'
 
 /*
@@ -25,7 +25,7 @@ const Layout = () => {
           <CircularProgress color="inherit" />
         </div>}
       <Header />
-      <Body />
+      <Router />
       <Footer />
     </div>
   )

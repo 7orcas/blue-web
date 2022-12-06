@@ -26,6 +26,12 @@ export interface BaseEntI {
   _caParent: any 
 }
 
+//Reference entities, eg countries
+export interface BaseEntRefI extends BaseEntI {
+  sort: number
+  dvalue: boolean
+}
+
 //Flag entities that are not used
 export interface UsedI extends BaseEntI {}
 
@@ -37,6 +43,13 @@ export const initListBase = (data : any, ent : BaseEntI) => {
 //Populate base entity fields
 export const initEntBase = (data : any, ent : BaseEntI) => {
   initBase (data, ent)
+}
+
+//Populate base reference fields
+export const initEntRefBase = (data : any, ent : BaseEntRefI) => {
+  initBase (data, ent)
+  ent.sort = data.sort
+  ent.dvalue = data.dvalue
 }
 
 //Populate base fields

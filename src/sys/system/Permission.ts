@@ -31,9 +31,17 @@ export const isDelete = (session : any, permission : string | null) : boolean =>
 const is = (session : any, permission : string | null, action : string) : boolean => {
   if (permission === null || session.devAdmin) return true
   if (typeof session.permissions === 'undefined') return false
-  var map : Map<string,string> = session.permissions
-  var crud : string | undefined = map.get(permission)
-  if (typeof crud === 'undefined') return false
+
+  var crud : string | undefined = session.permissions.get(permission)
+  if (typeof crud === 'undefined') {
+    //Test if permission is at a higher level
+    var index = permission.indexOf('/')
+    if (index !== -1) {
+      return is(session, permission.substring(0, index), action)
+    }
+    return false
+  }
+
   if (crud === '*') return true
   if (crud.indexOf(action) !== -1) return true
   return false

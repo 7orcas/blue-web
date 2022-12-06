@@ -28,7 +28,8 @@ const Navbar = () => {
  
   //Sub menus
   var sub1 = f.mainSub('mastdat')
-  f.subItem(sub1, session, 'reftype1', '/reftype1', null)
+  f.subItem(sub1, session, 'countries', '/country', 'ref/country')
+  f.subItem(sub1, session, 'currs', '/currency', 'ref/currency')
   f.subItem(sub1, session, 'styles', '/Test3', null)
   f.subItem(sub1, session, 'molds', '/Test3', null)
   f.div(sub1)

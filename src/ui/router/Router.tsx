@@ -9,22 +9,26 @@ import UserEditor from '../../sys/user/UserEditor'
 import LoginsEditor from '../../sys/logins/LoginsEditor'
 import LoginConfig from '../../sys/login/LoginConfig'
 import Login, {LoginSuccess, Logout} from '../../sys/login/Login'
+import CountryEditor from '../app/ref/CountryEditor'
+import CurrencyEditor from '../app/ref/CurrencyEditor'
 import Test2 from './Test2'
 import Test3 from './Test3'
 import ChangePW from '../../sys/user/ChangePW'
-import Home from './Home'
+import Home from '../main/Home'
 import NotAuthorised from '../../sys/component/utils/NotAuthorised'
 import { JsonResponseI } from '../../sys/definition/types'
 
 /*
-  Main Body
+  Main Router
+
   All routes are managed here
 
   [Licence]
   Created 1/9/22
   @author John Stewart
  */
-const Body = () => {
+const Router
+ = () => {
 
   const { session } = useContext(AppContext) as AppContextI
   let navigate = useNavigate()
@@ -59,13 +63,15 @@ const Body = () => {
         <Route path='loginconf' element={<LoginConfig />} />
         <Route path='passchg' element={<ChangePW />} />
         <Route path='notauth' element={<NotAuthorised />} />
+        <Route path='country' element={<CountryEditor />} />
+        <Route path='currency' element={<CurrencyEditor />} />
         <Route path='test2' element={<Test2 />} />
         <Route path='test3' element={<Test3 />} />
-        <Route path='reftype1' element={<Test3 />} />
         <Route path='*' element={<Home />} />
       </Routes>
     </div>
   )
 }
 
-export default Body
+export default Router
+

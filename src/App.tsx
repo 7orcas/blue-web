@@ -6,7 +6,7 @@ import './sys/component/dialog/dialog.css';
 import './sys/component/utils/utils.css'
 import 'normalize.css'
 
-import Layout from './app/main/Layout'
+import Layout from './ui/main/Layout'
 import { AppContextProvider } from './sys/system/AppContext'
 
 function App() {
